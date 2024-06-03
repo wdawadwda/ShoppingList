@@ -4,10 +4,10 @@ import { useFonts } from "expo-font";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    "Lato-Regular": require("./src/fonts/Lato-Regular.ttf"),
-    "Lato-Medium": require("./src/fonts/Lato-Medium.ttf"),
-    "Montserrat-SemiBold": require("./src/fonts/Montserrat-SemiBold.ttf"),
-    "Montserrat-Bold": require("./src/fonts/Montserrat-Bold.ttf"),
+    "Lato-Regular": require("./assets/fonts/Lato-Regular.ttf"),
+    "Lato-Medium": require("./assets/fonts/Lato-Medium.ttf"),
+    "Montserrat-SemiBold": require("./assets/fonts/Montserrat-SemiBold.ttf"),
+    "Montserrat-Bold": require("./assets/fonts/Montserrat-Bold.ttf"),
   });
 
   if (!fontsLoaded) {
