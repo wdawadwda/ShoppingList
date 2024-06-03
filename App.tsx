@@ -20,6 +20,7 @@ export default function App() {
       <Text style={fontsStyles.subtitle}>Open up App.tsx to start working on your app!</Text>
       <Text style={fontsStyles.text}>Open up App.tsx to start working on your app!</Text>
       <Text style={fontsStyles.text2}>Open up App.tsx to start working on your app!</Text>
+      {/* <TestSvgComponent style={fontsStyles.svg} /> */}
       <StatusBar style="auto" />
     </View>
   );
@@ -35,6 +36,11 @@ const styles = StyleSheet.create({
 });
 
 export const fontsStyles = StyleSheet.create({
+  // svg: {
+  //   color: "red",
+  //   width: 50,
+  //   height: 50,
+  // },
   title: {
     fontSize: 35,
     textAlign: "center",
