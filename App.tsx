@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useFonts } from "expo-font";
-import { StatusBar } from "expo-status-bar";
-import ShoppingListTest from "./src/components/test/shopping-list-test";
+import { styles } from "./styles/global.style";
+import { Navigation } from "./src/navigation/navigation";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -17,30 +17,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={fontsStyles.title}>Open up App.tsx to start working on your app!</Text>
-      <Text style={fontsStyles.subtitle}>Open up App.tsx to start working on your app!</Text>
-      <Text style={fontsStyles.text}>Open up App.tsx to start working on your app!</Text>
-      <Text style={fontsStyles.text2}>Open up App.tsx to start working on your app!</Text>
-      {/* <TestSvgComponent style={styles.svg} /> */}
-      <ShoppingListTest />
-      <StatusBar style="auto" />
+      <Navigation />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  // svg: {
-  //   color: "red",
-  //   width: 50,
-  //   height: 50,
-  // },
-});
 
 export const fontsStyles = StyleSheet.create({
   title: {
