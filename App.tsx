@@ -4,10 +4,10 @@ import { useFonts } from "expo-font";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    "Lato-Regular": require("./src/fonts/Lato-Regular.ttf"),
-    "Lato-Medium": require("./src/fonts/Lato-Medium.ttf"),
-    "Montserrat-SemiBold": require("./src/fonts/Montserrat-SemiBold.ttf"),
-    "Montserrat-Bold": require("./src/fonts/Montserrat-Bold.ttf"),
+    "Lato-Regular": require("./assets/fonts/Lato-Regular.ttf"),
+    "Lato-Medium": require("./assets/fonts/Lato-Medium.ttf"),
+    "Montserrat-SemiBold": require("./assets/fonts/Montserrat-SemiBold.ttf"),
+    "Montserrat-Bold": require("./assets/fonts/Montserrat-Bold.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -20,6 +20,7 @@ export default function App() {
       <Text style={fontsStyles.subtitle}>Open up App.tsx to start working on your app!</Text>
       <Text style={fontsStyles.text}>Open up App.tsx to start working on your app!</Text>
       <Text style={fontsStyles.text2}>Open up App.tsx to start working on your app!</Text>
+      {/* <TestSvgComponent style={fontsStyles.svg} /> */}
       <StatusBar style="auto" />
     </View>
   );
@@ -35,6 +36,11 @@ const styles = StyleSheet.create({
 });
 
 export const fontsStyles = StyleSheet.create({
+  // svg: {
+  //   color: "red",
+  //   width: 50,
+  //   height: 50,
+  // },
   title: {
     fontSize: 35,
     textAlign: "center",
