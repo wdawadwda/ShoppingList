@@ -1,8 +1,57 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useFonts } from "expo-font";
+import { useEffect, useState } from "react";
+
+const initialProducts = [
+  {
+    id: 1,
+    categoryName: "Мясо",
+    products: [
+      { id: 1, name: "Колбаса", isPushed: false },
+      { id: 2, name: "Курица", isPushed: false },
+    ],
+  },
+  {
+    id: 2,
+    categoryName: "Молочные продукты",
+    products: [
+      { id: 1, name: "Молоко", isPushed: false },
+      { id: 2, name: "Сыр", isPushed: true },
+    ],
+  },
+  {
+    id: 3,
+    categoryName: "Другое",
+    products: [{ id: 1, name: "Пластырь", isPushed: false }],
+  },
+];
 
 export default function App() {
+  const [products, setProducts] = useState(initialProducts);
+
+  const handleProductClick = (categoryId, productId) => {
+    setProducts((prevProducts) => {
+      return prevProducts.map((category) => {
+        if (category.id === categoryId) {
+          return {
+            ...category,
+            products: category.products.map((product) => {
+              if (product.id === productId) {
+                return {
+                  ...product,
+                  isPushed: !product.isPushed,
+                };
+              }
+              return product;
+            }),
+          };
+        }
+        return category;
+      });
+    });
+  };
+
   const [fontsLoaded] = useFonts({
     "Lato-Regular": require("./assets/fonts/Lato-Regular.ttf"),
     "Lato-Medium": require("./assets/fonts/Lato-Medium.ttf"),
@@ -15,13 +64,41 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={fontsStyles.title}>Open up App.tsx to start working on your app!</Text>
-      <Text style={fontsStyles.subtitle}>Open up App.tsx to start working on your app!</Text>
-      <Text style={fontsStyles.text}>Open up App.tsx to start working on your app!</Text>
-      <Text style={fontsStyles.text2}>Open up App.tsx to start working on your app!</Text>
-      {/* <TestSvgComponent style={fontsStyles.svg} /> */}
-      <StatusBar style="auto" />
+    <View style={{ flex: 1, marginTop: 50 }}>
+      <ScrollView style={{ flex: 1 }}>
+        <Text style={{ color: "red" }}>Доступные товары:</Text>
+        {products.map(
+          (category) =>
+            category.products.some((product) => !product.isPushed) && (
+              <View key={category.id}>
+                <Text style={{ color: "green" }}>{category.categoryName}</Text>
+                {category.products
+                  .filter((product) => !product.isPushed)
+                  .map((product) => (
+                    <TouchableOpacity key={product.id} onPress={() => handleProductClick(category.id, product.id)}>
+                      <Text>{product.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+              </View>
+            ),
+        )}
+        <Text style={{ color: "red" }}>Купленные товары:</Text>
+        {products.map(
+          (category) =>
+            category.products.some((product) => product.isPushed) && (
+              <View key={category.id}>
+                <Text style={{ color: "green" }}>{category.categoryName}</Text>
+                {category.products
+                  .filter((product) => product.isPushed)
+                  .map((product) => (
+                    <TouchableOpacity key={product.id} onPress={() => handleProductClick(category.id, product.id)}>
+                      <Text>{product.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+              </View>
+            ),
+        )}
+      </ScrollView>
     </View>
   );
 }
