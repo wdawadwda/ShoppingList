@@ -1,6 +1,7 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
+import ShoppingListTest from "./src/components/test/shopping-list-test";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,7 +21,8 @@ export default function App() {
       <Text style={fontsStyles.subtitle}>Open up App.tsx to start working on your app!</Text>
       <Text style={fontsStyles.text}>Open up App.tsx to start working on your app!</Text>
       <Text style={fontsStyles.text2}>Open up App.tsx to start working on your app!</Text>
-      {/* <TestSvgComponent style={fontsStyles.svg} /> */}
+      {/* <TestSvgComponent style={styles.svg} /> */}
+      <ShoppingListTest />
       <StatusBar style="auto" />
     </View>
   );
@@ -33,14 +35,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-});
-
-export const fontsStyles = StyleSheet.create({
   // svg: {
   //   color: "red",
   //   width: 50,
   //   height: 50,
   // },
+});
+
+export const fontsStyles = StyleSheet.create({
   title: {
     fontSize: 35,
     textAlign: "center",
