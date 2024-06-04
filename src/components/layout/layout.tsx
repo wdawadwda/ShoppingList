@@ -3,14 +3,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native";
 import { type LayoutProps } from "./layout.type";
 import { Header } from "./header/header";
-import { styles } from "../../../styles/global.style";
+import { darkStyles, globalStyles, lightStyles } from "@/styles";
 
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ children, theme }: LayoutProps) => {
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={{ backgroundColor: "gray" }}>
-        <Header />
-        <View style={styles.content}>{children}</View>
+    <SafeAreaView style={globalStyles.safeArea}>
+      <View style={[theme === "dark" ? darkStyles.container : lightStyles.container, globalStyles.container]}>
+        <Header theme={theme} />
+        <View style={globalStyles.content}>{children}</View>
       </View>
     </SafeAreaView>
   );

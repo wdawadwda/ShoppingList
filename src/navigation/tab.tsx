@@ -1,18 +1,22 @@
 import { AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StackNavigator, StackUserNavigator } from "./stack";
-import TestSvgComponent from "../../assets/icons/test/test-svg";
+import { Theme } from "@/store";
+import { colorDark, colorLight } from "@/styles";
+import TestSvgComponent from "@/assets/icons/test/test-svg";
+import { useTranslation } from "react-i18next";
 
 const Tab = createBottomTabNavigator();
-export const TabNavigator = () => {
+export const TabNavigator = ({ theme }: { theme: Theme }) => {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: "tomato",
-        tabBarInactiveTintColor: "black",
+        tabBarActiveTintColor: theme === "dark" ? colorDark.textColor : colorLight.textColor,
+        tabBarInactiveTintColor: colorDark.textDisabledColor,
         tabBarStyle: {
-          backgroundColor: "gray",
-          borderTopColor: "lightgray",
+          backgroundColor: theme === "dark" ? colorDark.backgroundColorSecond : colorLight.backgroundColorSecond,
+          borderTopColor: theme === "dark" ? colorDark.backgroundColorSecond : colorLight.backgroundColorSecond,
           height: 75,
         },
         tabBarLabelStyle: {
@@ -25,12 +29,12 @@ export const TabNavigator = () => {
         name="HomeTab"
         initialParams={{ initialRoute: "Home" }}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: t("tabsLabels.home"),
           tabBarIcon: ({ color }) => <AntDesign name="home" size={35} color={color} />,
           headerShown: false,
         }}
       >
-        {() => <StackNavigator />}
+        {() => <StackNavigator theme={theme} />}
       </Tab.Screen>
 
       <Tab.Screen
@@ -42,7 +46,19 @@ export const TabNavigator = () => {
           headerShown: false,
         }}
       >
-        {() => <StackUserNavigator />}
+        {() => <StackUserNavigator theme={theme} />}
+      </Tab.Screen>
+
+      <Tab.Screen
+        name="blabla"
+        initialParams={{ initialRoute: "User" }}
+        options={{
+          tabBarLabel: "User",
+          tabBarIcon: ({ color }) => <TestSvgComponent width={50} height={50} color={color} />,
+          headerShown: false,
+        }}
+      >
+        {() => <StackUserNavigator theme={theme} />}
       </Tab.Screen>
     </Tab.Navigator>
   );

@@ -1,59 +1,44 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "../screens/home/home";
 import { StatusBar } from "react-native";
-import User from "../screens/user/user";
+import { type Theme } from "@/store";
+import { colorDark, colorLight } from "@/styles";
+import { Home, User } from "@/screens";
 
 const Stack = createNativeStackNavigator();
 
-export const StackNavigator = () => (
+export const StackNavigator = ({ theme }: { theme: Theme }) => (
   <>
-    <StatusBar backgroundColor={"gray"} barStyle={"dark-content"} />
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#fff",
-        },
-        headerTintColor: "#000",
-      }}
-    >
+    <StatusBar
+      backgroundColor={theme === "dark" ? colorDark.backgroundColorSecond : colorLight.backgroundColorSecond}
+      barStyle="light-content"
+    />
+    <Stack.Navigator>
       <Stack.Screen
         name="Home"
         options={{
           headerShown: false,
         }}
       >
-        {() => <Home />}
-      </Stack.Screen>
-      <Stack.Screen
-        name="User"
-        options={{
-          headerShown: false,
-        }}
-      >
-        {() => <User />}
+        {() => <Home theme={theme} />}
       </Stack.Screen>
     </Stack.Navigator>
   </>
 );
 
-export const StackUserNavigator = () => (
+export const StackUserNavigator = ({ theme }: { theme: Theme }) => (
   <>
-    <StatusBar backgroundColor={"gray"} barStyle={"dark-content"} />
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#fff",
-        },
-        headerTintColor: "#000",
-      }}
-    >
+    <StatusBar
+      backgroundColor={theme === "dark" ? colorDark.backgroundColorSecond : colorLight.backgroundColorSecond}
+      barStyle="light-content"
+    />
+    <Stack.Navigator>
       <Stack.Screen
         name="User"
         options={{
           headerShown: false,
         }}
       >
-        {() => <User />}
+        {() => <User theme={theme} />}
       </Stack.Screen>
     </Stack.Navigator>
   </>
