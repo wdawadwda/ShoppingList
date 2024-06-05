@@ -1,9 +1,10 @@
-import { Text, useColorScheme, View } from "react-native";
+import { useColorScheme, View } from "react-native";
 import { TabNavigator } from "./tab";
 import { NavigationContainer } from "@react-navigation/native";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch, type Theme, themeActions, selectTheme } from "@/store";
+import { Loader } from "@/components";
 
 export const Navigation = () => {
   const isInitializing = false;
@@ -19,7 +20,7 @@ export const Navigation = () => {
     <NavigationContainer>
       {isInitializing ? (
         <View>
-          <Text>Loading...</Text>
+          <Loader size={100} theme={theme} />
         </View>
       ) : (
         <TabNavigator theme={theme} />
