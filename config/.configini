@@ -1,0 +1,5 @@
+; Rename this file to "config.ini" and input variables values after project running
+[GoogleAPI]
+EMAIL_HOST_USER =
+EMAIL_HOST_PASSWORD =
+DEFAULT_FROM_EMAIL =
