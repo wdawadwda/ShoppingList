@@ -1,5 +1,13 @@
 {
   "tabsLabels": {
-    "home": "Главная"
+    "home": "Главная",
+    "settings": "Настройки"
+  },
+  "buttonLabels": {
+    "themeSettings": "Настройки Темы"
+  },
+  "screensName": {
+    "home": "Домашняя",
+    "settings": "Настройки"
   }
 }

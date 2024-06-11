@@ -8,5 +8,5 @@ export interface ButtonProps {
   onPress?: (event: GestureResponderEvent) => void;
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
-  buttonColorVar?: "backgroundColorSecond";
+  buttonColorVar?: "backgroundColorSecond" | "backgroundColorThird";
 }

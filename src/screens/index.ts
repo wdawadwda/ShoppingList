@@ -1,2 +1,3 @@
 export { Home } from "./home";
-export { User } from "./user";
+export { Settings } from "./settings";
+export { UserTheme } from "./user-theme";

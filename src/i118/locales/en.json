@@ -1,5 +1,13 @@
 {
   "tabsLabels": {
-    "home": "Home"
+    "home": "Home",
+    "settings": "Settings"
+  },
+  "buttonLabels": {
+    "themeSettings": "Theme settings"
+  },
+  "screensName": {
+    "home": "Home",
+    "settings": "Settings"
   }
 }

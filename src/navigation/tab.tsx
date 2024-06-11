@@ -1,10 +1,11 @@
 import { AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StackNavigator, StackUserNavigator } from "./stack";
+import { StackNavigator, StackSettingsNavigator } from "./stack";
 import { Theme } from "@/store";
 import { colorDark, colorLight } from "@/styles";
 import TestSvgComponent from "@/assets/icons/test/test-svg";
 import { useTranslation } from "react-i18next";
+import { Feather } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 export const TabNavigator = ({ theme }: { theme: Theme }) => {
@@ -38,18 +39,6 @@ export const TabNavigator = ({ theme }: { theme: Theme }) => {
       </Tab.Screen>
 
       <Tab.Screen
-        name="UserTab"
-        initialParams={{ initialRoute: "User" }}
-        options={{
-          tabBarLabel: "User",
-          tabBarIcon: ({ color }) => <TestSvgComponent width={50} height={50} color={color} />,
-          headerShown: false,
-        }}
-      >
-        {() => <StackUserNavigator theme={theme} />}
-      </Tab.Screen>
-
-      <Tab.Screen
         name="blabla"
         initialParams={{ initialRoute: "User" }}
         options={{
@@ -58,7 +47,19 @@ export const TabNavigator = ({ theme }: { theme: Theme }) => {
           headerShown: false,
         }}
       >
-        {() => <StackUserNavigator theme={theme} />}
+        {() => <StackSettingsNavigator theme={theme} />}
+      </Tab.Screen>
+
+      <Tab.Screen
+        name="SettingsTab"
+        initialParams={{ initialRoute: "Settings" }}
+        options={{
+          tabBarLabel: t("tabsLabels.settings"),
+          tabBarIcon: ({ color }) => <Feather name="settings" size={30} color={color} />,
+          headerShown: false,
+        }}
+      >
+        {() => <StackSettingsNavigator theme={theme} />}
       </Tab.Screen>
     </Tab.Navigator>
   );

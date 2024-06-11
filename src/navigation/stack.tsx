@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "react-native";
 import { type Theme } from "@/store";
 import { colorDark, colorLight } from "@/styles";
-import { Home, User } from "@/screens";
+import { Home, Settings, UserTheme } from "@/screens";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,7 +25,7 @@ export const StackNavigator = ({ theme }: { theme: Theme }) => (
   </>
 );
 
-export const StackUserNavigator = ({ theme }: { theme: Theme }) => (
+export const StackSettingsNavigator = ({ theme }: { theme: Theme }) => (
   <>
     <StatusBar
       backgroundColor={theme === "dark" ? colorDark.backgroundColorSecond : colorLight.backgroundColorSecond}
@@ -33,12 +33,20 @@ export const StackUserNavigator = ({ theme }: { theme: Theme }) => (
     />
     <Stack.Navigator>
       <Stack.Screen
-        name="User"
+        name="Settings"
         options={{
           headerShown: false,
         }}
       >
-        {() => <User theme={theme} />}
+        {() => <Settings theme={theme} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="UserTheme"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {() => <UserTheme theme={theme} />}
       </Stack.Screen>
     </Stack.Navigator>
   </>

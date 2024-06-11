@@ -33,10 +33,12 @@ export const fontsStyles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontFamily: "Lato-Medium",
+    textTransform: "none",
   },
   text2: {
     fontSize: 14,
     fontFamily: "Lato-Medium",
+    textTransform: "none",
   },
 });
 
