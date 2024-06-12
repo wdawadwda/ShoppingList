@@ -8,10 +8,28 @@ export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  containerAlert: {
+    padding: 10,
+    marginBottom: 5,
+    borderRadius: 5,
+  },
+  containerSuccess: {
+    padding: 10,
+    marginBottom: 5,
+    borderRadius: 5,
+  },
   content: {
     flex: 1,
     paddingRight: 10,
     paddingLeft: 10,
+  },
+  input: {
+    width: "100%",
+    backgroundColor: "white",
+    marginBottom: 10,
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 5,
   },
 });
 
@@ -53,7 +71,7 @@ export const darkStyles = StyleSheet.create({
     backgroundColor: colorDark.backgroundAlert,
   },
   containerSuccess: {
-    backgroundColor: colorDark.backgroundColorSecond,
+    backgroundColor: colorDark.backgroundColoSuccess,
   },
 });
 
@@ -68,6 +86,6 @@ export const lightStyles = StyleSheet.create({
     backgroundColor: colorLight.backgroundAlert,
   },
   containerSuccess: {
-    backgroundColor: colorLight.backgroundColorSecond,
+    backgroundColor: colorLight.backgroundColoSuccess,
   },
 });

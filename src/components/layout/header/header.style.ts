@@ -29,4 +29,7 @@ export const stylesHeader = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
   },
+  user: {
+    marginRight: 10,
+  },
 });

@@ -9,4 +9,10 @@ export interface ButtonProps {
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
   buttonColorVar?: "backgroundColorSecond" | "backgroundColorThird";
+  isLoading?: boolean;
+}
+
+export interface ExtraButtonsType {
+  onPress: () => void;
+  theme: Theme;
 }

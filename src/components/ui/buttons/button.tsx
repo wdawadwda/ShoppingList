@@ -1,9 +1,10 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
 import { type ButtonProps } from "./button.type";
-import { colorDark, colorLight } from "@/styles";
+import { colorDark, colorLight, fontsStyles } from "@/styles";
+import Loader from "../loader/loader";
 
-export const Button = ({ children, onPress, style, disabled, theme, buttonColorVar }: ButtonProps) => {
+export const Button = ({ children, onPress, style, disabled, theme, buttonColorVar, isLoading }: ButtonProps) => {
   const backgroundColor = buttonColorVar
     ? theme === "dark"
       ? colorDark[buttonColorVar]
@@ -26,7 +27,11 @@ export const Button = ({ children, onPress, style, disabled, theme, buttonColorV
       onPress={onPress}
       disabled={disabled}
     >
-      <Text style={styles.text}>{children}</Text>
+      {isLoading ? (
+        <Loader inButton={true} theme={theme} size={18} />
+      ) : (
+        <Text style={[styles.text, fontsStyles.text]}>{children}</Text>
+      )}
     </Pressable>
   );
 };
