@@ -22,4 +22,4 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 class BillSerializer(serializers.ModelSerializer):
     class Meta:
         model = BillModel
-        fields = "__all__'"
+        fields = "__all__"

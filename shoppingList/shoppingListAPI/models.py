@@ -32,7 +32,7 @@ class CustomUser(AbstractUser):
 
 class BillModel(models.Model):
     bill = models.FileField(blank=True)
-    date = models.DateTimeField(blank=False, null=False)
+    date = models.DateTimeField(auto_now_add=True)
     bill_text = models.CharField(max_length=2000, blank=True, null=True)
     ai_model = models.CharField(max_length=30, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
