@@ -1,18 +1,41 @@
-from rest_framework import status
+from djoser.conf import User
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth import get_user_model
-from .serializers import CustomTokenObtainPairSerializer
+from django.contrib.auth import login, authenticate
 
-# User = get_user_model()
+from .models import UserThemeModel
+from .serializers import UserSettingsSerializer
+
+
+from django.contrib.auth.models import BaseUserManager
+
+# class UserManager(BaseUserManager):
+#     def create_user(self, username, email, password=None, **extra_fields):
+#         extra_fields.setdefault('is_staff', False)
+#         extra_fields.setdefault('is_superuser', False)
+#         if not username:
+#             raise ValueError('Users must have a username')
+#         if not email:
+#             raise ValueError('Users must have an email address')
+#         user = self.model(username=username, email=self.normalize_email(email), **extra_fields)
+#         user.set_password(password)
+#         user.save()
+#         # Создаем профиль пользователя и заполняем поле user_theme
+#         User.objects.create(user=user, user_theme='auto')
+#         return user
 #
-# class CreateUserView(APIView):
-#     def post(self, request, format=None):
-#         data = request.data
-#         serializer = CustomTokenObtainPairSerializer(data=data)
-#         if serializer.is_valid():
-#             user = serializer.validated_data['username']
-#             token = serializer.validated_data['access']
-#             return Response(data={'user_id': user.pk, 'token': token, 'status': 'success'}, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def create_superuser(self, username, email, password=None, **extra_fields):
+#         extra_fields.setdefault('is_staff', True)
+#         extra_fields.setdefault('is_superuser', True)
+#         if not username:
+#             raise ValueError('Users must have a username')
+#         if not email:
+#             raise ValueError('Users must have an email address')
+#         user = self.model(username=username, email=self.normalize_email(email), **extra_fields)
+#         user.set_password(password)
+#         user.save()
+
+class UserSettingsView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSettingsSerializer

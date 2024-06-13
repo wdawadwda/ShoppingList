@@ -19,9 +19,23 @@ class CustomUser(AbstractUser):
     },
   )
   email = models.EmailField(db_index=True, unique=True)
+  user_theme = models.CharField(
+    max_length=10,
+    choices=[('light', 'Light'), ('dark', 'Dark'), ('auto', 'Auto')],
+    default='auto'
+  )
   USERNAME_FIELD = 'username'
   REQUIRED_FIELDS = ['email', 'is_staff']
   objects = UserManager()
 
   def __str__(self):
-    return self.username
+    return self.email
+
+
+class UserThemeModel(models.Model):
+    theme = models.CharField(max_length=50)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+      return self.user
+
