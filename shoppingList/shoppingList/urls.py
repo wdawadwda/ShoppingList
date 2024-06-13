@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
-    path('', include('shoppingListAPI.urls')),
+    path('api/v1/', include('shoppingListAPI.urls')),
 ]
 # if settings.DEBUG:
 #     urlpatterns += static(settings.SITE_URL, document_root=settings.SITE_ROOT)
