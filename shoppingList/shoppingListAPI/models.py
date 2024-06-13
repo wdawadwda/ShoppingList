@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 
-
 class CustomUser(AbstractUser):
   username_validator = UnicodeUsernameValidator()
 
@@ -31,11 +30,13 @@ class CustomUser(AbstractUser):
   def __str__(self):
     return self.email
 
-
-class UserThemeModel(models.Model):
-    theme = models.CharField(max_length=50)
+class BillModel(models.Model):
+    bill = models.FileField(blank=True)
+    date = models.DateTimeField(blank=False, null=False)
+    bill_text = models.CharField(max_length=2000, blank=True, null=True)
+    ai_model = models.CharField(max_length=30, blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
-      return self.user
+      return self.date
 
