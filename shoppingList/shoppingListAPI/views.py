@@ -1,20 +1,16 @@
+import os
+
 import requests
 from djoser.conf import User
-from djoser.serializers import UserSerializer
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth import login, authenticate, get_user_model
-
-from OCR.tess_OCR import text_from_tesseract_ocr
 from shoppingList.settings import BASE_DIR
+from OCR.tess_OCR import text_from_tesseract_ocr
 from .forms import BillForm
 from .models import BillModel
 from .serializers import UserSettingsSerializer, BillSerializer, CustomUserSerializer
-
 from django.contrib.auth.models import BaseUserManager
-
-# User = get_user_model()
 
 class CustomUserView(APIView):
     def get(self, request, *args, **kwargs):
@@ -57,39 +53,64 @@ class BillView(generics.ListCreateAPIView):
     serializer_class = BillSerializer
 
     def post(self, request, *args, **kwargs):
-        goods = []
         form = BillForm(request.POST, request.FILES)
         print(request.data)
         if form.is_valid():
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            text_OCR = get_text_from_photo(pic_name=form.files['bill'])
-            goods = ask_AI(text_OCR)
-            return Response({'message': "чек сохранен", "AI": True, "goods": goods}) if goods else Response({'message': "чек сохранен", "AI": False, "goods": text_OCR})
+            text_OCR, file_path = self.get_text_from_photo(pic_name=form.files['bill'])
+            self.delete_bill_pic(file_path)
+
+            try:
+                goods = self.ask_AI(text_OCR)
+                return Response({'message': "чек принят", "AI": True, "goods": goods, 'text_OCR': text_OCR})
+            except Exception as ex:
+                return Response({'error': str(ex), 'message': "чек принят", "AI": False, "goods": text_OCR, 'text_OCR': text_OCR})
         return Response({"message": "Не корректно заполнена форма", "errors": form.errors})
 
-def get_text_from_photo(pic_name) -> str:
-    file_path = f"{BASE_DIR}/media/{pic_name}"
-    return text_from_tesseract_ocr(file_path=file_path)
+    def get_text_from_photo(self, pic_name) -> [str, str]:
+        file_path = f"{BASE_DIR}/media/{pic_name}"
+        return text_from_tesseract_ocr(file_path=file_path), file_path
 
 
-def ask_AI(text_OCR) -> list:
-    goods = []
-    good = {}
-    categories = ['barcode', 'product_name', 'unit', 'price', 'amount', 'cost']
-
-    ai_prompt = "Это некорректно распознанный OCR чек из магазина. Восстанови его и пришли в формате: штрих-код продукта; продукт; единица измерения; цена; количество; стоимость. Каждый следующий продукт с новой строки. Ответь без лишнего текста, только по сути. Вот текст, который нужно восстановить: "
-    ai_text = ai_prompt + text_OCR
-
-    response = requests.post(url="http://194.163.44.157/gpt_request", json={"request": ai_text, "tokens": 600})
-    response = response.json()['answer']
-    print(response)
-    response = response.split("\n")
-    for item in response:
-        item = item.split("; ")
-        for i in range(0, len(item)):
-            good[categories[i]] = item[i]
-        goods.append(good)
+    def ask_AI(self, text_OCR) -> list:
+        goods = []
         good = {}
-    return goods
+        categories = ['barcode', 'product_name', 'unit', 'price', 'amount', 'cost']
+        categories_float = ['price', 'amount', 'cost']
+
+        ai_prompt = "Это некорректно распознанный OCR чек из магазина. Восстанови его и пришли в формате: штрих-код продукта; продукт; единица измерения; цена; количество; стоимость. Каждый следующий продукт с новой строки. Ответь без лишнего текста, только по сути. Вот текст, который нужно восстановить: "
+        ai_text = ai_prompt + text_OCR
+
+        response = requests.post(url="http://194.163.44.157/gpt_request", json={"request": ai_text, "tokens": 100})
+        response = response.json()['answer']
+        print(response)
+        response = response.split("\n")
+        for item in response:
+            item = item.split("; ")
+            for i in range(0, len(item)):
+                if not item[i].startswith("'''"):
+                    good[categories[i]] = item[i]
+            goods.append(good)
+            good = {}
+        return goods
+
+    def delete_bill_pic(self, file_path):
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+            print(f"Файл {file_path} удален")
+        else:
+            print(f"Файл {file_path} не найден")
+
+class AcceptCustomBillTextView(generics.UpdateAPIView, generics.ListAPIView):
+    queryset = BillModel.objects.all()
+    serializer_class = BillSerializer
+
+    def patch(self, request, *args, **kwargs):
+
+
+
+
+        return self.partial_update(request, *args, **kwargs)
+
