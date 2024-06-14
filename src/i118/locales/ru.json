@@ -4,10 +4,63 @@
     "settings": "Настройки"
   },
   "buttonLabels": {
-    "themeSettings": "Настройки Темы"
+    "themeSettings": "Настройки Темы",
+    "saveTheme": "Сохранить для пользователя",
+    "regAuth": {
+      "login": "Вход",
+      "register": "Регистрация",
+      "logout": "Выход",
+      "pleaseAuthorize": "Пожалуйста авторизуйтесь"
+    }
   },
   "screensName": {
     "home": "Домашняя",
     "settings": "Настройки"
+  },
+  "other": {
+    "greetings" : "Здравствуйте, "
+  },
+  "validation": {
+    "base": {
+      "integer": "число должно быть целым",
+      "positive": "число должно быть положительным",
+      "mustNumber": "должен быть числом",
+      "cannotBeZero": "не может быть меньше или равен 0",
+      "aboveZero": "введите число от 0 и выше",
+      "isRequired": "обязателен(о) для заполнения",
+      "optional": "не обязателен(о)"
+    },
+    "addWater": {
+      "maxWaterGlasses": "cлишком много стаканов воды"
+    },
+    "calorieSchema": {
+      "desWeightMust": "желаемый вес должен быть меньше или равен весу"
+    },
+    "regAuth": {
+      "login": {
+        "usernameRequired": "Введите имя пользователя",
+        "passwordRequired": "Введите пароль"
+      },
+      "logout": "Выход выполнен успешно",
+      "reg": {
+        "usernameRequired": "Введите имя пользователя",
+        "emailRequired": "Введите адрес электронной почты",
+        "emailInvalid": "Введите корректный адрес электронной почты",
+        "usernameMinLength": "Имя пользователя должен содержать минимум {{min}} символа(ов)",
+        "passwordRequired": "Введите пароль",
+        "passwordMinLength": "Пароль должен содержать минимум {{min}} символов",
+        "passwordInvalid": "Пароль должен содержать хотя бы одну букву, заглавную букву, строчную букву и цифру",
+        "repeatPasswordRequired": "Повторите пароль",
+        "repeatPasswordMatch": "Пароли должны совпадать"
+      },
+      "username": "имя пользователя",
+      "email": "email",
+      "password": "пароль",
+      "repeatPassword": "повторите пароль"
+    }
+  },
+  "defaultMessage": {
+    "successSavingTheme": "Тема \"{{theme}}\" успешно сохранена",
+    "errorSavingTheme": "Ошибка при сохранении темы"
   }
 }

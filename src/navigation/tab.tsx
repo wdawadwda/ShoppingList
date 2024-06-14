@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StackNavigator, StackSettingsNavigator } from "./stack";
+import { ResiptNavigator, StackNavigator, StackSettingsNavigator } from "./stack";
 import { Theme } from "@/store";
 import { colorDark, colorLight } from "@/styles";
 import TestSvgComponent from "@/assets/icons/test/test-svg";
@@ -39,15 +39,15 @@ export const TabNavigator = ({ theme }: { theme: Theme }) => {
       </Tab.Screen>
 
       <Tab.Screen
-        name="blabla"
-        initialParams={{ initialRoute: "User" }}
+        name="ResiptTab"
+        initialParams={{ initialRoute: "Resipt" }}
         options={{
-          tabBarLabel: "User",
+          tabBarLabel: "Resipt",
           tabBarIcon: ({ color }) => <TestSvgComponent width={50} height={50} color={color} />,
           headerShown: false,
         }}
       >
-        {() => <StackSettingsNavigator theme={theme} />}
+        {() => <ResiptNavigator theme={theme} />}
       </Tab.Screen>
 
       <Tab.Screen

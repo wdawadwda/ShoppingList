@@ -5,6 +5,7 @@ export const colorDark = {
   backgroundDisabled: "#555555",
   backgroundAlert: "red",
   backgroundLinks: "aqua",
+  backgroundColoSuccess: "green",
 
   textColor: "white",
   textAlertColor: "white",
@@ -19,6 +20,7 @@ export const colorLight = {
   backgroundDisabled: "#555555",
   backgroundAlert: "red",
   backgroundLinks: "aqua",
+  backgroundColoSuccess: "green",
 
   textColor: "white",
   textAlertColor: "white",

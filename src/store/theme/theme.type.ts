@@ -3,3 +3,5 @@ export type ThemeState = {
 };
 
 export type Theme = "dark" | "light" | null;
+
+export type UserTheme = "dark" | "light" | "auto";

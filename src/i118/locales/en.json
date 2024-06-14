@@ -4,10 +4,48 @@
     "settings": "Settings"
   },
   "buttonLabels": {
-    "themeSettings": "Theme settings"
+    "themeSettings": "Theme settings",
+    "saveTheme": "Save for user",
+    "regAuth": {
+      "login": "Login",
+      "register": "Register",
+      "logout": "Logout",
+      "pleaseAuthorize": "Please authorize"
+    }
   },
   "screensName": {
     "home": "Home",
     "settings": "Settings"
+  },
+  "other": {
+    "greetings" : "Hello, "
+  },
+  "validation": {
+    "regAuth": {
+      "login": {
+        "usernameRequired": "Enter your username",
+        "passwordRequired": "Enter your password"
+      },
+      "logout": "Logout successful",
+      "reg": {
+        "usernameRequired": "Enter your username",
+        "emailRequired": "Enter your email address",
+        "emailInvalid": "Enter a valid email address",
+        "usernameMinLength": "Username must be at least {{min}} characters long",
+        "passwordRequired": "Enter your password",
+        "passwordMinLength": "Password must be at least {{min}} characters long",
+        "passwordInvalid": "Password must contain at least one letter, one uppercase letter, one lowercase letter, and one digit",
+        "repeatPasswordRequired": "Repeat your password",
+        "repeatPasswordMatch": "Passwords must match"
+      },
+      "username": "username",
+      "email": "email",
+      "password": "password",
+      "repeatPassword": "repeat your password"
+    }
+  },
+  "defaultMessage": {
+    "successSavingTheme": "Theme \"{{theme}}\" saved successfully",
+    "errorSavingTheme": "Error saving theme"
   }
 }
