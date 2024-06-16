@@ -35,6 +35,8 @@ DEFAULT_FROM_EMAIL = config[google_creds]['DEFAULT_FROM_EMAIL']
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 
 # Application definition
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     'django_filters',
     'shoppingListAPI',
     'djoser',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'shoppingList.urls'
@@ -207,3 +212,4 @@ pass
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
