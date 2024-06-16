@@ -38,4 +38,4 @@ class BillModel(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
-      return str(self.bill)
+      return str(self.user)

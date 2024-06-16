@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, date, timedelta
 
 import requests
 from djoser.conf import User
@@ -103,14 +104,50 @@ class BillView(generics.ListCreateAPIView):
         else:
             print(f"Файл {file_path} не найден")
 
-class AcceptCustomBillTextView(generics.UpdateAPIView, generics.ListAPIView):
+class CustomBillTextView(generics.CreateAPIView, generics.ListAPIView):
     queryset = BillModel.objects.all()
     serializer_class = BillSerializer
 
-    def patch(self, request, *args, **kwargs):
+class GetBillsHistoryView(generics.ListAPIView):
+    queryset = BillModel.objects.all()
+    serializer_class = BillSerializer
+
+    def get(self, request, *args, **kwargs):
+
+        params = {}
+        if request.query_params.get('user'):
+            params['user'] = request.query_params['user']
+        if request.query_params.get('date_from'):
+            date = self.normalize_date(request.query_params['date_from'])
+            if not date['error']:
+                params['date_from'] = date['date']
+        if request.query_params.get('date_to'):
+            date = self.normalize_date(request.query_params['date_to'])
+            if not date['error']:
+                params['date_to'] = date['date'] + timedelta(days=1)
+
+        if params:
+            bills = BillModel.objects.filter(date__range=(params['date_from'], params['date_to']), user=params['user'])
+        else:
+            bills = self.get_queryset()
+        return self.list(bills, *args, **kwargs)
+
+    def list(self, bills, *args, **kwargs):
+        page = self.paginate_queryset(bills)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(bills, many=True)
+        return Response(serializer.data)
+
+    def normalize_date(self, date):
+        formats = ['%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d', '%y-%m-%d', '%d-%m-%Y', '%d-%m-%y']
+        for format in formats:
+            try:
+                return {'error': False, 'date': datetime.strptime(str(date), format)}
+            except Exception as ex:
+                print(ex)
+        return {'error': ex, "date": None}
 
 
-
-
-        return self.partial_update(request, *args, **kwargs)
 
