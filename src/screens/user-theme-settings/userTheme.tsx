@@ -5,7 +5,6 @@ import { colorDark, fontsStyles, globalStyles } from "@/styles";
 import { t } from "i18next";
 
 export function UserTheme({ theme }: { theme: Theme }) {
-
   return (
     <Layout theme={theme}>
       <View style={globalStyles.container}>

@@ -1,16 +1,40 @@
 {
   "tabsLabels": {
     "home": "Home",
-    "settings": "Settings"
+    "settings": "Settings",
+    "receipts": "Receipts"
   },
   "buttonLabels": {
     "themeSettings": "Theme settings",
     "saveTheme": "Save for user",
+    "choosePhoto": "Choose a photo",
     "regAuth": {
       "login": "Login",
       "register": "Register",
       "logout": "Logout",
       "pleaseAuthorize": "Please authorize"
+    },
+    "reviseReceipt": {
+      "add": "Add receipt",
+      "history": "History",
+      "takePhoto": "Take a photo",
+      "download": "Download from gallery",
+      "send": "Send",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "submitCustomDate": "Submit your date",
+      "week": "Week",
+      "month": "Month",
+      "halfYear": "Half year",
+      "year": "Year",
+      "twoYears": "Two years",
+      "selectPeriod": "Select period",
+      "selectYourDate": "Select your date",
+      "edit": "Edit",
+      "saveChanges": "Save changes",
+      "addProduct": "Add product",
+      "accept": "Accept",
+      "delete": "Delete"
     }
   },
   "screensName": {
@@ -44,8 +68,23 @@
       "repeatPassword": "repeat your password"
     }
   },
+  "text": {
+    "reviseReceipt": {
+      "productName": "Product name",
+      "price": "Price",
+      "amount": "Amount",
+      "cost": "Cost",
+      "noData": "No data for the selected period",
+      "unitOfMeasurement": "Unit of measurement"
+    }
+  },
   "defaultMessage": {
     "successSavingTheme": "Theme \"{{theme}}\" saved successfully",
-    "errorSavingTheme": "Error saving theme"
+    "errorSavingTheme": "Error saving theme",
+    "errorPhoto": "Error sending photo",
+    "defaultError": "Something went wrong"
+  },
+  "permission": {
+    "receipt": "We need permission to use the camera. Please set it in your device settings"
   }
 }

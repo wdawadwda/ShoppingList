@@ -16,13 +16,7 @@ export function User({ theme }: { theme: Theme }) {
   return (
     <Layout theme={theme}>
       <View style={globalStyles.container}>
-        {!user && (
-          <Button
-            theme={theme}
-            onPress={() => navigation.navigate("RegAuth" as never)}
-          >{`${t("buttonLabels.regAuth.login")} / ${t("buttonLabels.regAuth.register")}`}</Button>
-        )}
-        {user && (
+        {user ? (
           <>
             <Text
               style={[fontsStyles.subtitle, { color: colorDark.textColor }]}
@@ -32,6 +26,11 @@ export function User({ theme }: { theme: Theme }) {
               {t("buttonLabels.regAuth.logout")}
             </Button>
           </>
+        ) : (
+          <Button
+            theme={theme}
+            onPress={() => navigation.navigate("RegAuth" as never)}
+          >{`${t("buttonLabels.regAuth.login")} / ${t("buttonLabels.regAuth.register")}`}</Button>
         )}
       </View>
     </Layout>

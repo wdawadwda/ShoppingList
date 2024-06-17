@@ -39,3 +39,19 @@ export type MessageType = {
 };
 
 export type Status = "idle" | "loading" | "success" | "error";
+
+export interface Product {
+  barcode: string;
+  product_name: string;
+  unit: string;
+  price: string;
+  amount?: string;
+  cost?: string;
+}
+
+export interface BillResponse {
+  message: string;
+  AI: boolean;
+  goods: Product[];
+  text_OCR: string;
+}

@@ -8,5 +8,7 @@ export {
   type Status,
   type ErrorObject,
   type MessageType,
+  type Product,
+  type BillResponse,
 } from "./api.type";
 export { BACKEND_URL } from "./api.const";

@@ -1,1 +1,3 @@
-export { TestSvgComponent } from "./test/test-svg";
+export { HomeSvgComponent, ReceiptSvgComponent, SettingsSvgComponent } from "./tab";
+export { UserSvgComponent, XSvgComponent, ArrowLeftComponent } from "./other";
+export { AddPhotoSvgComponent, AddGallerySvgComponent } from "./reciept";
