@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CustomUserView, CustomBillTextView, GetBillsHistoryView
+from .views import CustomUserView, CustomBillTextView, GetBillsHistoryView, TestSendBillView
 
 from .views import UserSettingsView, BillView
 
@@ -10,5 +10,7 @@ urlpatterns = [
     path('accept-bill-text/', CustomBillTextView.as_view(), name='acceptCustomBillTextView'),
     path('bill-history/<int:pk>/', GetBillsHistoryView.as_view(), name='getBillsHistoryView'),
     path('bill-history/', GetBillsHistoryView.as_view(), name='getBillsHistoryView'),
+
+    path('test-send-bill/', TestSendBillView.as_view(), name='getBillsHistoryView'),
 
 ]

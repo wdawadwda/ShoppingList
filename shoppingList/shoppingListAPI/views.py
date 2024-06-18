@@ -149,5 +149,7 @@ class GetBillsHistoryView(generics.ListAPIView):
                 print(ex)
         return {'error': ex, "date": None}
 
-
+class TestSendBillView(generics.CreateAPIView):
+    queryset = BillModel.objects.all()
+    serializer_class = BillSerializer
 

@@ -1,4 +1,5 @@
-
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView, TokenObtainPairView
@@ -20,6 +21,6 @@ urlpatterns = [
     path('api/v1/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     path('api/v1/', include('shoppingListAPI.urls')),
-]
+]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # if settings.DEBUG:
 #     urlpatterns += static(settings.SITE_URL, document_root=settings.SITE_ROOT)

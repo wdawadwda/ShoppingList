@@ -34,7 +34,7 @@ DEFAULT_FROM_EMAIL = config[google_creds]['DEFAULT_FROM_EMAIL']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
 
 
@@ -212,4 +212,6 @@ pass
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'media')
 
+pass

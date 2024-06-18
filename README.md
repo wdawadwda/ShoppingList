@@ -139,3 +139,5 @@ METHODS = [GET]
 ^/api/v1//bill-history/pk:int/ - get one bill by pk\
 ^/api/v1//bill-history/?user=<user_id>&date_from<date_from>&date_to=<date_to>
 
+- ### *SEND BILL (TEST)*
+^/api/v1/test-send-bill/

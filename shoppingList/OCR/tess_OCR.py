@@ -7,6 +7,12 @@ import pytesseract
 def text_from_tesseract_ocr(file_path, rate=150): # 170
     print("rate ", rate)
     img = cv2.imread(file_path)
+    # if img:
+    #     pass
+    if img.size == 0:
+        pass
+    else:
+        pass
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     ret, thresh = cv2.threshold(gray, rate, rate+1, cv2.THRESH_BINARY)
 
