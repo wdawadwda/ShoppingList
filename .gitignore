@@ -1,1 +1,5 @@
+/venv
 /config/config.ini
+/shoppingList/system_conf.py
+/shoppingList/*.sqlite3
+/config/system_conf.py

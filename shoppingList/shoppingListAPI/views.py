@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import datetime, date, timedelta
 
 import requests
@@ -12,6 +13,7 @@ from .forms import BillForm
 from .models import BillModel
 from .serializers import UserSettingsSerializer, BillSerializer, CustomUserSerializer
 from django.contrib.auth.models import BaseUserManager
+from django.conf import settings
 
 class CustomUserView(APIView):
     def get(self, request, *args, **kwargs):
@@ -57,36 +59,50 @@ class BillView(generics.ListCreateAPIView):
         form = BillForm(request.POST, request.FILES)
         print(request.data)
         if form.is_valid():
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+            # serializer = self.get_serializer(data=request.data)
+            # serializer.is_valid(raise_exception=True)
+            # serializer.save()
+            self.save_file(request=request)
             text_OCR, file_path = self.get_text_from_photo(pic_name=form.files['bill'])
             self.delete_bill_pic(file_path)
 
             try:
-                goods = self.ask_AI(text_OCR)
-                return Response({'message': "чек принят", "AI": True, "goods": goods, 'text_OCR': text_OCR})
+                goods, error = self.ask_AI(text_OCR)
+                return Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods})
             except Exception as ex:
-                return Response({'error': str(ex), 'message': "чек принят", "AI": False, "goods": text_OCR, 'text_OCR': text_OCR})
-        return Response({"message": "Не корректно заполнена форма", "errors": form.errors})
+                return Response({'error': str(ex), 'message': "чек принят", "AI": False, "goods": text_OCR})
+        return Response({"error": form.errors, "message": "Не корректно заполнена форма"})
+
+    def save_file(self, request):
+        file = request.FILES['bill']
+        file_path = os.path.join(settings.MEDIA_ROOT, file.name)
+        with open(file_path, 'wb+') as f:
+            for chunk in file.chunks():
+                f.write(chunk)
+        return file_path
+
 
     def get_text_from_photo(self, pic_name) -> [str, str]:
         file_path = f"{BASE_DIR}/media/{pic_name}"
         return text_from_tesseract_ocr(file_path=file_path), file_path
 
 
-    def ask_AI(self, text_OCR) -> list:
+    def ask_AI(self, text_OCR) -> [list, dict]:
+        incorrect_picture_status = "некорректная картинка"
+
         goods = []
         good = {}
         categories = ['barcode', 'product_name', 'unit', 'price', 'amount', 'cost']
         categories_float = ['price', 'amount', 'cost']
 
-        ai_prompt = "Это некорректно распознанный OCR чек из магазина. Восстанови его и пришли в формате: штрих-код продукта; продукт; единица измерения; цена; количество; стоимость. Каждый следующий продукт с новой строки. Ответь без лишнего текста, только по сути. Вот текст, который нужно восстановить: "
+        ai_prompt = f"Это некорректно распознанный OCR чек из магазина. Восстанови его и пришли в формате: штрих-код продукта; продукт; единица измерения; цена; количество; стоимость. Каждый следующий продукт с новой строки. Ответь без лишнего текста, только по сути. Если текст невозможно восстановить, выдай ответ: {incorrect_picture_status}. Вот текст, который нужно восстановить: "
         ai_text = ai_prompt + text_OCR
 
-        response = requests.post(url="http://194.163.44.157/gpt_request", json={"request": ai_text, "tokens": 100})
+        response = requests.post(url="http://194.163.44.157/gpt_request", json={"request": ai_text, "tokens": 500})
         response = response.json()['answer']
         print(response)
+        if re.findall(r'некорректная[\s]{0,}картинка', response):
+            return [], incorrect_picture_status
         response = response.split("\n")
         for item in response:
             item = item.split("; ")
@@ -95,7 +111,7 @@ class BillView(generics.ListCreateAPIView):
                     good[categories[i]] = item[i]
             goods.append(good)
             good = {}
-        return goods
+        return goods, False
 
     def delete_bill_pic(self, file_path):
         if os.path.isfile(file_path):
@@ -108,7 +124,7 @@ class CustomBillTextView(generics.CreateAPIView, generics.ListAPIView):
     queryset = BillModel.objects.all()
     serializer_class = BillSerializer
 
-class GetBillsHistoryView(generics.ListAPIView):
+class GetBillsHistoryView(generics.ListAPIView, generics.DestroyAPIView):
     queryset = BillModel.objects.all()
     serializer_class = BillSerializer
 
@@ -128,6 +144,8 @@ class GetBillsHistoryView(generics.ListAPIView):
 
         if params:
             bills = BillModel.objects.filter(date__range=(params['date_from'], params['date_to']), user=params['user'])
+        elif kwargs.get('pk'):
+            bills = BillModel.objects.filter(id=int(kwargs['pk']))
         else:
             bills = self.get_queryset()
         return self.list(bills, *args, **kwargs)

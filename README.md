@@ -134,10 +134,11 @@ METHODS = [POST]
 - ### *GET BILL HISTORY ^/api/v1//bill-history/* 
 ContentType = application/json; 
 
-METHODS = [GET]
+METHODS = [GET, DELETE]
 
 ^/api/v1//bill-history/pk:int/ - get one bill by pk\
 ^/api/v1//bill-history/?user=<user_id>&date_from<date_from>&date_to=<date_to>
+^/api/v1//bill-history/pk:int/ - DELETE one bill by pk\
 
 - ### *SEND BILL (TEST)*
 ^/api/v1/test-send-bill/
