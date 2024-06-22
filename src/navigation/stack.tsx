@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "react-native";
 import { type Theme } from "@/store";
 import { colorDark, colorLight } from "@/styles";
-import { Home, RegAuth, Resipt, Settings, User, UserTheme } from "@/screens";
+import { HistoryResipt, Home, PhotoResipt, RegAuth, Resipt, Settings, User, UserTheme } from "@/screens";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +56,22 @@ export const ResiptNavigator = ({ theme }: { theme: Theme }) => (
         }}
       >
         {() => <Resipt theme={theme} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="PhotoResipt"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {() => <PhotoResipt theme={theme} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="HistoryResipt"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {() => <HistoryResipt theme={theme} />}
       </Stack.Screen>
 
       <Stack.Screen

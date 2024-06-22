@@ -1,11 +1,9 @@
-import { AntDesign } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ResiptNavigator, StackNavigator, StackSettingsNavigator } from "./stack";
 import { Theme } from "@/store";
 import { colorDark, colorLight } from "@/styles";
-import TestSvgComponent from "@/assets/icons/test/test-svg";
 import { useTranslation } from "react-i18next";
-import { Feather } from "@expo/vector-icons";
+import { HomeSvgComponent, ReceiptSvgComponent, SettingsSvgComponent } from "@/assets";
 
 const Tab = createBottomTabNavigator();
 export const TabNavigator = ({ theme }: { theme: Theme }) => {
@@ -31,7 +29,7 @@ export const TabNavigator = ({ theme }: { theme: Theme }) => {
         initialParams={{ initialRoute: "Home" }}
         options={{
           tabBarLabel: t("tabsLabels.home"),
-          tabBarIcon: ({ color }) => <AntDesign name="home" size={35} color={color} />,
+          tabBarIcon: ({ color }) => <HomeSvgComponent stroke={color} width={32} height={32} color={color} />,
           headerShown: false,
         }}
       >
@@ -42,8 +40,8 @@ export const TabNavigator = ({ theme }: { theme: Theme }) => {
         name="ResiptTab"
         initialParams={{ initialRoute: "Resipt" }}
         options={{
-          tabBarLabel: "Resipt",
-          tabBarIcon: ({ color }) => <TestSvgComponent width={50} height={50} color={color} />,
+          tabBarLabel: t("tabsLabels.receipts"),
+          tabBarIcon: ({ color }) => <ReceiptSvgComponent stroke={color} width={32} height={32} color={color} />,
           headerShown: false,
         }}
       >
@@ -55,7 +53,7 @@ export const TabNavigator = ({ theme }: { theme: Theme }) => {
         initialParams={{ initialRoute: "Settings" }}
         options={{
           tabBarLabel: t("tabsLabels.settings"),
-          tabBarIcon: ({ color }) => <Feather name="settings" size={30} color={color} />,
+          tabBarIcon: ({ color }) => <SettingsSvgComponent stroke={color} width={32} height={32} color={color} />,
           headerShown: false,
         }}
       >

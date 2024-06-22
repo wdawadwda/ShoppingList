@@ -5,6 +5,7 @@ export interface TabsProperties {
   handleTabClick: (tab: string | null) => void;
   center?: boolean;
   fixedWidth?: boolean;
+  fixedWidthWidth?: number;
   theme: Theme;
 }
 
@@ -31,4 +32,5 @@ export type RenderTabContentProps = {
   activeTab: string | null;
   t: (key: string) => string;
   theme: Theme;
+  userId?: string | null;
 };

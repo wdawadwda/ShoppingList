@@ -1,9 +1,9 @@
-import { AntDesign } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import Button from "../button";
 import { type Theme } from "@/store";
 import { useNavigation } from "@react-navigation/native";
 import { colorDark } from "@/styles";
+import { ArrowLeftComponent } from "@/assets";
 
 export const BackButton = ({ theme }: { theme: Theme }) => {
   const navigation = useNavigation();
@@ -14,7 +14,7 @@ export const BackButton = ({ theme }: { theme: Theme }) => {
       style={[styles.buttonContainer, { alignSelf: "flex-start" }]}
       buttonColorVar="backgroundColorThird"
     >
-      <AntDesign name="arrowleft" size={25} color={colorDark.textColor} />
+      <ArrowLeftComponent width={25} height={25} color={colorDark.textColor} />
     </Button>
   );
 };

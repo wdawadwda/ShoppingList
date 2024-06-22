@@ -1,13 +1,7 @@
 export { Layout } from "./layout";
-export { Loader } from "./ui";
-export { ThemeToggleButtons } from "./ui";
-export { Button, BackButton, DetailButton } from "./ui";
+export { Loader, ThemeToggleButtons, Button, BackButton, DetailButton, LangSwitcher, InputForm } from "./ui";
 export { LoaderFetchUser } from "./loader-fetch-user";
-export { LangSwitcher } from "./ui";
-export { InputForm } from "./ui";
-export { useTabs } from "./tabs";
-export { useRedirectLogic } from "./tabs";
-export { SliderWithButtons } from "./tabs";
-export { Auth } from "./register-auth";
-export { Reg } from "./register-auth";
+export { useTabs, useRedirectLogic, SliderWithButtons } from "./tabs";
+export { Auth, Reg } from "./register-auth";
 export { MessForm } from "./mess-form";
+export { HistoryList, HistoryButton } from "./receipt";

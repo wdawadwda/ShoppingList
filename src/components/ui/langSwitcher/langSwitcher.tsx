@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   text: {
     color: colorDark.textColor,
     textAlign: "center",
+    fontSize: 20,
   },
   openingContainer: {
     backgroundColor: colorDark.textColor,

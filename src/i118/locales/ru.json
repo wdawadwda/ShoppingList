@@ -1,16 +1,40 @@
 {
   "tabsLabels": {
     "home": "Главная",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "receipts": "Чеки"
   },
   "buttonLabels": {
     "themeSettings": "Настройки Темы",
     "saveTheme": "Сохранить для пользователя",
+    "choosePhoto": "Выберите фото",
     "regAuth": {
       "login": "Вход",
       "register": "Регистрация",
       "logout": "Выход",
       "pleaseAuthorize": "Пожалуйста авторизуйтесь"
+    },
+    "reviseReceipt": {
+      "add": "Добавить чек",
+      "history": "История",
+      "takePhoto": "Сделать фото",
+      "download": "Загрузить из галереи",
+      "send": "Отправить",
+      "startDate": "Начальная дата",
+      "endDate": "Конечная дата",
+      "submitCustomDate": "Отправить свою дату",
+      "week": "Неделя",
+      "month": "Месяц",
+      "halfYear": "Полугодие",
+      "year": "Год",
+      "twoYears": "Два года",
+      "selectPeriod": "Выбрать период",
+      "selectYourDate": "Выбрать свою дату",
+      "edit": "Редактировать",
+      "saveChanges": "Сохранить изменения",
+      "addProduct": "Добавить продукт",
+      "accept": "Принять",
+      "delete": "Удалить"
     }
   },
   "screensName": {
@@ -59,8 +83,23 @@
       "repeatPassword": "повторите пароль"
     }
   },
+  "text": {
+    "reviseReceipt": {
+      "productName": "Название товара",
+      "price": "Цена",
+      "amount": "Количество",
+      "cost": "Стоимость",
+      "noData": "Нет данных для выбранного периода",
+      "unitOfMeasurement": "Единица измерения"
+    }    
+  },
   "defaultMessage": {
     "successSavingTheme": "Тема \"{{theme}}\" успешно сохранена",
-    "errorSavingTheme": "Ошибка при сохранении темы"
+    "errorSavingTheme": "Ошибка при сохранении темы",
+    "errorPhoto": "Ошибка отправки фото",
+    "defaultError": "Что-то пошло не так"
+  },
+  "permission": {
+    "receipt": "Нам требуется разрешение для использования камеры, установите в настройках вашей устройство"
   }
 }
