@@ -134,10 +134,10 @@ SIMPLE_JWT = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'ruslanslp19@gmail.com'
-EMAIL_HOST_PASSWORD = 'cjqe vjrr jabt pbqr'
+# EMAIL_HOST_USER = 'ruslanslp19@gmail.com'
+# EMAIL_HOST_PASSWORD = 'cjqe vjrr jabt pbqr'
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL  = 'ruslanslp19@gmail.com'
+# DEFAULT_FROM_EMAIL  = 'ruslanslp19@gmail.com'
 
 DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
@@ -163,9 +163,9 @@ REST_FRAMEWORK = {
     )
 }
 
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('Bearer',),
-}
+# SIMPLE_JWT = {
+#     'AUTH_HEADER_TYPES': ('Bearer',),
+# }
 
 
 # Password validation
