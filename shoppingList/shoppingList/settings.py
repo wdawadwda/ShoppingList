@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'shoppingListAPI',
     'djoser',
     'corsheaders',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -214,4 +215,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MEDIA_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'media')
 
-pass
+SECURE_SSL_REDIRECT = True
+SECURE_SSL_HOST = "localhost"
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
