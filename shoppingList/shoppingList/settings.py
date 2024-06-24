@@ -213,9 +213,10 @@ pass
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# MEDIA_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'media')
 
-SECURE_SSL_REDIRECT = True
-SECURE_SSL_HOST = "localhost"
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
+# SECURE_SSL_HOST = "localhost"
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+#
+CSRF_TRUSTED_ORIGINS = ['https://2e54-178-127-147-229.ngrok-free.app']
