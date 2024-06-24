@@ -64,3 +64,24 @@ export const fetchHistory = async (from: string, to: string, userId: number) => 
     throw error;
   }
 };
+
+export const deleteBillHistoryItem = async (itemId: string | number) => {
+  try {
+    const url = `${BACKEND_URL}/api/v1/bill-history/${itemId}/`;
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 204) {
+      return true;
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error deleting bill history item:", error);
+    throw error;
+  }
+};

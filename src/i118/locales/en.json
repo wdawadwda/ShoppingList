@@ -6,8 +6,14 @@
   },
   "buttonLabels": {
     "themeSettings": "Theme settings",
+    "addCustomProduct": "Add custom product",
+    "addCustomProductBtn" : {
+      "addNames": "Add {{lang}} names"
+    },
     "saveTheme": "Save for user",
     "choosePhoto": "Choose a photo",
+    "cancel": "Cancel",
+    "delete": "Delete",
     "regAuth": {
       "login": "Login",
       "register": "Register",
@@ -39,7 +45,8 @@
   },
   "screensName": {
     "home": "Home",
-    "settings": "Settings"
+    "settings": "Settings",
+    "addList": "Add list"
   },
   "other": {
     "greetings" : "Hello, "
@@ -75,13 +82,22 @@
       "amount": "Amount",
       "cost": "Cost",
       "noData": "No data for the selected period",
-      "unitOfMeasurement": "Unit of measurement"
+      "unitOfMeasurement": "Unit of measurement",
+      "confirmDelete": "Are you sure you want to delete?",
+      "deleteReceipt": "Удаление чека"
+    },
+    "addCustomProduct": {
+      "title": "Add custom product"
+    },
+    "home": {
+      "yourLists": "Your lists"
     }
   },
   "defaultMessage": {
     "successSavingTheme": "Theme \"{{theme}}\" saved successfully",
     "errorSavingTheme": "Error saving theme",
     "errorPhoto": "Error sending photo",
+    "errorReceipt": "Error deleting receipt",
     "defaultError": "Something went wrong"
   },
   "permission": {

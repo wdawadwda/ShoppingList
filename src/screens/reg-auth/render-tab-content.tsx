@@ -1,5 +1,5 @@
 import { Auth, Reg } from "@/components";
-import { Content, RenderTabContentProps } from "@/components/tabs/tabs.types";
+import { type Content, type RenderTabContentProps } from "@/components/tabs/tabs.types";
 
 export const renderTabContent = ({ activeTab, t, theme }: RenderTabContentProps): Content => {
   switch (activeTab) {

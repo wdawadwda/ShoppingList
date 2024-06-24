@@ -21,7 +21,7 @@ export function HistoryButton({
   userId: number | null;
   theme: Theme;
 }) {
-  const [isDatePicker, setIsDatePicker] = useState(true);
+  const [isDatePicker, setIsDatePicker] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 

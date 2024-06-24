@@ -8,10 +8,10 @@ import { darkStyles, globalStyles, lightStyles } from "@/styles";
 export const Layout = ({ children, theme }: LayoutProps) => {
   return (
     <SafeAreaView style={globalStyles.safeArea}>
-      <ScrollView style={[theme === "dark" ? darkStyles.container : lightStyles.container, globalStyles.container]}>
+      <View style={[theme === "dark" ? darkStyles.container : lightStyles.container, globalStyles.container]}>
         <Header theme={theme} />
-        <View style={globalStyles.content}>{children}</View>
-      </ScrollView>
+        <ScrollView style={globalStyles.content}>{children}</ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

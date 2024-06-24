@@ -7,9 +7,10 @@ import { t } from "i18next";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/user";
+import { type MainNavigationProp } from "@/navigation";
 
 export function Resipt({ theme }: { theme: Theme }) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainNavigationProp>();
   const user = useSelector(selectUser);
 
   return (
@@ -18,21 +19,17 @@ export function Resipt({ theme }: { theme: Theme }) {
         <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>{t("tabsLabels.receipts")}</Text>
         {user ? (
           <>
-            <Button
-              theme={theme}
-              style={{ marginBottom: 10 }}
-              onPress={() => navigation.navigate("PhotoResipt" as never)}
-            >
+            <Button theme={theme} style={{ marginBottom: 10 }} onPress={() => navigation.navigate("PhotoResipt")}>
               {t("buttonLabels.reviseReceipt.add")}
             </Button>
-            <Button theme={theme} onPress={() => navigation.navigate("HistoryResipt" as never)}>
+            <Button theme={theme} onPress={() => navigation.navigate("HistoryResipt")}>
               {t("buttonLabels.reviseReceipt.history")}
             </Button>
           </>
         ) : (
           <Button
             theme={theme}
-            onPress={() => navigation.navigate("RegAuth" as never)}
+            onPress={() => navigation.navigate("RegAuth")}
           >{`${t("buttonLabels.regAuth.login")} / ${t("buttonLabels.regAuth.register")}`}</Button>
         )}
       </View>

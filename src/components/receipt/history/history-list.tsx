@@ -1,11 +1,57 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { t } from "i18next";
 import { type History } from "@/components/receipt/receipt.type";
 import { formatDate } from "@/utils";
 import { colorDark, fontsStyles } from "@/styles";
+import { Button } from "@/components/ui";
+import { type Theme } from "@/store";
+import { deleteBillHistoryItem } from "@/store/api";
+import { useNavigation } from "@react-navigation/native";
+import { MessForm } from "@/components/mess-form";
+import { type MainNavigationProp } from "@/navigation";
 
-export function HistoryList({ historyData }: { historyData: History[] | null }) {
+export function HistoryList({ historyData, theme }: { historyData: History[] | null; theme: Theme }) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<{ id: string | number; error: string } | null>(null);
+
+  const navigation = useNavigation<MainNavigationProp>();
+  const handleDeleteItem = (itemId: string | number) => {
+    setError(null);
+    Alert.alert(
+      t("text.reviseReceipt.deleteReceipt"),
+      t("text.reviseReceipt.confirmDelete"),
+      [
+        {
+          text: t("buttonLabels.cancel"),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttonLabels.delete"),
+          onPress: () => {
+            deleteItem(itemId);
+          },
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
+  const deleteItem = async (itemId: string | number) => {
+    try {
+      setIsLoading(true);
+      const deletedSuccessfully = await deleteBillHistoryItem(itemId);
+      if (deletedSuccessfully) {
+        navigation.navigate("Receipt");
+      }
+    } catch (error) {
+      setError({ id: itemId, error: t("defaultMessage.errorReceipt") });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <View>
       {historyData && historyData.length > 0 ? (
@@ -19,19 +65,34 @@ export function HistoryList({ historyData }: { historyData: History[] | null }) 
               {item.bill_text.map((billItem, index) => (
                 <View key={index} style={styles.billItemContainer}>
                   <Text style={[fontsStyles.text, styles.text]}>
-                    {t("text.reviseReceipt.productName")}: {billItem.product_name}
+                    {t("text.reviseReceipt.productName")}: {billItem?.product_name}
                   </Text>
                   <Text style={[fontsStyles.text, styles.text]}>
-                    {t("text.reviseReceipt.price")}: {billItem.price} {billItem.unit}
+                    {t("text.reviseReceipt.price")}: {billItem?.price}
                   </Text>
                   <Text style={[fontsStyles.text, styles.text]}>
-                    {t("text.reviseReceipt.amount")}: {billItem.amount} {billItem.unit}
+                    {t("text.reviseReceipt.amount")}: {billItem?.amount} {billItem?.unit}
                   </Text>
                   <Text style={[fontsStyles.text, styles.text]}>
-                    {t("text.reviseReceipt.cost")}: {billItem.cost}
+                    {t("text.reviseReceipt.cost")}: {billItem?.cost}
                   </Text>
                 </View>
               ))}
+              <Button
+                isLoading={isLoading}
+                disabled={isLoading}
+                buttonColorVar="backgroundAlert"
+                style={{ marginTop: 5 }}
+                theme={theme}
+                onPress={() => handleDeleteItem(item.id)}
+              >
+                Удалить чек
+              </Button>
+              {error && error.id === item.id && !isLoading && (
+                <View style={styles.error}>
+                  <MessForm message={{ defaultAxios: error.error }} status={"error"} />
+                </View>
+              )}
             </View>
           ))
       ) : historyData && historyData.length === 0 ? (
@@ -56,6 +117,9 @@ const styles = StyleSheet.create({
     color: colorDark.textColor,
     textAlign: "center",
     marginTop: 10,
+  },
+  error: {
+    marginTop: 5,
   },
 });
 

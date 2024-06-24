@@ -10,5 +10,14 @@ export {
   type MessageType,
   type Product,
   type BillResponse,
-} from "./api.type";
-export { BACKEND_URL } from "./api.const";
+  BACKEND_URL,
+} from "./api";
+export {
+  svgScheme,
+  productsConst,
+  type ProductsListData,
+  type ProductInList,
+  type ListAddProductProps,
+  type ExistingListProps,
+  type NewListProps,
+} from "./products-lists";

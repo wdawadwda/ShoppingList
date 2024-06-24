@@ -1,19 +1,26 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
-import { Button, Layout } from "@/components";
-import { Theme } from "@/store";
-import { globalStyles } from "@/styles/global.style";
+import { AddButton, Button, Layout } from "@/components";
+import { selectProductsData, type Theme } from "@/store";
+import { fontsStyles, globalStyles } from "@/styles/global.style";
 import { KEYS } from "@/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "@/store/user";
-import { useEffect } from "react";
+import { type MainNavigationProp } from "@/navigation";
+import { colorDark } from "@/styles";
+import { t } from "i18next";
+import { useSelector } from "react-redux";
 
 export function Home({ theme }: { theme: Theme }) {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
+  const navigate = useNavigation<MainNavigationProp>();
+  // const listStatus = useSelector(selectProductsStatus);
+
+  const listData = useSelector(selectProductsData);
+  // const listError = useSelector(selectProductsError);
+
+  // useEffect(() => {
+  //   console.log(listData);
+  // }, [listData]);
 
   //! Удалить
   const handleSaveToStorage = async () => {
@@ -29,7 +36,6 @@ export function Home({ theme }: { theme: Theme }) {
     try {
       const storedData = await AsyncStorage.getAllKeys();
       const filteredData = await AsyncStorage.multiGet([KEYS.USER.REFRESH_TOKEN, KEYS.USER.ACCESS_TOKEN]);
-      // console.log(user);
       console.log("Data retrieved from AsyncStorage:", storedData);
       console.log("Filtered data for specific keys:", filteredData);
     } catch (error) {
@@ -48,29 +54,56 @@ export function Home({ theme }: { theme: Theme }) {
     }
   };
   //! Удалить
-  // useEffect(() => {
-  //   console.log(user);
-  // }, []);
+
   return (
     <Layout theme={theme}>
       <View style={globalStyles.container}>
-        {/*
-        {!user && (
-          <Button
-            theme={theme}
-            onPress={() => navigation.navigate("RegAuth" as never)}
-          >{`${t("buttonsTitles.regAuth.login")} / ${t("buttonsTitles.regAuth.reg")}`}</Button>
-        )}
-        {user && (
-          <Button theme={theme} onPress={() => dispatch(userActions.logout())}>
-            Logout
-          </Button>
-        )}
-        */}
-        {/* <Button
-          theme={theme}
-          onPress={() => navigation.navigate("RegAuth" as never)}
-        >{`${t("buttonsTitles.regAuth.login")} / ${t("buttonsTitles.regAuth.reg")}`}</Button> */}
+        <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>{t("tabsLabels.home")}</Text>
+        <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>{t("text.home.yourLists")}:</Text>
+        {/* Блок со списками */}
+        <View style={{ marginTop: 10 }}>
+          <AddButton onPress={() => navigate.navigate("List")} theme={theme} />
+          {listData ? (
+            <>
+              {listData.owner.length > 0 && (
+                <View>
+                  {listData.owner.map((listItem, index) => (
+                    <View key={`owner-${index}`}>
+                      <Button
+                        theme={theme}
+                        style={{ marginTop: 25 }}
+                        onPress={() =>
+                          navigate.navigate("List", { listId: String(listItem.id), listName: listItem.name })
+                        }
+                      >
+                        {listItem.name}
+                      </Button>
+                    </View>
+                  ))}
+                </View>
+              )}
+              {listData.shared.length > 0 && (
+                <View>
+                  <Text style={fontsStyles.subtitle}>Переданные списки</Text>
+                  {listData.shared.map((listItem, index) => (
+                    <View key={`shared-${index}`}>
+                      <Button
+                        theme={theme}
+                        style={{ marginTop: 25 }}
+                        onPress={() =>
+                          navigate.navigate("List", { listId: String(listItem.id), listName: listItem.name })
+                        }
+                      >
+                        {listItem.name}
+                      </Button>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </>
+          ) : null}
+        </View>
+
         <View style={{ margin: 50 }}>
           <Button theme={theme} style={{ marginTop: 25 }} onPress={handleSaveToStorage}>
             Save to Storage
@@ -81,9 +114,14 @@ export function Home({ theme }: { theme: Theme }) {
           <Button theme={theme} style={{ marginTop: 25 }} onPress={handleClearStorage}>
             Clear Storage
           </Button>
-          {/* <Button theme={theme} style={{ marginTop: 25 }} onPress={handleShowUser}>
-            Show User
-          </Button> */}
+
+          <Button
+            theme={theme}
+            style={{ marginTop: 25 }}
+            onPress={() => navigate.navigate("List", { listId: "1", listName: "Список" })}
+          >
+            List
+          </Button>
         </View>
       </View>
     </Layout>
