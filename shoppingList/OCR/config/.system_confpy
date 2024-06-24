@@ -1,0 +1,2 @@
+# rename to system_conf.py and imput your system 'windows' or 'ubuntu'
+system = ''

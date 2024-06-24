@@ -4,7 +4,7 @@ import cv2
 import pytesseract
 import os
 # from igmToText import bill_cutter
-from config import system_conf
+from .config import system_conf
 
 
 def text_from_tesseract_ocr(file_path, rate=150): # 170
