@@ -39,3 +39,17 @@ class BillModel(models.Model):
 
     def __str__(self):
       return str(self.user)
+
+class GoodsModel(models.Model):
+  barcode = models.CharField(max_length=50, blank=True, null=True)
+  product_name = models.CharField(max_length=150, blank=False, null=False)
+  unit = models.CharField(max_length=15, blank=False, null=False)
+  default = models.BooleanField(blank=False, null=False)
+
+class ListOfPlannedGoods(models.Model):
+  date = models.DateTimeField(auto_now_add=True)
+  product_name = models.ForeignKey(GoodsModel, on_delete=models.CASCADE)
+  status = models.CharField(max_length=11, choices=[('active', 'Active'), ('worked_out', 'Worked_out')])
+
+
+
