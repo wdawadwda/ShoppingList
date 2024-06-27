@@ -142,3 +142,148 @@ METHODS = [GET, DELETE]
 
 - ### *SEND BILL (TEST)*
 ^/api/v1/test-send-bill/
+
+## *** CUSTOM PRODUCTS *** 
+
+MODEL
+```python
+  barcode = models.CharField(max_length=50, blank=True, null=True)
+  name_en = models.CharField(max_length=150, blank=True, null=True)
+  name_ru = models.CharField(max_length=150, blank=True, null=True)
+  unit = models.CharField(max_length=20, choices=[('kg', 'Kg'), ('piece', 'Piece'), ('g', 'G')])
+  svgKey = models.CharField(max_length=20, blank=False, null=False)
+  category_ru = models.CharField(max_length=20, blank=True, null=True)
+  category_en = models.CharField(max_length=20, blank=True, null=True)
+  isPushed = models.BooleanField(default=False)
+
+```
+
+
+#### POST ^/api/v1/api/v1/custom-product/
+```json
+{
+    "barcode": "000000",
+    "name_en": "Milk of my Dreams, 450g",
+    "name_ru": "Молоко моих грез, 450 г",
+    "unit": "kg",
+    "svgKey": "svg",
+    "category_ru": "Молоко",
+    "category_en": "Milk",
+    "isPushed": true
+}
+```
+#### GET (all) ^/api/v1/api/v1/custom-product/
+#### GET (by id) ^/api/v1/api/v1/custom-product/id:int/
+#### PUT (update) ^/api/v1/api/v1/custom-product/id:int/
+```json
+{
+    "barcode": "000000",
+    "name_en": "Milk of my Dreams, 450g",
+    "name_ru": "Молоко моих грез, 450 г",
+    "unit": "kg",
+    "svgKey": "svg",
+    "category_ru": "Молоко",
+    "category_en": "Milk",
+    "isPushed": true
+}
+```
+#### PATCH (update) ^/api/v1/api/v1/custom-product/id:int/
+```json
+{
+    "isPushed": false
+}
+```
+#### DELETE ^/api/v1/api/v1/custom-product/id:int/
+
+## *** PRODUCT LIST DATA *** 
+
+MODEL
+```python
+"""
+  name = models.CharField(max_length=50, unique=True, blank=False, null=False)
+  products = models.JSONField(blank=True, null=True)
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(blank=True, null=True)
+  owner_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_lists')
+  owner_permissions_read = models.BooleanField(default=True)
+  owner_permissions_write = models.BooleanField(default=True)
+  owner_permissions_admin = models.BooleanField(default=True)
+  shared_with_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shared_lists', blank=True, null=True)
+  shared_with_permissions_read = models.BooleanField(blank=True, null=True)
+  shared_with_permissions_write = models.BooleanField(blank=True, null=True)
+  shared_with_permissions_admin = models.BooleanField(blank=True, null=True)
+"""
+```
+
+
+#### POST ^/api/v1/products-list-data/
+```json
+{
+  "owner_id": 1,
+	"name": "th6_list",
+  "products": [
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Milk 2,8 in plastic bag",
+                "ru": "Молоко 2,8 в пласт бутылке"
+            },
+            "svgKey": "string",
+            "isPushed": "TRUE"
+        },
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Milk 2,8 in plastic bag",
+                "ru": "Молоко 2,8 в пласт бутылке"
+            },
+            "svgKey": "string",
+            "isPushed": "true"
+        }
+  ]
+}
+```
+#### GET (all) ^/api/v1/products-list-data
+#### GET (by id) ^/api/v1/products-list-data/id:int/
+#### PUT (update) ^/api/v1/products-list-data/id:int/
+```json
+{
+  "name": "second_list",
+  "products": [
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Milk 2,8 in plastic bag",
+                "ru": "Молоко 2,8 в пласт бутылке"
+            },
+            "svgKey": "string",
+            "isPushed": "true"
+        }
+  ]
+}
+  
+```
+#### PATCH (update) ^/api/v1/api/v1/custom-product/id:int/
+```json
+{
+    "owner_permissions_write": false,
+		"shared_with_id": 1,
+		"shared_with_permissions_read": true,
+		"shared_with_permissions_write": true,
+		"shared_with_permissions_admin": false
+}
+```
+#### DELETE ^/api/v1/api/v1/products-list-data/id:int/
+
