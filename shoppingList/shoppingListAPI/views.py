@@ -3,15 +3,19 @@ import re
 from datetime import datetime, date, timedelta
 
 import requests
+from django.shortcuts import get_object_or_404
 from djoser.conf import User
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from OCR.get_most_valid_text import text_recognize
 from shoppingList.settings import BASE_DIR
 from OCR.tess_OCR import text_from_tesseract_ocr
 from .forms import BillForm
-from .models import BillModel
-from .serializers import UserSettingsSerializer, BillSerializer, CustomUserSerializer
+from .models import BillModel, ProductsListDataModel, CustomProductModel
+from .serializers import UserSettingsSerializer, BillSerializer, CustomUserSerializer, ProductsListDataSerializer, \
+    CustomProductSerializer
 from django.contrib.auth.models import BaseUserManager
 from django.conf import settings
 
@@ -59,9 +63,6 @@ class BillView(generics.ListCreateAPIView):
         form = BillForm(request.POST, request.FILES)
         print(request.data)
         if form.is_valid():
-            # serializer = self.get_serializer(data=request.data)
-            # serializer.is_valid(raise_exception=True)
-            # serializer.save()
             self.save_file(request=request)
             text_OCR, file_path = self.get_text_from_photo(pic_name=form.files['bill'])
             self.delete_bill_pic(file_path)
@@ -84,7 +85,8 @@ class BillView(generics.ListCreateAPIView):
 
     def get_text_from_photo(self, pic_name) -> [str, str]:
         file_path = f"{BASE_DIR}/media/{pic_name}"
-        return text_from_tesseract_ocr(file_path=file_path), file_path
+        # return text_from_tesseract_ocr(file_path=file_path), file_path
+        return text_recognize(file_path=file_path), file_path
 
 
     def ask_AI(self, text_OCR) -> [list, dict]:
@@ -165,9 +167,52 @@ class GetBillsHistoryView(generics.ListAPIView, generics.DestroyAPIView):
                 return {'error': False, 'date': datetime.strptime(str(date), format)}
             except Exception as ex:
                 print(ex)
-        return {'error': ex, "date": None}
+                return {'error': ex, "date": None}
 
 class TestSendBillView(generics.CreateAPIView):
     queryset = BillModel.objects.all()
     serializer_class = BillSerializer
+
+"""
+1. нужен эндпоинт на получение всех списков и конкретного по id
+
+2. сделать возможность передачи другому пользователю
+если список передан изначальный хозяин не может вносить изменения, но может отозвать
+и тогда у 2 пользователя, теряется возможность вносить изменения и видеть список
+т.е. нужно как-то обозначать кто может его редактировать в текущий момент
+
+"""
+
+class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView,
+                           generics.ListCreateAPIView):
+    queryset = CustomProductModel.objects.all()
+    serializer_class = CustomProductSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs.get('pk'):
+            try:
+                object = CustomProductModel.objects.get(id=kwargs['pk'])
+                object = self.get_serializer(object)
+                return Response(object.data)
+            except Exception as ex:
+                return Response({'error': True, 'details': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return self.list(request, *args, **kwargs)
+
+class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView,
+                           generics.ListCreateAPIView):
+    queryset = ProductsListDataModel.objects.all()
+    serializer_class = ProductsListDataSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs.get('pk'):
+            try:
+                object = ProductsListDataModel.objects.get(id=kwargs['pk'])
+                object = self.get_serializer(object)
+                return Response(object.data)
+            except Exception as ex:
+                return Response({'error': True, 'details': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return self.list(request, *args, **kwargs)
+
 

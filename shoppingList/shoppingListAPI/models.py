@@ -40,16 +40,40 @@ class BillModel(models.Model):
     def __str__(self):
       return str(self.user)
 
-class GoodsModel(models.Model):
+# class CategoriesModel(models.Model):
+#   name_ru = models.CharField(max_length=50, blank=False, null=False)
+#   name_en = models.CharField(max_length=50, blank=False, null=False)
+#   default = models.BooleanField()
+
+class CustomProductModel(models.Model):
   barcode = models.CharField(max_length=50, blank=True, null=True)
-  product_name = models.CharField(max_length=150, blank=False, null=False)
-  unit = models.CharField(max_length=15, blank=False, null=False)
-  default = models.BooleanField(blank=False, null=False)
+  name_en = models.CharField(max_length=150, blank=True, null=True)
+  name_ru = models.CharField(max_length=150, blank=True, null=True)
+  unit = models.CharField(max_length=20, choices=[('kg', 'Kg'), ('piece', 'Piece'), ('g', 'G')])
+  svgKey = models.CharField(max_length=20, blank=False, null=False)
+  category_ru = models.CharField(max_length=20, blank=True, null=True)
+  category_en = models.CharField(max_length=20, blank=True, null=True)
+  isPushed = models.BooleanField(default=False)
 
-class ListOfPlannedGoods(models.Model):
-  date = models.DateTimeField(auto_now_add=True)
-  product_name = models.ForeignKey(GoodsModel, on_delete=models.CASCADE)
-  status = models.CharField(max_length=11, choices=[('active', 'Active'), ('worked_out', 'Worked_out')])
-
+class ProductsListDataModel(models.Model):
+  """
+  export interface ProductsListData {
+    id: number | string | null;
+    name: string;
+    products: ProductInList[] | [];
+  }
+  """
+  name = models.CharField(max_length=50, unique=True, blank=False, null=False)
+  products = models.JSONField(blank=True, null=True)
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(blank=True, null=True)
+  owner_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_lists')
+  owner_permissions_read = models.BooleanField(default=True)
+  owner_permissions_write = models.BooleanField(default=True)
+  owner_permissions_admin = models.BooleanField(default=True)
+  shared_with_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shared_lists', blank=True, null=True)
+  shared_with_permissions_read = models.BooleanField(blank=True, null=True)
+  shared_with_permissions_write = models.BooleanField(blank=True, null=True)
+  shared_with_permissions_admin = models.BooleanField(blank=True, null=True)
 
 
