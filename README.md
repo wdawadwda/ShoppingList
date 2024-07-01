@@ -273,6 +273,7 @@ MODEL
 ```
 #### GET (all) ^/api/v1/products-list-data
 #### GET (by id) ^/api/v1/products-list-data/id:int/
+#### GET (by user_id) ^/api/v1/products-list-data/user_id=1/
 #### PUT (update) ^/api/v1/products-list-data/id:int/
 ```json
 {

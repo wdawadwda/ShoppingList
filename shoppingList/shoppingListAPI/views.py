@@ -212,7 +212,24 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                 return Response(object.data)
             except Exception as ex:
                 return Response({'error': True, 'details': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        elif request.query_params.get('user_id'):
+            user_id = request.query_params['user_id']
+            objects = ProductsListDataModel.objects.filter(owner_id=user_id)
+
+            page = self.paginate_queryset(objects)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+            serializer = self.get_serializer(objects, many=True)
+            return Response(serializer.data)
+
         else:
             return self.list(request, *args, **kwargs)
 
-
+    def post(self, request, *args, **kwargs):
+        request_data = request.data
+        checking_queryset = ProductsListDataModel.objects.filter(name=request_data['name'], owner_id=request_data['owner_id'])
+        if not list(checking_queryset.values()):
+            return self.create(request, *args, **kwargs)
+        else:
+            return Response({'details': 'products list data model with this name already exists'})

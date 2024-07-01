@@ -63,7 +63,7 @@ class ProductsListDataModel(models.Model):
     products: ProductInList[] | [];
   }
   """
-  name = models.CharField(max_length=50, unique=True, blank=False, null=False)
+  name = models.CharField(max_length=50, unique=False, blank=False, null=False)
   products = models.JSONField(blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(blank=True, null=True)
