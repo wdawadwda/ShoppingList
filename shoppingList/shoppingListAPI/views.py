@@ -366,21 +366,19 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
 
         if serializer.data['owner_id'] == user:
             if serializer.data['owner_permissions_write']:
-                match method:
+                match method.lower():
                     case 'put': return self.update(request, *args, **kwargs)
                     case 'patch': return self.partial_update(request, *args, **kwargs)
                     case 'delete': return self.destroy(request, *args, **kwargs)
-                # return self.update(request, *args, **kwargs) if not patch else self.partial_update(request, *args, **kwargs)
             else:
                 return error_not_have_permissions()
 
         elif serializer.data['shared_with_id'] == user:
             if serializer.data['shared_with_permissions_write']:
-                match method:
+                match method.lower():
                     case 'put': return self.update(request, *args, **kwargs)
                     case 'patch': return self.partial_update(request, *args, **kwargs)
                     case 'delete': return self.destroy(request, *args, **kwargs)
-                # return self.update(request, *args, **kwargs) if not patch else self.partial_update(request, *args, **kwargs)
             else:
                 return error_not_have_permissions()
 
@@ -389,7 +387,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
 
     def delete(self, request, *args, **kwargs):
         data = request.data
-        queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
+        queryset = ProductsListDataModel.objects.filter(id=kwargs['pk'])
         if queryset:
             return self.update_common(queryset, request.data['user'], request, method='delete', *args, **kwargs)
         else:

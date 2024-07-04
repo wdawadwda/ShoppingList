@@ -175,46 +175,153 @@ MODEL
   category_ru = models.CharField(max_length=20, blank=True, null=True)
   category_en = models.CharField(max_length=20, blank=True, null=True)
   isPushed = models.BooleanField(default=False)
+  user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 ```
 
 
 #### POST ^/api/v1/api/v1/custom-product/
+body
 ```json
 {
+    "user": 2,
+  
     "barcode": "000000",
-    "name_en": "Milk of my Dreams, 450g",
-    "name_ru": "Молоко моих грез, 450 г",
+    "name": {
+        "en": "Milk 2,8 in plastic bag",
+        "ru": "Молоко 2,8 в пласт бутылке"
+    },
+    "category": {
+        "en": "milk",
+        "ru": "молоко"
+    },
     "unit": "kg",
-    "svgKey": "svg",
-    "category_ru": "Молоко",
-    "category_en": "Milk",
-    "isPushed": true
+    "svgKey": "string",
+    "isPushed": "true"
 }
 ```
+<hr>
+
 #### GET (all) ^/api/v1/api/v1/custom-product/
-#### GET (by id) ^/api/v1/api/v1/custom-product/id:int/
-#### PUT (update) ^/api/v1/api/v1/custom-product/id:int/
+body
 ```json
 {
-    "barcode": "000000",
-    "name_en": "Milk of my Dreams, 450g",
-    "name_ru": "Молоко моих грез, 450 г",
-    "unit": "kg",
-    "svgKey": "svg",
-    "category_ru": "Молоко",
-    "category_en": "Milk",
-    "isPushed": true
+    "user": 2
 }
 ```
-#### PATCH (update) ^/api/v1/api/v1/custom-product/id:int/
+
+return list of all objects
+```json
+[
+    {
+        "id": 8,
+        "barcode": "000000",
+        "name": {
+            "en": "aMilk 2,8 in plastic bag",
+            "ru": "dМолоко 2,8 в пласт бутылке"
+        },
+        "unit": "kg",
+        "svgKey": "string",
+        "category": {
+            "ru": "молоко",
+            "en": "milk"
+        },
+        "isPushed": true,
+        "user": 2
+    },
+    {
+        "id": 9,
+        "barcode": "000000",
+        "name": {
+            "en": "Milk 2,8 in plastic bag",
+            "ru": "Молоко 2,8 в пласт бутылке"
+        },
+        "unit": "kg",
+        "svgKey": "string",
+        "category": {
+            "ru": "молоко",
+            "en": "milk"
+        },
+        "isPushed": true,
+        "user": 2
+    }
+]
+```
+<hr>
+
+#### GET (by id) ^/api/v1/api/v1/custom-product/id:int/
+body
 ```json
 {
-    "isPushed": false
+    "user": 2
+}
+```
+there is such a record and it contains a link to the user who created it, or to the user with whom this list was shared, it returns:
+```json
+{
+    "id": 9,
+    "barcode": "000000",
+    "name": {
+        "en": "Milk 2,8 in plastic bag",
+        "ru": "Молоко 2,8 в пласт бутылке"
+    },
+    "unit": "kg",
+    "svgKey": "string",
+    "category": {
+        "ru": "молоко",
+        "en": "milk"
+    },
+    "isPushed": true,
+    "user": 2
+}
+```
+else:
+```json
+[]
+```
+<hr>
+
+#### PUT (update) ^/api/v1/api/v1/custom-product/id:int/
+body
+```json
+{
+    "user": 2,
+
+    "barcode": "0000005",
+		"name": {
+				"en": "daed rabbit",
+				"ru": "мертвый кролик"
+		},
+		"category": {
+				"en": "6milk",
+				"ru": "6молоко"
+		},
+    "unit": "kg",
+    "svgKey": "6string",
+    "isPushed": "true"
+}
+```
+<hr>
+
+#### PATCH (update) ^/api/v1/api/v1/custom-product/id:int/
+body
+```json
+{
+    "user": 1,
+
+    "isPushed": "true",
+    "name": {
+        "en": "ejwhfbaweads"
+    }
 }
 ```
 #### DELETE ^/api/v1/api/v1/custom-product/id:int/
-
+body
+```json
+{
+	"user": 2
+}
+```
 <hr>
 
 ## *** PRODUCT LIST DATA *** 
@@ -234,13 +341,13 @@ MODEL
   shared_with_permissions_write = models.BooleanField(blank=True, null=True)
   shared_with_permissions_admin = models.BooleanField(blank=True, null=True)
 ```
-
+<hr>
 
 #### POST ^/api/v1/products-list-data/
 ```json
 {
-  "owner_id": 1,
-	"name": "th6_list",
+  "owner_id": 2,
+  "name": "test_list",
   "products": [
         {
             "quantity": 40,
@@ -271,14 +378,737 @@ MODEL
   ]
 }
 ```
+<hr>
+
 #### GET (all) ^/api/v1/products-list-data
+not body
+response:
+```json
+[
+    {
+        "id": 1,
+        "name": "second_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-06-27T19:58:19.469081+03:00",
+        "updated_at": "2024-07-04T18:45:18.761776+03:00",
+        "owner_permissions_read": true,
+        "owner_permissions_write": false,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": true,
+        "shared_with_permissions_write": true,
+        "shared_with_permissions_admin": false,
+        "owner_id": 1,
+        "shared_with_id": 1
+    },
+    {
+        "id": 2,
+        "name": "77777h66dd_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-06-27T19:59:01.461024+03:00",
+        "updated_at": "2024-07-04T19:52:08.428740+03:00",
+        "owner_permissions_read": true,
+        "owner_permissions_write": false,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": true,
+        "shared_with_permissions_write": true,
+        "shared_with_permissions_admin": false,
+        "owner_id": 1,
+        "shared_with_id": 1
+    },
+    {
+        "id": 3,
+        "name": "77777h66dd_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-06-27T20:01:08.963187+03:00",
+        "updated_at": "2024-07-04T20:04:17.291915+03:00",
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": true,
+        "shared_with_permissions_write": true,
+        "shared_with_permissions_admin": true,
+        "owner_id": 1,
+        "shared_with_id": 2
+    },
+    {
+        "id": 4,
+        "name": "th5_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-06-27T20:02:16.591297+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 1,
+        "shared_with_id": 1
+    },
+    {
+        "id": 5,
+        "name": "th6_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-06-27T20:29:28.189929+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 1,
+        "shared_with_id": null
+    },
+    {
+        "id": 6,
+        "name": "th66_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-07-01T15:45:32.072613+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 2,
+        "shared_with_id": null
+    },
+    {
+        "id": 7,
+        "name": "th66d_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-07-01T15:59:43.590764+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 2,
+        "shared_with_id": null
+    },
+    {
+        "id": 8,
+        "name": "th66d_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-07-01T16:00:30.021036+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 1,
+        "shared_with_id": null
+    },
+    {
+        "id": 10,
+        "name": "th66dd_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-07-01T16:00:48.242640+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 1,
+        "shared_with_id": null
+    },
+    {
+        "id": 11,
+        "name": "5th66dd_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-07-04T13:19:51.801167+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 1,
+        "shared_with_id": null
+    },
+    {
+        "id": 12,
+        "name": "77777h66dd_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Rabbit",
+                    "ru": "Кролик мертвый в пакете"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-07-04T20:02:11.569309+03:00",
+        "updated_at": "2024-07-04T20:03:56.188434+03:00",
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 1,
+        "shared_with_id": null
+    },
+    {
+        "id": 13,
+        "name": "test_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-07-04T21:03:20.271841+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 1,
+        "shared_with_id": null
+    },
+    {
+        "id": 14,
+        "name": "test_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-07-04T21:03:56.013027+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 2,
+        "shared_with_id": null
+    }
+]
+```
+<hr>
+
 #### GET (by id) ^/api/v1/products-list-data/id:int/
-#### GET (by user_id) ^/api/v1/products-list-data/user_id=1/
+body:
+```json
+{
+    "user": 2
+}
+```
+response:
+```json
+{
+    "error": false,
+    "owner": {
+        "id": 16,
+        "name": "test_list",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-07-04T21:18:22.502065+03:00",
+        "updated_at": null,
+        "owner_permissions_read": true,
+        "owner_permissions_write": true,
+        "owner_permissions_admin": true,
+        "shared_with_permissions_read": null,
+        "shared_with_permissions_write": null,
+        "shared_with_permissions_admin": null,
+        "owner_id": 2,
+        "shared_with_id": null
+    },
+    "shared": []
+}
+```
+or 
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "У этого пользователя нет записи с этим id",
+        "en": "The user does not have a record with this ID"
+    }
+}
+```
+<hr>
+
+#### GET ^/api/v1/products-list-data?user_id=2
+without body
+
+return all records by user id trow 'owner' and 'shared' keys
+```json
+{
+    "owner": [
+        {
+            "id": 6,
+            "name": "th66_list",
+            "products": [
+                {
+                    "quantity": 40,
+                    "category": {
+                        "en": "milk",
+                        "ru": "молоко"
+                    },
+                    "name": {
+                        "en": "Milk 2,8 in plastic bag",
+                        "ru": "Молоко 2,8 в пласт бутылке"
+                    },
+                    "svgKey": "string",
+                    "isPushed": "TRUE"
+                },
+                {
+                    "quantity": 40,
+                    "category": {
+                        "en": "milk",
+                        "ru": "молоко"
+                    },
+                    "name": {
+                        "en": "Milk 2,8 in plastic bag",
+                        "ru": "Молоко 2,8 в пласт бутылке"
+                    },
+                    "svgKey": "string",
+                    "isPushed": "true"
+                }
+            ],
+            "created_at": "2024-07-01T15:45:32.072613+03:00",
+            "updated_at": null,
+            "owner_permissions_read": true,
+            "owner_permissions_write": true,
+            "owner_permissions_admin": true,
+            "shared_with_permissions_read": null,
+            "shared_with_permissions_write": null,
+            "shared_with_permissions_admin": null,
+            "owner_id": 2,
+            "shared_with_id": null
+        }
+    ],
+    "shared": [
+        {
+            "id": 3,
+            "name": "77777h66dd_list",
+            "products": [
+                {
+                    "quantity": 40,
+                    "category": {
+                        "en": "milk",
+                        "ru": "молоко"
+                    },
+                    "name": {
+                        "en": "Milk 2,8 in plastic bag",
+                        "ru": "Молоко 2,8 в пласт бутылке"
+                    },
+                    "svgKey": "string",
+                    "isPushed": "TRUE"
+                },
+                {
+                    "quantity": 40,
+                    "category": {
+                        "en": "milk",
+                        "ru": "молоко"
+                    },
+                    "name": {
+                        "en": "Milk 2,8 in plastic bag",
+                        "ru": "Молоко 2,8 в пласт бутылке"
+                    },
+                    "svgKey": "string",
+                    "isPushed": "true"
+                }
+            ],
+            "created_at": "2024-06-27T20:01:08.963187+03:00",
+            "updated_at": "2024-07-04T20:04:17.291915+03:00",
+            "owner_permissions_read": true,
+            "owner_permissions_write": true,
+            "owner_permissions_admin": true,
+            "shared_with_permissions_read": true,
+            "shared_with_permissions_write": true,
+            "shared_with_permissions_admin": true,
+            "owner_id": 1,
+            "shared_with_id": 2
+        }
+    ]
+}
+```
+<hr>
+
 #### PUT (update) ^/api/v1/products-list-data/id:int/
 ```json
 {
-  "name": "second_list",
-  "products": [
+	"user": 2,
+
+    "owner_id": 2,
+    "name": "test_test",
+	"products": [
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Rabbit",
+                "ru": "Кролик мертвый в пакете"
+            },
+            "svgKey": "string",
+            "isPushed": "TRUE"
+        },
         {
             "quantity": 40,
             "category": {
@@ -294,17 +1124,147 @@ MODEL
         }
   ]
 }
-  
 ```
+response:
+```json
+{
+    "id": 15,
+    "name": "test_test",
+    "products": [
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Rabbit",
+                "ru": "Кролик мертвый в пакете"
+            },
+            "svgKey": "string",
+            "isPushed": "TRUE"
+        },
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Milk 2,8 in plastic bag",
+                "ru": "Молоко 2,8 в пласт бутылке"
+            },
+            "svgKey": "string",
+            "isPushed": "true"
+        }
+    ],
+    "created_at": "2024-07-04T21:09:00.738579+03:00",
+    "updated_at": "2024-07-04T21:10:13.670725+03:00",
+    "owner_permissions_read": true,
+    "owner_permissions_write": true,
+    "owner_permissions_admin": true,
+    "shared_with_permissions_read": null,
+    "shared_with_permissions_write": null,
+    "shared_with_permissions_admin": null,
+    "owner_id": 2,
+    "shared_with_id": null
+}
+```
+or
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "У этого пользователя нет записи с этим id",
+        "en": "The user does not have a record with this ID"
+    }
+}
+```
+<hr>
+
 #### PATCH (update) ^/api/v1/api/v1/custom-product/id:int/
 ```json
 {
-    "owner_permissions_write": false,
-		"shared_with_id": 1,
-		"shared_with_permissions_read": true,
-		"shared_with_permissions_write": true,
-		"shared_with_permissions_admin": false
+    "user": 2,
+
+    "owner_permissions_read": true,
+    "owner_permissions_write": true,
+    "shared_with_id": 1,
+    "shared_with_permissions_read": true,
+    "shared_with_permissions_write": true,
+    "shared_with_permissions_admin": true
+}
+```
+response:
+```json
+{
+    "id": 15,
+    "name": "test_test",
+    "products": [
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Rabbit",
+                "ru": "Кролик мертвый в пакете"
+            },
+            "svgKey": "string",
+            "isPushed": "TRUE"
+        },
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Milk 2,8 in plastic bag",
+                "ru": "Молоко 2,8 в пласт бутылке"
+            },
+            "svgKey": "string",
+            "isPushed": "true"
+        }
+    ],
+    "created_at": "2024-07-04T21:09:00.738579+03:00",
+    "updated_at": "2024-07-04T21:10:28.801438+03:00",
+    "owner_permissions_read": true,
+    "owner_permissions_write": true,
+    "owner_permissions_admin": true,
+    "shared_with_permissions_read": true,
+    "shared_with_permissions_write": true,
+    "shared_with_permissions_admin": true,
+    "owner_id": 2,
+    "shared_with_id": 1
+}
+```
+or 
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "У этого пользователя нет записи с этим id",
+        "en": "The user does not have a record with this ID"
+    }
 }
 ```
 #### DELETE ^/api/v1/api/v1/products-list-data/id:int/
-
+body json
+```json
+{
+	"user": 2
+}
+```
+response status 204
+or
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "У этого пользователя нет записи с этим id",
+        "en": "The user does not have a record with this ID"
+    }
+}
+```
