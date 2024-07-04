@@ -1,6 +1,7 @@
 import os
 import re
 from datetime import datetime, date, timedelta
+from django.db.models import Q
 
 import requests
 from django.shortcuts import get_object_or_404
@@ -173,15 +174,6 @@ class TestSendBillView(generics.CreateAPIView):
     queryset = BillModel.objects.all()
     serializer_class = BillSerializer
 
-"""
-1. нужен эндпоинт на получение всех списков и конкретного по id
-
-2. сделать возможность передачи другому пользователю
-если список передан изначальный хозяин не может вносить изменения, но может отозвать
-и тогда у 2 пользователя, теряется возможность вносить изменения и видеть список
-т.е. нужно как-то обозначать кто может его редактировать в текущий момент
-
-"""
 
 class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView,
                            generics.ListCreateAPIView):
@@ -193,8 +185,9 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
         serializer_data = []
         if kwargs.get('pk'):
             try:
-                object = CustomProductModel.objects.get(id=kwargs['pk'], user=user)
-                if not object:
+                try:
+                    object = CustomProductModel.objects.get(id=kwargs['pk'], user=user)
+                except:
                     return Response([])
                 object = self.get_serializer(object)
                 object = self.transform_data(from_db=object.data) if object.data else []
@@ -232,30 +225,12 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
 
     def delete(self, request, *args, **kwargs):
         queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.data['user'])
-        return self.destroy(request, *args, **kwargs) if queryset else Response(
-            {
-                'error': True,
-                'details': {
-                    'ru': 'У этого пользователя нет записи с этим id',
-                    'en': 'The user does not have a record with this ID'
-                }
-            },
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def put(self, request, *args, **kwargs):
         queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.data['user'])
 
-        return self.update(request, *args, **kwargs) if queryset else Response(
-            {
-                'error': True,
-                'details': {
-                    'ru': 'У этого пользователя нет записи с этим id',
-                    'en': 'The user does not have a record with this ID'
-                }
-            },
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        return self.update(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def update(self, request, *args, **kwargs):
         request_data = self.transform_data(to_db=request.data)
@@ -272,16 +247,7 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
     def patch(self, request, *args, **kwargs):
         queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.data['user'])
 
-        return self.partial_update(request, *args, **kwargs) if queryset else Response(
-            {
-                'error': True,
-                'details': {
-                    'ru': 'У этого пользователя нет записи с этим id',
-                    'en': 'The user does not have a record with this ID'
-                }
-            },
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        return self.partial_update(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def transform_data(self, *args, **kwargs):
         if kwargs.get('to_db'):
@@ -315,29 +281,55 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             exists['en'] = True if list(CustomProductModel.objects.filter(name_en=name['en'], user=user).values()) else False
         return True if exists['ru'] or exists['en'] else False
 
-class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView,
-                           generics.ListCreateAPIView):
+class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView, generics.ListCreateAPIView):
     queryset = ProductsListDataModel.objects.all()
     serializer_class = ProductsListDataSerializer
 
     def get(self, request, *args, **kwargs):
         if kwargs.get('pk'):
+            user = request.data['user']
             try:
-                object = ProductsListDataModel.objects.get(id=kwargs['pk'])
-                object = self.get_serializer(object)
-                return Response(object.data)
+                try:
+                    object_owner = ProductsListDataModel.objects.get(id=kwargs['pk'], owner_id=user)
+                    object_owner = self.get_serializer(object_owner).data
+                except:
+                    object_owner = []
+                try:
+                    object_shared = ProductsListDataModel.objects.get(id=kwargs['pk'], shared_with_id=user)
+                    object_shared = self.get_serializer(object_shared).data
+                except:
+                    object_shared = []
+
+                return Response({'error': False, 'owner': object_owner, 'shared': object_shared}) if object_shared or object_owner else Response(
+                    {
+                        'error': True,
+                        'details': {
+                            'ru': 'У этого пользователя нет записи с этим id',
+                            'en': 'The user does not have a record with this ID'
+                        }
+                    },
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
             except Exception as ex:
-                return Response({'error': True, 'details': {'ru': str(ex), 'en': str(ex)}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response(
+                    {
+                        'error': True,
+                        'details': {
+                            'ru': str(ex),
+                            'en': str(ex)
+                        }
+                    },
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+
         elif request.query_params.get('user_id'):
             user_id = request.query_params['user_id']
-            objects = ProductsListDataModel.objects.filter(owner_id=user_id)
-
-            page = self.paginate_queryset(objects)
-            if page is not None:
-                serializer = self.get_serializer(page, many=True)
-                return self.get_paginated_response(serializer.data)
-            serializer = self.get_serializer(objects, many=True)
-            return Response(serializer.data)
+            objects_owner = ProductsListDataModel.objects.filter(owner_id=user_id)
+            objects_owner = self.get_serializer(objects_owner, many=True)
+            objects_shared = ProductsListDataModel.objects.filter(shared_with_id=user_id)
+            objects_shared = self.get_serializer(objects_shared, many=True)
+            return Response({'owner': objects_owner.data, 'shared': objects_shared.data})
 
         else:
             return self.list(request, *args, **kwargs)
@@ -348,4 +340,96 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         if not list(checking_queryset.values()):
             return self.create(request, *args, **kwargs)
         else:
-            return Response({'details': 'products list data model with this name already exists'})
+            # return Response({'details': 'products list data model with this name already exists'})
+            return error_builder(ru_en_dict={'ru': 'Список с этим именем уже существует', 'en': 'Products list data model with this name already exists'})
+
+    def patch(self, request, *args, **kwargs):
+        user = request.data['user']
+        request.data['updated_at'] = datetime.now()
+        try:
+            queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
+        except:
+            return error_does_not_have_a_record()
+        return self.update_common(queryset, user, request, method='patch', *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        user = request.data['user']
+        request.data['updated_at'] = datetime.now()
+        try:
+            queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
+        except:
+            return error_does_not_have_a_record()
+        return self.update_common(queryset, user, request, method='put', *args, **kwargs)
+
+    def update_common(self, queryset, user, request, method='put', *args, **kwargs):
+        serializer = self.get_serializer(queryset)
+
+        if serializer.data['owner_id'] == user:
+            if serializer.data['owner_permissions_write']:
+                match method:
+                    case 'put': return self.update(request, *args, **kwargs)
+                    case 'patch': return self.partial_update(request, *args, **kwargs)
+                    case 'delete': return self.destroy(request, *args, **kwargs)
+                # return self.update(request, *args, **kwargs) if not patch else self.partial_update(request, *args, **kwargs)
+            else:
+                return error_not_have_permissions()
+
+        elif serializer.data['shared_with_id'] == user:
+            if serializer.data['shared_with_permissions_write']:
+                match method:
+                    case 'put': return self.update(request, *args, **kwargs)
+                    case 'patch': return self.partial_update(request, *args, **kwargs)
+                    case 'delete': return self.destroy(request, *args, **kwargs)
+                # return self.update(request, *args, **kwargs) if not patch else self.partial_update(request, *args, **kwargs)
+            else:
+                return error_not_have_permissions()
+
+        else:
+            return error_does_not_have_a_record()
+
+    def delete(self, request, *args, **kwargs):
+        data = request.data
+        queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
+        if queryset:
+            return self.update_common(queryset, request.data['user'], request, method='delete', *args, **kwargs)
+        else:
+            return error_does_not_have_a_record()
+
+        # return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
+
+
+def error_not_have_permissions():
+    return Response(
+        {
+            'error': True,
+            'details': {
+                'ru': 'Недостаточно прав',
+                'en': 'Not enough rights'
+            }
+        },
+        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+    )
+
+def error_does_not_have_a_record():
+    return Response(
+        {
+            'error': True,
+            'details': {
+                'ru': 'У этого пользователя нет записи с этим id',
+                'en': 'The user does not have a record with this ID'
+            }
+        },
+        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+    )
+
+def error_builder(ru_en_dict:dict):
+    return Response(
+        {
+            'error': True,
+            'details': {
+                'ru': ru_en_dict['ru'],
+                'en': ru_en_dict['en']
+            }
+        },
+        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+    )
