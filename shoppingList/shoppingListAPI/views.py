@@ -193,7 +193,7 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
         serializer_data = []
         if kwargs.get('pk'):
             try:
-                object = CustomProductModel.objects.filter(id=kwargs['pk'], user=user)
+                object = CustomProductModel.objects.get(id=kwargs['pk'], user=user)
                 if not object:
                     return Response([])
                 object = self.get_serializer(object)

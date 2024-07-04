@@ -52,8 +52,8 @@ class CustomProductModel(models.Model):
   isPushed = models.BooleanField(default=False)
   user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
-  def __str__(self):
-    return f"{self.name_ru} -> {self.user}"
+  # def __str__(self):
+  #   return f"{self.name_ru} -> {self.user}"
 
 
 class ProductsListDataModel(models.Model):
