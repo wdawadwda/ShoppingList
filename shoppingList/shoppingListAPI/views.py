@@ -189,15 +189,131 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
     serializer_class = CustomProductSerializer
 
     def get(self, request, *args, **kwargs):
+        user = request.data['user']
+        serializer_data = []
         if kwargs.get('pk'):
             try:
-                object = CustomProductModel.objects.get(id=kwargs['pk'])
+                object = CustomProductModel.objects.filter(id=kwargs['pk'], user=user)
+                if not object:
+                    return Response([])
                 object = self.get_serializer(object)
-                return Response(object.data)
+                object = self.transform_data(from_db=object.data) if object.data else []
+                return Response(object)
             except Exception as ex:
-                return Response({'error': True, 'details': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({'error': True, 'details': {'ru': str(ex), 'en': str(ex)}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            return self.list(request, *args, **kwargs)
+            queryset = CustomProductModel.objects.filter(user=user)
+            serializer = self.get_serializer(queryset, many=True)
+            for item in range(len(serializer.data)):
+                serializer_data.append(self.transform_data(from_db=serializer.data[item]))
+            return Response(serializer_data)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        if not self.check_exists(name=data['name'], user=data['user']):
+            data_to_db = self.transform_data(to_db=data)
+            serializer = self.get_serializer(data=data_to_db)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            data_from_db = self.transform_data(from_db=serializer.data)
+            return Response(data_from_db, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            return Response(
+                {
+                'error': True,
+                'details' :{
+                    'en': 'This list name exists already',
+                    'ru': 'Список с таким именем уже существует'
+                }
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    def delete(self, request, *args, **kwargs):
+        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.data['user'])
+        return self.destroy(request, *args, **kwargs) if queryset else Response(
+            {
+                'error': True,
+                'details': {
+                    'ru': 'У этого пользователя нет записи с этим id',
+                    'en': 'The user does not have a record with this ID'
+                }
+            },
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+    def put(self, request, *args, **kwargs):
+        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.data['user'])
+
+        return self.update(request, *args, **kwargs) if queryset else Response(
+            {
+                'error': True,
+                'details': {
+                    'ru': 'У этого пользователя нет записи с этим id',
+                    'en': 'The user does not have a record with this ID'
+                }
+            },
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+    def update(self, request, *args, **kwargs):
+        request_data = self.transform_data(to_db=request.data)
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request_data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+        serializer_data = self.transform_data(from_db=serializer.data)
+        return Response(serializer_data)
+
+    def patch(self, request, *args, **kwargs):
+        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.data['user'])
+
+        return self.partial_update(request, *args, **kwargs) if queryset else Response(
+            {
+                'error': True,
+                'details': {
+                    'ru': 'У этого пользователя нет записи с этим id',
+                    'en': 'The user does not have a record with this ID'
+                }
+            },
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+    def transform_data(self, *args, **kwargs):
+        if kwargs.get('to_db'):
+            data = kwargs['to_db']
+            data_to_db = {}
+            for key, item in data.items():
+                if type(item) == dict:
+                    for subkey, subitem in data[key].items():
+                        data_to_db[f"{key}_{subkey}"] = subitem
+                else:
+                    data_to_db[key] = item
+            return data_to_db
+        elif kwargs.get('from_db'):
+            data = kwargs['from_db']
+            data_from_db = {}
+            for key, item in data.items():
+                if '_en' in key or '_ru' in key:
+                    main_key = key.split("_")[0]
+                    if not data_from_db.get(main_key):
+                        data_from_db[main_key] = {}
+                    data_from_db[main_key][key.split("_")[1]] = item
+                else:
+                    data_from_db[key] = item
+            return data_from_db
+    
+    def check_exists(self, name, user):
+        exists = {}
+        if name.get('ru'):
+            exists['ru'] = True if list(CustomProductModel.objects.filter(name_ru=name['ru'], user=user).values()) else False
+        if name.get('en'):
+            exists['en'] = True if list(CustomProductModel.objects.filter(name_en=name['en'], user=user).values()) else False
+        return True if exists['ru'] or exists['en'] else False
 
 class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView,
                            generics.ListCreateAPIView):
@@ -211,7 +327,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                 object = self.get_serializer(object)
                 return Response(object.data)
             except Exception as ex:
-                return Response({'error': True, 'details': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({'error': True, 'details': {'ru': str(ex), 'en': str(ex)}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         elif request.query_params.get('user_id'):
             user_id = request.query_params['user_id']
             objects = ProductsListDataModel.objects.filter(owner_id=user_id)

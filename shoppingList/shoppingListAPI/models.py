@@ -40,10 +40,6 @@ class BillModel(models.Model):
     def __str__(self):
       return str(self.user)
 
-# class CategoriesModel(models.Model):
-#   name_ru = models.CharField(max_length=50, blank=False, null=False)
-#   name_en = models.CharField(max_length=50, blank=False, null=False)
-#   default = models.BooleanField()
 
 class CustomProductModel(models.Model):
   barcode = models.CharField(max_length=50, blank=True, null=True)
@@ -54,6 +50,11 @@ class CustomProductModel(models.Model):
   category_ru = models.CharField(max_length=20, blank=True, null=True)
   category_en = models.CharField(max_length=20, blank=True, null=True)
   isPushed = models.BooleanField(default=False)
+  user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+  def __str__(self):
+    return f"{self.name_ru} -> {self.user}"
+
 
 class ProductsListDataModel(models.Model):
   """
