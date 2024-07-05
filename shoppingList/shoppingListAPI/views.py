@@ -174,14 +174,12 @@ class TestSendBillView(generics.CreateAPIView):
     queryset = BillModel.objects.all()
     serializer_class = BillSerializer
 
-
-class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView,
-                           generics.ListCreateAPIView):
+class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView, generics.ListCreateAPIView):
     queryset = CustomProductModel.objects.all()
     serializer_class = CustomProductSerializer
 
     def get(self, request, *args, **kwargs):
-        user = request.data['user']
+        user = request.query_params['user']
         serializer_data = []
         if kwargs.get('pk'):
             try:
@@ -224,12 +222,11 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             )
 
     def delete(self, request, *args, **kwargs):
-        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.data['user'])
+        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.query_params['user'])
         return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def put(self, request, *args, **kwargs):
-        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.data['user'])
-
+        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.query_params['user'])
         return self.update(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def update(self, request, *args, **kwargs):
@@ -245,7 +242,7 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
         return Response(serializer_data)
 
     def patch(self, request, *args, **kwargs):
-        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.data['user'])
+        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.query_params['user'])
 
         return self.partial_update(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
@@ -287,7 +284,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
 
     def get(self, request, *args, **kwargs):
         if kwargs.get('pk'):
-            user = request.data['user']
+            user = request.query_params['user']
             try:
                 try:
                     object_owner = ProductsListDataModel.objects.get(id=kwargs['pk'], owner_id=user)
@@ -323,11 +320,11 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                 )
 
 
-        elif request.query_params.get('user_id'):
-            user_id = request.query_params['user_id']
-            objects_owner = ProductsListDataModel.objects.filter(owner_id=user_id)
+        elif request.query_params.get('user'):
+            user = request.query_params['user']
+            objects_owner = ProductsListDataModel.objects.filter(owner_id=user)
             objects_owner = self.get_serializer(objects_owner, many=True)
-            objects_shared = ProductsListDataModel.objects.filter(shared_with_id=user_id)
+            objects_shared = ProductsListDataModel.objects.filter(shared_with_id=user)
             objects_shared = self.get_serializer(objects_shared, many=True)
             return Response({'owner': objects_owner.data, 'shared': objects_shared.data})
 
@@ -344,7 +341,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             return error_builder(ru_en_dict={'ru': 'Список с этим именем уже существует', 'en': 'Products list data model with this name already exists'})
 
     def patch(self, request, *args, **kwargs):
-        user = request.data['user']
+        user = int(request.query_params['user'])
         request.data['updated_at'] = datetime.now()
         try:
             queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
@@ -353,7 +350,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         return self.update_common(queryset, user, request, method='patch', *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        user = request.data['user']
+        user = int(request.query_params['user'])
         request.data['updated_at'] = datetime.now()
         try:
             queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
@@ -394,7 +391,6 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             return error_does_not_have_a_record()
 
         # return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
-
 
 def error_not_have_permissions():
     return Response(
