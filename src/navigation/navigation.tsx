@@ -6,12 +6,16 @@ import { useSelector } from "react-redux";
 import { useAppDispatch, type Theme, themeActions, selectTheme, useAppSelector } from "@/store";
 import { Layout, LoaderFetchUser } from "@/components";
 import { useAuth, useLoadAsyncInState } from "@/use";
+import { useFetchLists } from "@/use/use-fetch-lists";
+import { selectUser } from "@/store/user";
 
 export const Navigation = () => {
   const isInitializing = useAppSelector(
     ({ user }) =>
       (user.currentUser.status === "loading" || user.currentUser.status === "idle") && user.tokens.status === "success",
   );
+  const user = useSelector(selectUser);
+
   // const isInitializing = false;
   const dispatch = useAppDispatch();
   const defaultTheme = useColorScheme();
@@ -19,10 +23,19 @@ export const Navigation = () => {
 
   useAuth(dispatch);
   useLoadAsyncInState(dispatch);
+  useFetchLists(dispatch, user);
 
   useEffect(() => {
-    dispatch(themeActions.setTheme(defaultTheme === "dark" ? "dark" : "light"));
-  }, []);
+    const systemTheme = defaultTheme === "dark" ? "dark" : "light";
+
+    if (!user || user.user_theme === "auto") {
+      dispatch(themeActions.setTheme(systemTheme));
+    } else if (user.user_theme === "dark" || user.user_theme === "light") {
+      dispatch(themeActions.setTheme(user.user_theme));
+    } else {
+      dispatch(themeActions.setTheme(systemTheme));
+    }
+  }, [user, defaultTheme]);
 
   return (
     <NavigationContainer>

@@ -25,7 +25,7 @@ export function HistoryResipt({ theme }: { theme: Theme }) {
           setHistoryData={setHistoryData}
           userId={userId}
         />
-        {isLoading ? <Loader theme={theme} size={50} /> : <HistoryList historyData={historyData} />}
+        {isLoading ? <Loader theme={theme} size={50} /> : <HistoryList theme={theme} historyData={historyData} />}
       </View>
     </Layout>
   );

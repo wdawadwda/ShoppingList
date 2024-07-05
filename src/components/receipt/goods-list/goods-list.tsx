@@ -8,6 +8,7 @@ import { acceptBillText } from "@/store/api";
 import { useNavigation } from "@react-navigation/native";
 import { MessForm } from "@/components/mess-form";
 import { t } from "i18next";
+import { type MainNavigationProp } from "@/navigation";
 
 export const GoodsList = ({
   userId,
@@ -18,7 +19,7 @@ export const GoodsList = ({
   goods: Good[];
   theme: Theme;
 }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainNavigationProp>();
   const [editedGoods, setEditedGoods] = useState<Good[]>(goods);
   const [editMode, setEditMode] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +47,7 @@ export const GoodsList = ({
     if (userId) {
       try {
         await acceptBillText(userId, editedGoods);
-        navigation.navigate("Resipt" as never);
+        navigation.navigate("Receipt");
       } catch (error) {
         setError(t("defaultMessage.errorPhoto"));
       } finally {

@@ -5,12 +5,19 @@ import { useNavigation } from "@react-navigation/native";
 import { colorDark } from "@/styles";
 import { ArrowLeftComponent } from "@/assets";
 
-export const BackButton = ({ theme }: { theme: Theme }) => {
+export const BackButton = ({ theme, onPress }: { theme: Theme; onPress?: () => void }) => {
   const navigation = useNavigation();
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      navigation.goBack();
+    }
+  };
   return (
     <Button
       theme={theme}
-      onPress={() => navigation.goBack()}
+      onPress={handlePress}
       style={[styles.buttonContainer, { alignSelf: "flex-start" }]}
       buttonColorVar="backgroundColorThird"
     >

@@ -7,9 +7,10 @@ import { Button } from "@/components";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { selectUser, userActions } from "@/store/user";
+import { type MainNavigationProp } from "@/navigation";
 
 export function User({ theme }: { theme: Theme }) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MainNavigationProp>();
   const user = useSelector(selectUser);
   const dispatch = useAppDispatch();
 
@@ -29,7 +30,7 @@ export function User({ theme }: { theme: Theme }) {
         ) : (
           <Button
             theme={theme}
-            onPress={() => navigation.navigate("RegAuth" as never)}
+            onPress={() => navigation.navigate("RegAuth")}
           >{`${t("buttonLabels.regAuth.login")} / ${t("buttonLabels.regAuth.register")}`}</Button>
         )}
       </View>

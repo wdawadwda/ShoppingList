@@ -6,8 +6,14 @@
   },
   "buttonLabels": {
     "themeSettings": "Настройки Темы",
+    "addCustomProduct": "Добавить свой продукт",
+    "addCustomProductBtn" : {
+      "addNames": "Добавить {{lang}} имена"
+    },
     "saveTheme": "Сохранить для пользователя",
     "choosePhoto": "Выберите фото",
+    "cancel": "Отмена",
+    "delete": "Удалить",
     "regAuth": {
       "login": "Вход",
       "register": "Регистрация",
@@ -39,7 +45,8 @@
   },
   "screensName": {
     "home": "Домашняя",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "addList": "Добавить список"
   },
   "other": {
     "greetings" : "Здравствуйте, "
@@ -53,12 +60,6 @@
       "aboveZero": "введите число от 0 и выше",
       "isRequired": "обязателен(о) для заполнения",
       "optional": "не обязателен(о)"
-    },
-    "addWater": {
-      "maxWaterGlasses": "cлишком много стаканов воды"
-    },
-    "calorieSchema": {
-      "desWeightMust": "желаемый вес должен быть меньше или равен весу"
     },
     "regAuth": {
       "login": {
@@ -90,13 +91,22 @@
       "amount": "Количество",
       "cost": "Стоимость",
       "noData": "Нет данных для выбранного периода",
-      "unitOfMeasurement": "Единица измерения"
-    }    
+      "unitOfMeasurement": "Единица измерения",
+      "confirmDelete": "Вы уверены, что хотите удалить?",
+      "deleteReceipt": "Удаление чека"
+    },
+    "addCustomProduct": {
+      "title": "Добавление соего продукта"
+    },
+    "home": {
+      "yourLists": "Ваши списки"
+    }
   },
   "defaultMessage": {
     "successSavingTheme": "Тема \"{{theme}}\" успешно сохранена",
     "errorSavingTheme": "Ошибка при сохранении темы",
     "errorPhoto": "Ошибка отправки фото",
+    "errorReceipt": "Ошибка удаления чека",
     "defaultError": "Что-то пошло не так"
   },
   "permission": {

@@ -32,5 +32,4 @@ export type RenderTabContentProps = {
   activeTab: string | null;
   t: (key: string) => string;
   theme: Theme;
-  userId?: string | null;
 };

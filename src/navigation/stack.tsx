@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "react-native";
 import { type Theme } from "@/store";
 import { colorDark, colorLight } from "@/styles";
-import { HistoryResipt, Home, PhotoResipt, RegAuth, Resipt, Settings, User, UserTheme } from "@/screens";
+import { AddCustomProduct, HistoryResipt, Home, List, PhotoResipt, RegAuth, Resipt, Settings, User, UserTheme } from "@/screens";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +23,15 @@ export const StackNavigator = ({ theme }: { theme: Theme }) => (
       </Stack.Screen>
 
       <Stack.Screen
+        name="List"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {() => <List theme={theme} />}
+      </Stack.Screen>
+
+      <Stack.Screen
         name="User"
         options={{
           headerShown: false,
@@ -30,6 +39,7 @@ export const StackNavigator = ({ theme }: { theme: Theme }) => (
       >
         {() => <User theme={theme} />}
       </Stack.Screen>
+
       <Stack.Screen
         name="RegAuth"
         options={{
@@ -50,13 +60,14 @@ export const ResiptNavigator = ({ theme }: { theme: Theme }) => (
     />
     <Stack.Navigator>
       <Stack.Screen
-        name="Resipt"
+        name="Receipt"
         options={{
           headerShown: false,
         }}
       >
         {() => <Resipt theme={theme} />}
       </Stack.Screen>
+
       <Stack.Screen
         name="PhotoResipt"
         options={{
@@ -65,6 +76,7 @@ export const ResiptNavigator = ({ theme }: { theme: Theme }) => (
       >
         {() => <PhotoResipt theme={theme} />}
       </Stack.Screen>
+
       <Stack.Screen
         name="HistoryResipt"
         options={{
@@ -82,6 +94,7 @@ export const ResiptNavigator = ({ theme }: { theme: Theme }) => (
       >
         {() => <User theme={theme} />}
       </Stack.Screen>
+
       <Stack.Screen
         name="RegAuth"
         options={{
@@ -109,6 +122,7 @@ export const StackSettingsNavigator = ({ theme }: { theme: Theme }) => (
       >
         {() => <Settings theme={theme} />}
       </Stack.Screen>
+
       <Stack.Screen
         name="User"
         options={{
@@ -117,6 +131,7 @@ export const StackSettingsNavigator = ({ theme }: { theme: Theme }) => (
       >
         {() => <User theme={theme} />}
       </Stack.Screen>
+
       <Stack.Screen
         name="RegAuth"
         options={{
@@ -125,6 +140,7 @@ export const StackSettingsNavigator = ({ theme }: { theme: Theme }) => (
       >
         {() => <RegAuth theme={theme} />}
       </Stack.Screen>
+
       <Stack.Screen
         name="UserTheme"
         options={{
@@ -132,6 +148,15 @@ export const StackSettingsNavigator = ({ theme }: { theme: Theme }) => (
         }}
       >
         {() => <UserTheme theme={theme} />}
+      </Stack.Screen>
+
+      <Stack.Screen
+        name="AddCustomProduct"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {() => <AddCustomProduct theme={theme} />}
       </Stack.Screen>
     </Stack.Navigator>
   </>
