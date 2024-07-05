@@ -60,12 +60,11 @@ export function Home({ theme }: { theme: Theme }) {
       <View style={globalStyles.container}>
         <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>{t("tabsLabels.home")}</Text>
         <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>{t("text.home.yourLists")}:</Text>
-        {/* Блок со списками */}
         <View style={{ marginTop: 10 }}>
           <AddButton onPress={() => navigate.navigate("List")} theme={theme} />
           {listData ? (
             <>
-              {listData.owner.length > 0 && (
+              {listData?.owner?.length > 0 && (
                 <View>
                   {listData.owner.map((listItem, index) => (
                     <View key={`owner-${index}`}>
@@ -82,7 +81,7 @@ export function Home({ theme }: { theme: Theme }) {
                   ))}
                 </View>
               )}
-              {listData.shared.length > 0 && (
+              {listData?.shared?.length > 0 && (
                 <View>
                   <Text style={fontsStyles.subtitle}>Переданные списки</Text>
                   {listData.shared.map((listItem, index) => (

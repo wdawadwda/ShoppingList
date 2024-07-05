@@ -17,11 +17,22 @@ export function Settings({ theme }: { theme: Theme }) {
       <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>{t("screensName.settings")}</Text>
       {user ? (
         <>
+          <Text style={[fontsStyles.text, { color: colorDark.textColor, marginBottom: 10 }]}>
+            {t("screensName.settingsAdditional.theme")}:
+          </Text>
+
           <Button theme={theme} onPress={() => navigation.navigate("UserTheme")}>
             <Text>{t("buttonLabels.themeSettings")}</Text>
           </Button>
+          <Text style={[fontsStyles.text, { color: colorDark.textColor, marginBottom: 10, marginTop: 25 }]}>
+            {t("screensName.settingsAdditional.customProduct")}:
+          </Text>
+
           <Button theme={theme} onPress={() => navigation.navigate("AddCustomProduct")}>
             <Text>{t("buttonLabels.addCustomProduct")}</Text>
+          </Button>
+          <Button style={{ marginTop: 10 }} theme={theme} onPress={() => navigation.navigate("DellEditCustomProduct")}>
+            <Text>{t("buttonLabels.dellEdit")}</Text>
           </Button>
         </>
       ) : (

@@ -24,6 +24,7 @@ export interface FormField {
   detailText1?: string;
   detailText2?: string;
   detail?: boolean;
+  maxLength?: number;
 }
 
 export interface FormInputProps<T extends FieldValues> {

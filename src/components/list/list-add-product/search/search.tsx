@@ -1,18 +1,40 @@
 import { Button } from "@/components/ui";
-import { type ListAddProductProps, type ProductInList, productsConst, type ProductsListData } from "@/constants";
-import { useMemo, useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity } from "react-native";
-import { RadixTree } from "./radix-tree";
+import { type ListAddProductProps, type ProductInList, productsConst } from "@/constants";
+import { useEffect, useMemo, useState } from "react";
+import { ScrollView, Text, TextInput } from "react-native";
+import { useSelector } from "react-redux";
+import { selectСustomProducts, Theme } from "@/store";
+import { RadixTree } from "@/utils";
+import { Language } from "@/constants/products-lists/products-lists.type";
+import { HelperRenderComponent } from "./helper";
 
-export const Search = ({ setshowInputAdd, language, setProductData, productData, theme }: ListAddProductProps) => {
+interface SearchProps extends Partial<Omit<ListAddProductProps, "theme" | "language">> {
+  theme: Theme;
+  language: Language;
+  type: "custom" | "customAndDefault";
+}
+
+export const Search = ({
+  setshowInputAdd,
+  language,
+  setProductData,
+  productData,
+  theme,
+  type = "customAndDefault",
+}: SearchProps) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [suggestions, setSuggestions] = useState<ProductInList[]>([]);
   const [currentProduct, setCurrentProduct] = useState<ProductInList | null>(null);
-  const [quantity, setQuantity] = useState<string>("");
+  const customProductsData = useSelector(selectСustomProducts);
+  useEffect(() => {
+    console.log(customProductsData);
+  }, [customProductsData]);
+
+  const productsForSearch = type === "custom" ? [...customProductsData] : [...productsConst, ...customProductsData];
 
   const radixTree = useMemo(() => {
     const tree = new RadixTree();
-    productsConst.forEach((product) => tree.insert(product, language));
+    productsForSearch.forEach((product) => tree.insert(product, language));
     return tree;
   }, [language]);
 
@@ -31,39 +53,22 @@ export const Search = ({ setshowInputAdd, language, setProductData, productData,
     setSuggestions([]);
   };
 
-  const handleAddProduct = (prData: ProductsListData) => {
-    const productWithQuantity = { ...currentProduct, quantity };
-    const newData = {
-      ...prData,
-      products: [...prData.products, productWithQuantity],
-    };
-
-    setProductData(newData as ProductsListData);
-
-    setSearchTerm("");
-    setCurrentProduct(null);
-    setQuantity("");
-    setshowInputAdd(false);
-  };
-
   return (
     <>
+      <Text>Поиск:</Text>
       {currentProduct ? (
-        <>
-          <Text>Поиск:</Text>
-          <TextInput
-            style={{ height: 40, borderColor: "gray", borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 }}
-            placeholder="Введите количество"
-            value={quantity}
-            onChangeText={setQuantity}
-          />
-          <TouchableOpacity onPress={() => handleAddProduct(productData)}>
-            <Text>Подтвердить</Text>
-          </TouchableOpacity>
-        </>
+        <HelperRenderComponent
+          type={type}
+          currentProduct={currentProduct}
+          productData={productData}
+          setProductData={setProductData}
+          setshowInputAdd={setshowInputAdd}
+          setSearchTerm={setSearchTerm}
+          setCurrentProduct={setCurrentProduct}
+          theme={theme}
+        />
       ) : (
         <>
-          <Text>Поиск:</Text>
           <TextInput
             style={{ height: 40, borderColor: "gray", borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 }}
             placeholder="Введите название продукта"

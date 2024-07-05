@@ -5,8 +5,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch, type Theme, themeActions, selectTheme, useAppSelector } from "@/store";
 import { Layout, LoaderFetchUser } from "@/components";
-import { useAuth, useLoadAsyncInState } from "@/use";
-import { useFetchLists } from "@/use/use-fetch-lists";
+import { useAuth, useCustomProducts, useFetchLists, useLoadAsyncInState } from "@/use";
 import { selectUser } from "@/store/user";
 
 export const Navigation = () => {
@@ -17,6 +16,7 @@ export const Navigation = () => {
   const user = useSelector(selectUser);
 
   // const isInitializing = false;
+
   const dispatch = useAppDispatch();
   const defaultTheme = useColorScheme();
   const theme: Theme = useSelector(selectTheme);
@@ -24,6 +24,7 @@ export const Navigation = () => {
   useAuth(dispatch);
   useLoadAsyncInState(dispatch);
   useFetchLists(dispatch, user);
+  useCustomProducts(dispatch, user);
 
   useEffect(() => {
     const systemTheme = defaultTheme === "dark" ? "dark" : "light";

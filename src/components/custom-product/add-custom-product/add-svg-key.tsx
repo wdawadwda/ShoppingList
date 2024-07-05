@@ -1,7 +1,7 @@
 import { type Theme } from "@/store";
 import { StyleSheet, View } from "react-native";
-import { Button } from "../ui";
 import { svgSchemeForAdding } from "@/constants/products-lists/svg-scheme";
+import { Button } from "@/components/ui";
 
 export const AddSvgKey = ({ theme, onSelectSvgKey }: { theme: Theme; onSelectSvgKey: (key: string) => void }) => {
   return (

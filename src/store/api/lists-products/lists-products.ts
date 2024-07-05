@@ -13,7 +13,7 @@ export const fetchProductsLists = createAsyncThunk<
 >("lists-products/fetchProductsLists", async function (userId, thunkAPI) {
   try {
     const response = await axios.get<ProductsListsDataApi, AxiosResponse<ProductsListsDataApi>>(
-      `${BACKEND_URL}/api/v1/products-list-data/?user_id=${userId}`,
+      `${BACKEND_URL}/api/v1/products-list-data/?user=${userId}`,
       {
         signal: thunkAPI.signal,
       },

@@ -3,6 +3,20 @@ import { type Dispatch } from "react";
 
 export type Language = "ru" | "en";
 
+export interface UpdateingProductInList {
+  quantity?: string;
+  category?: {
+    en?: string;
+    ru?: string;
+  };
+  name?: {
+    en?: string;
+    ru?: string;
+  };
+  svgKey?: string;
+  isPushed?: boolean;
+}
+
 export interface ProductInList {
   quantity: string;
   category: {
@@ -15,6 +29,11 @@ export interface ProductInList {
   };
   svgKey: string;
   isPushed: boolean;
+}
+
+export interface ProductCustom extends ProductInList {
+  user: number | string;
+  id: number | string;
 }
 
 export interface ProductsListData {

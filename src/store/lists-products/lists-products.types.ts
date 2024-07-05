@@ -1,14 +1,9 @@
-import { ProductsListData, Status } from "@/constants";
+import { type ErrorObject, type ProductsListData, type Status } from "@/constants";
 
 export interface UserSlice {
   status: Status;
   data: ProductsListsDataApi | null;
   error: ErrorObject | null;
-}
-export interface ErrorObject {
-  statusErr: string | number;
-  detail: string;
-  message: string;
 }
 
 export type ProductsListsDataApi = {

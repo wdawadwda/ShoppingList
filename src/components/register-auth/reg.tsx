@@ -16,6 +16,7 @@ import { MessForm } from "../mess-form";
 export function Reg({ theme }: { theme: Theme }) {
   const { formFields } = useConst({ reg: true });
   const { control, handleSubmit, formState } = useForm({
+    mode: "onChange",
     defaultValues: {
       username: "",
       email: "",
@@ -46,7 +47,6 @@ export function Reg({ theme }: { theme: Theme }) {
           .required(`${t("validation.regAuth.reg.repeatPasswordRequired")}`),
       }),
     ),
-    mode: "onChange",
   });
 
   const [registrationStatus, setRegistrationStatus] = useState<string | null>(null);
