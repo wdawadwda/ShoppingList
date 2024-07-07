@@ -167,16 +167,14 @@ METHODS = [GET, DELETE]
 
 MODEL
 ```python
-  barcode = models.CharField(max_length=50, blank=True, null=True)
   name_en = models.CharField(max_length=150, blank=True, null=True)
   name_ru = models.CharField(max_length=150, blank=True, null=True)
-  unit = models.CharField(max_length=20, choices=[('kg', 'Kg'), ('piece', 'Piece'), ('g', 'G')])
-  svgKey = models.CharField(max_length=20, blank=False, null=False)
   category_ru = models.CharField(max_length=20, blank=True, null=True)
   category_en = models.CharField(max_length=20, blank=True, null=True)
+  quantity = models.CharField(max_length=10, blank=True, null=True)
+  svgKey = models.CharField(max_length=20, blank=True, null=True)
   isPushed = models.BooleanField(default=False)
   user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
 ```
 
 
@@ -184,20 +182,18 @@ MODEL
 body
 ```json
 {
-    "user": 2,
-  
-    "barcode": "000000",
     "name": {
-        "en": "Milk 2,8 in plastic bag",
-        "ru": "Молоко 2,8 в пласт бутылке"
+            "en": "Milk 2,8 in plasfdtic bag",
+            "ru": "Молоко 2,8 в плаfdст бутылке"
     },
     "category": {
-        "en": "milk",
-        "ru": "молоко"
+            "en": "milk",
+            "ru": "молоко"
     },
-    "unit": "kg",
-    "svgKey": "string",
-    "isPushed": "true"
+    "svgKey": "",
+    "quantity": "",
+    "isPushed": "true",
+    "user": 2
 }
 ```
 <hr>
@@ -209,12 +205,10 @@ return list of all objects by user id
 [
     {
         "id": 8,
-        "barcode": "000000",
         "name": {
             "en": "aMilk 2,8 in plastic bag",
             "ru": "dМолоко 2,8 в пласт бутылке"
         },
-        "unit": "kg",
         "svgKey": "string",
         "category": {
             "ru": "молоко",
@@ -225,12 +219,10 @@ return list of all objects by user id
     },
     {
         "id": 9,
-        "barcode": "000000",
         "name": {
             "en": "Milk 2,8 in plastic bag",
             "ru": "Молоко 2,8 в пласт бутылке"
         },
-        "unit": "kg",
         "svgKey": "string",
         "category": {
             "ru": "молоко",
@@ -251,12 +243,10 @@ Response
 ```json
 {
     "id": 9,
-    "barcode": "000000",
     "name": {
         "en": "Milk 2,8 in plastic bag",
         "ru": "Молоко 2,8 в пласт бутылке"
     },
-    "unit": "kg",
     "svgKey": "string",
     "category": {
         "ru": "молоко",
@@ -276,16 +266,14 @@ else:
 body
 ```json
 {
-    "barcode": "0000005",
-		"name": {
-				"en": "daed rabbit",
-				"ru": "мертвый кролик"
-		},
-		"category": {
-				"en": "6milk",
-				"ru": "6молоко"
-		},
-    "unit": "kg",
+    "name": {
+            "en": "daed rabbit",
+            "ru": "мертвый кролик"
+    },
+    "category": {
+            "en": "6milk",
+            "ru": "6молоко"
+    },
     "svgKey": "6string",
     "isPushed": "true",    
     "user": 2
