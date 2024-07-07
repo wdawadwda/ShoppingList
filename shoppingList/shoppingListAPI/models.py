@@ -42,15 +42,16 @@ class BillModel(models.Model):
 
 
 class CustomProductModel(models.Model):
-  barcode = models.CharField(max_length=50, blank=True, null=True)
   name_en = models.CharField(max_length=150, blank=True, null=True)
   name_ru = models.CharField(max_length=150, blank=True, null=True)
-  unit = models.CharField(max_length=20, choices=[('kg', 'Kg'), ('piece', 'Piece'), ('g', 'G')])
-  svgKey = models.CharField(max_length=20, blank=False, null=False)
   category_ru = models.CharField(max_length=20, blank=True, null=True)
   category_en = models.CharField(max_length=20, blank=True, null=True)
+  quantity = models.CharField(max_length=10, blank=True, null=True)
+  svgKey = models.CharField(max_length=20, blank=True, null=True)
   isPushed = models.BooleanField(default=False)
   user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+  # barcode = models.CharField(max_length=50, blank=True, null=True)
+  # unit = models.CharField(max_length=20, choices=[('kg', 'Kg'), ('piece', 'Piece'), ('g', 'G')])
 
   # def __str__(self):
   #   return f"{self.name_ru} -> {self.user}"
