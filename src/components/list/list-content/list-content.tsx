@@ -15,7 +15,7 @@ export const ListContent = ({
   productList: ProductInList[];
   theme: Theme;
   language: Language;
-  setProductData: React.Dispatch<React.SetStateAction<ProductsListData>>;
+  setProductData: Dispatch<React.SetStateAction<ProductsListData>>;
   productData: ProductsListData;
 }) => {
   type CategoryMap = {
@@ -46,8 +46,8 @@ export const ListContent = ({
   };
 
   const renderProductList = (categories: CategoryMap, isPurchased: boolean) => {
-    return Object.entries(categories).map(([category, products]) => (
-      <View key={`${category}-${isPurchased}`}>
+    return Object.entries(categories).map(([category, products], index) => (
+      <View key={`${category}-${isPurchased}-${index + 1}`}>
         <Text>{category}</Text>
         {products.map((product) => (
           <TouchableOpacity key={product.id} onPress={() => toggleProductPushed(product)}>
@@ -58,6 +58,7 @@ export const ListContent = ({
               language={language}
               product={product}
               theme={theme}
+              isPurchased={!isPurchased}
             />
           </TouchableOpacity>
         ))}
