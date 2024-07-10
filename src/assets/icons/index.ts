@@ -1,5 +1,12 @@
 export { HomeSvgComponent, ReceiptSvgComponent, SettingsSvgComponent } from "./tab";
-export { UserSvgComponent, XSvgComponent, ArrowLeftComponent, PlusComponent } from "./other";
+export {
+  UserSvgComponent,
+  XSvgComponent,
+  ArrowLeftComponent,
+  PlusComponent,
+  TrashSvgComponent,
+  EditSvgComponent,
+} from "./other";
 export { AddPhotoSvgComponent, AddGallerySvgComponent } from "./reciept";
 export {
   CarrotSvgComponent,

@@ -2,6 +2,7 @@ import { ProductInList } from "./products-lists.type";
 
 export const productsConst: ProductInList[] = [
   {
+    id: "1 defaultProductId",
     name: { ru: "Яблоко", en: "Apple" },
     svgKey: "apple",
     quantity: "",
@@ -9,6 +10,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "2 defaultProductId",
     name: { ru: "Морковь", en: "Carrot" },
     svgKey: "carrot",
     quantity: "",
@@ -16,6 +18,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "3 defaultProductId",
     name: { ru: "Абрикос", en: "Apricot" },
     svgKey: "apricot",
     quantity: "",
@@ -23,6 +26,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "4 defaultProductId",
     name: { ru: "Авокадо", en: "Avocado" },
     svgKey: "avocado",
     quantity: "",
@@ -30,6 +34,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "5 defaultProductId",
     name: { ru: "Ананас", en: "Pineapple" },
     svgKey: "pineapple",
     quantity: "",
@@ -37,6 +42,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "6 defaultProductId",
     name: { ru: "Апельсин", en: "Orange" },
     svgKey: "orange",
     quantity: "",
@@ -44,6 +50,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "7 defaultProductId",
     name: { ru: "Арбуз", en: "Watermelon" },
     svgKey: "watermelon",
     quantity: "",
@@ -51,6 +58,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "8 defaultProductId",
     name: { ru: "Артишок", en: "Artichoke" },
     svgKey: "artichoke",
     quantity: "",
@@ -58,6 +66,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "9 defaultProductId",
     name: { ru: "Базилик", en: "Basil" },
     svgKey: "basil",
     quantity: "",
@@ -65,6 +74,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "10 defaultProductId",
     name: { ru: "Баклажан", en: "Eggplant" },
     svgKey: "eggplant",
     quantity: "",
@@ -72,6 +82,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "11 defaultProductId",
     name: { ru: "Банан", en: "Banana" },
     svgKey: "banana",
     quantity: "",
@@ -79,6 +90,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "12 defaultProductId",
     name: { ru: "Батат", en: "Sweet Potato" },
     svgKey: "sweet_potato",
     quantity: "",
@@ -86,6 +98,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "13 defaultProductId",
     name: { ru: "Перец сладкий", en: "Bell Pepper" },
     svgKey: "bell_pepper",
     quantity: "",
@@ -93,6 +106,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "14 defaultProductId",
     name: { ru: "Брокколи", en: "Broccoli" },
     svgKey: "broccoli",
     quantity: "",
@@ -100,6 +114,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "15 defaultProductId",
     name: { ru: "Виноград", en: "Grapes" },
     svgKey: "grapes",
     quantity: "",
@@ -107,6 +122,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "16 defaultProductId",
     name: { ru: "Горох", en: "Peas" },
     svgKey: "peas",
     quantity: "",
@@ -114,6 +130,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "17 defaultProductId",
     name: { ru: "Грейпфрут", en: "Grapefruit" },
     svgKey: "grapefruit",
     quantity: "",
@@ -121,6 +138,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "18 defaultProductId",
     name: { ru: "Дыня", en: "Melon" },
     svgKey: "melon",
     quantity: "",
@@ -128,6 +146,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "19 defaultProductId",
     name: { ru: "Зеленый лук", en: "Green Onion" },
     svgKey: "green_onion",
     quantity: "",
@@ -135,6 +154,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "20 defaultProductId",
     name: { ru: "Зелень", en: "Greens" },
     svgKey: "greens",
     quantity: "",
@@ -142,6 +162,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "21 defaultProductId",
     name: { ru: "Имбирь", en: "Ginger" },
     svgKey: "ginger",
     quantity: "",
@@ -149,6 +170,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "22 defaultProductId",
     name: { ru: "Инжир", en: "Fig" },
     svgKey: "fig",
     quantity: "",
@@ -156,6 +178,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "23 defaultProductId",
     name: { ru: "Капуста", en: "Cabbage" },
     svgKey: "cabbage",
     quantity: "",
@@ -163,6 +186,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "24 defaultProductId",
     name: { ru: "Картофель", en: "Potato" },
     svgKey: "potato",
     quantity: "",
@@ -170,6 +194,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "25 defaultProductId",
     name: { ru: "Киви", en: "Kiwi" },
     svgKey: "kiwi",
     quantity: "",
@@ -177,6 +202,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "26 defaultProductId",
     name: { ru: "Клубника", en: "Strawberry" },
     svgKey: "strawberry",
     quantity: "",
@@ -184,6 +210,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "27 defaultProductId",
     name: { ru: "Клюква", en: "Cranberry" },
     svgKey: "cranberry",
     quantity: "",
@@ -191,6 +218,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "28 defaultProductId",
     name: { ru: "Кориандр", en: "Coriander" },
     svgKey: "coriander",
     quantity: "",
@@ -198,6 +226,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "29 defaultProductId",
     name: { ru: "Кукуруза", en: "Corn" },
     svgKey: "corn",
     quantity: "",
@@ -205,6 +234,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "30 defaultProductId",
     name: { ru: "Лайм", en: "Lime" },
     svgKey: "lime",
     quantity: "",
@@ -212,6 +242,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "31 defaultProductId",
     name: { ru: "Лимон", en: "Lemon" },
     svgKey: "lemon",
     quantity: "",
@@ -219,6 +250,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "32 defaultProductId",
     name: { ru: "Лук", en: "Onion" },
     svgKey: "onion",
     quantity: "",
@@ -226,6 +258,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "33 defaultProductId",
     name: { ru: "Лук-порей", en: "Leek" },
     svgKey: "leek",
     quantity: "",
@@ -233,6 +266,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "34 defaultProductId",
     name: { ru: "Малина", en: "Raspberry" },
     svgKey: "raspberry",
     quantity: "",
@@ -240,6 +274,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "35 defaultProductId",
     name: { ru: "Манго", en: "Mango" },
     svgKey: "mango",
     quantity: "",
@@ -247,6 +282,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "36 defaultProductId",
     name: { ru: "Мандарины", en: "Tangerines" },
     svgKey: "tangerines",
     quantity: "",
@@ -254,6 +290,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "37 defaultProductId",
     name: { ru: "Маракуйя", en: "Passion Fruit" },
     svgKey: "passion_fruit",
     quantity: "",
@@ -261,6 +298,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "38 defaultProductId",
     name: { ru: "Мята", en: "Mint" },
     svgKey: "mint",
     quantity: "",
@@ -268,6 +306,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "39 defaultProductId",
     name: { ru: "Нектарин", en: "Nectarine" },
     svgKey: "nectarine",
     quantity: "",
@@ -275,6 +314,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "40 defaultProductId",
     name: { ru: "Огурец", en: "Cucumber" },
     svgKey: "cucumber",
     quantity: "",
@@ -282,6 +322,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "41 defaultProductId",
     name: { ru: "Оливки", en: "Olives" },
     svgKey: "olives",
     quantity: "",
@@ -289,6 +330,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "42 defaultProductId",
     name: { ru: "Перец чили", en: "Chili Pepper" },
     svgKey: "chili_pepper",
     quantity: "",
@@ -296,6 +338,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "43 defaultProductId",
     name: { ru: "Персик", en: "Peach" },
     svgKey: "peach",
     quantity: "",
@@ -303,6 +346,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "44 defaultProductId",
     name: { ru: "Петрушка", en: "Parsley" },
     svgKey: "parsley",
     quantity: "",
@@ -310,6 +354,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "45 defaultProductId",
     name: { ru: "Томаты", en: "Tomatoes" },
     svgKey: "tomatoes",
     quantity: "",
@@ -317,6 +362,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "46 defaultProductId",
     name: { ru: "Томаты чери", en: "Cherry Tomatoes" },
     svgKey: "cherry_tomatoes",
     quantity: "",
@@ -324,6 +370,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "47 defaultProductId",
     name: { ru: "Редис", en: "Radish" },
     svgKey: "radish",
     quantity: "",
@@ -331,6 +378,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "48 defaultProductId",
     name: { ru: "Рукола", en: "Arugula" },
     svgKey: "arugula",
     quantity: "",
@@ -338,6 +386,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "49 defaultProductId",
     name: { ru: "Салат", en: "Lettuce" },
     svgKey: "lettuce",
     quantity: "",
@@ -345,6 +394,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "50 defaultProductId",
     name: { ru: "Свекла", en: "Beetroot" },
     svgKey: "beetroot",
     quantity: "",
@@ -352,6 +402,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "51 defaultProductId",
     name: { ru: "Сельдерей", en: "Celery" },
     svgKey: "celery",
     quantity: "",
@@ -359,6 +410,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "52 defaultProductId",
     name: { ru: "Сливы", en: "Plums" },
     svgKey: "plums",
     quantity: "",
@@ -366,6 +418,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "53 defaultProductId",
     name: { ru: "Спаржа", en: "Asparagus" },
     svgKey: "asparagus",
     quantity: "",
@@ -373,6 +426,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "54 defaultProductId",
     name: { ru: "Тыква", en: "Pumpkin" },
     svgKey: "pumpkin",
     quantity: "",
@@ -380,6 +434,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "55 defaultProductId",
     name: { ru: "Укроп", en: "Dill" },
     svgKey: "dill",
     quantity: "",
@@ -387,6 +442,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "56 defaultProductId",
     name: { ru: "Финики", en: "Dates" },
     svgKey: "dates",
     quantity: "",
@@ -394,6 +450,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "57 defaultProductId",
     name: { ru: "Цветная капуста", en: "Cauliflower" },
     svgKey: "cauliflower",
     quantity: "",
@@ -401,6 +458,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "58 defaultProductId",
     name: { ru: "Цукини", en: "Zucchini" },
     svgKey: "zucchini",
     quantity: "",
@@ -408,6 +466,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "59 defaultProductId",
     name: { ru: "Черешня", en: "Cherry" },
     svgKey: "cherry",
     quantity: "",
@@ -415,6 +474,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "60 defaultProductId",
     name: { ru: "Черника", en: "Blueberry" },
     svgKey: "blueberry",
     quantity: "",
@@ -422,6 +482,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "61 defaultProductId",
     name: { ru: "Чеснок", en: "Garlic" },
     svgKey: "garlic",
     quantity: "",
@@ -429,6 +490,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "62 defaultProductId",
     name: { ru: "Шалфей", en: "Sage" },
     svgKey: "sage",
     quantity: "",
@@ -436,6 +498,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "63 defaultProductId",
     name: { ru: "Корм для собак", en: "Dog Food" },
     svgKey: "dog_food",
     quantity: "",
@@ -443,6 +506,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "64 defaultProductId",
     name: { ru: "Корм для кошек", en: "Cat Food" },
     svgKey: "cat_food",
     quantity: "",
@@ -450,6 +514,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "65 defaultProductId",
     name: { ru: "Корм для рыб", en: "Fish Food" },
     svgKey: "fish_food",
     quantity: "",
@@ -457,6 +522,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "66 defaultProductId",
     name: { ru: "Корм для птиц", en: "Bird Food" },
     svgKey: "bird_food",
     quantity: "",
@@ -464,6 +530,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "67 defaultProductId",
     name: { ru: "Корм для грызунов", en: "Rodent Food" },
     svgKey: "rodent_food",
     quantity: "",
@@ -471,6 +538,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "68 defaultProductId",
     name: { ru: "Салфетки бумажные", en: "Paper Napkins" },
     svgKey: "paper_napkins",
     quantity: "",
@@ -478,6 +546,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "69 defaultProductId",
     name: { ru: "Салфетки влажные", en: "Wet Wipes" },
     svgKey: "wet_wipes",
     quantity: "",
@@ -485,6 +554,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "70 defaultProductId",
     name: { ru: "Моющее средство для посуды", en: "Dish Soap" },
     svgKey: "dish_soap",
     quantity: "",
@@ -492,6 +562,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "71 defaultProductId",
     name: { ru: "Лампочки", en: "Light Bulbs" },
     svgKey: "light_bulbs",
     quantity: "",
@@ -499,6 +570,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "72 defaultProductId",
     name: { ru: "Пакеты для мусора", en: "Garbage Bags" },
     svgKey: "garbage_bags",
     quantity: "",
@@ -506,6 +578,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "73 defaultProductId",
     name: { ru: "Зубная паста", en: "Toothpaste" },
     svgKey: "toothpaste",
     quantity: "",
@@ -513,6 +586,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "74 defaultProductId",
     name: { ru: "Шампунь", en: "Shampoo" },
     svgKey: "shampoo",
     quantity: "",
@@ -520,6 +594,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "75 defaultProductId",
     name: { ru: "Мыло", en: "Soap" },
     svgKey: "soap",
     quantity: "",
@@ -527,6 +602,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "76 defaultProductId",
     name: { ru: "Туалетная бумага", en: "Toilet Paper" },
     svgKey: "toilet_paper",
     quantity: "",
@@ -534,6 +610,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "77 defaultProductId",
     name: { ru: "Стиральный порошок", en: "Laundry Detergent" },
     svgKey: "laundry_detergent",
     quantity: "",
@@ -541,6 +618,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "78 defaultProductId",
     name: { ru: "Губки для мытья посуды", en: "Dish Sponges" },
     svgKey: "dish_sponges",
     quantity: "",
@@ -548,6 +626,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "79 defaultProductId",
     name: { ru: "Освежитель воздуха", en: "Air Freshener" },
     svgKey: "air_freshener",
     quantity: "",
@@ -555,6 +634,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "80 defaultProductId",
     name: { ru: "Говядина", en: "Beef" },
     svgKey: "beef",
     quantity: "",
@@ -562,6 +642,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "81 defaultProductId",
     name: { ru: "Свинина", en: "Pork" },
     svgKey: "pork",
     quantity: "",
@@ -569,6 +650,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "82 defaultProductId",
     name: { ru: "Курица", en: "Chicken" },
     svgKey: "chicken",
     quantity: "",
@@ -576,6 +658,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "83 defaultProductId",
     name: { ru: "Индейка", en: "Turkey" },
     svgKey: "turkey",
     quantity: "",
@@ -583,6 +666,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "84 defaultProductId",
     name: { ru: "Баранина", en: "Lamb" },
     svgKey: "lamb",
     quantity: "",
@@ -590,6 +674,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "85 defaultProductId",
     name: { ru: "Телятина", en: "Veal" },
     svgKey: "veal",
     quantity: "",
@@ -597,6 +682,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "86 defaultProductId",
     name: { ru: "Утка", en: "Duck" },
     svgKey: "duck",
     quantity: "",
@@ -604,6 +690,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "87 defaultProductId",
     name: { ru: "Кролик", en: "Rabbit" },
     svgKey: "rabbit",
     quantity: "",
@@ -611,6 +698,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "88 defaultProductId",
     name: { ru: "Фарш", en: "Ground Meat" },
     svgKey: "ground_meat",
     quantity: "",
@@ -618,6 +706,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "89 defaultProductId",
     name: { ru: "Сосиски", en: "Sausages" },
     svgKey: "sausages",
     quantity: "",
@@ -625,6 +714,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "90 defaultProductId",
     name: { ru: "Колбаса", en: "Salami" },
     svgKey: "salami",
     quantity: "",
@@ -632,6 +722,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "91 defaultProductId",
     name: { ru: "Ветчина", en: "Ham" },
     svgKey: "ham",
     quantity: "",
@@ -639,6 +730,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "92 defaultProductId",
     name: { ru: "Бекон", en: "Bacon" },
     svgKey: "bacon",
     quantity: "",
@@ -646,6 +738,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "93 defaultProductId",
     name: { ru: "Лосось", en: "Salmon" },
     svgKey: "salmon",
     quantity: "",
@@ -653,6 +746,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "94 defaultProductId",
     name: { ru: "Треска", en: "Cod" },
     svgKey: "cod",
     quantity: "",
@@ -660,6 +754,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "95 defaultProductId",
     name: { ru: "Тунец", en: "Tuna" },
     svgKey: "tuna",
     quantity: "",
@@ -667,6 +762,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "96 defaultProductId",
     name: { ru: "Сельдь", en: "Herring" },
     svgKey: "herring",
     quantity: "",
@@ -674,6 +770,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "97 defaultProductId",
     name: { ru: "Форель", en: "Trout" },
     svgKey: "trout",
     quantity: "",
@@ -681,6 +778,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "98 defaultProductId",
     name: { ru: "Скумбрия", en: "Mackerel" },
     svgKey: "mackerel",
     quantity: "",
@@ -688,6 +786,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "99 defaultProductId",
     name: { ru: "Камбала", en: "Flounder" },
     svgKey: "flounder",
     quantity: "",
@@ -695,6 +794,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "100 defaultProductId",
     name: { ru: "Карп", en: "Carp" },
     svgKey: "carp",
     quantity: "",
@@ -702,6 +802,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "101 defaultProductId",
     name: { ru: "Окунь", en: "Perch" },
     svgKey: "perch",
     quantity: "",
@@ -709,6 +810,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "102 defaultProductId",
     name: { ru: "Щука", en: "Pike" },
     svgKey: "pike",
     quantity: "",
@@ -716,6 +818,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "103 defaultProductId",
     name: { ru: "Креветки", en: "Shrimp" },
     svgKey: "shrimp",
     quantity: "",
@@ -723,6 +826,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "104 defaultProductId",
     name: { ru: "Кальмары", en: "Squid" },
     svgKey: "squid",
     quantity: "",
@@ -730,6 +834,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "105 defaultProductId",
     name: { ru: "Мидии", en: "Mussels" },
     svgKey: "mussels",
     quantity: "",
@@ -737,6 +842,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "106 defaultProductId",
     name: { ru: "Устрицы", en: "Oysters" },
     svgKey: "oysters",
     quantity: "",
@@ -744,6 +850,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "107 defaultProductId",
     name: { ru: "Кетчуп", en: "Ketchup" },
     svgKey: "ketchup",
     quantity: "",
@@ -751,6 +858,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "108 defaultProductId",
     name: { ru: "Майонез", en: "Mayonnaise" },
     svgKey: "mayonnaise",
     quantity: "",
@@ -758,6 +866,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "109 defaultProductId",
     name: { ru: "Горчица", en: "Mustard" },
     svgKey: "mustard",
     quantity: "",
@@ -765,6 +874,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "110 defaultProductId",
     name: { ru: "Соевый соус", en: "Soy Sauce" },
     svgKey: "soy_sauce",
     quantity: "",
@@ -772,6 +882,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "111 defaultProductId",
     name: { ru: "Барбекю соус", en: "BBQ Sauce" },
     svgKey: "bbq_sauce",
     quantity: "",
@@ -779,6 +890,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "112 defaultProductId",
     name: { ru: "Тартар", en: "Tartar Sauce" },
     svgKey: "tartar_sauce",
     quantity: "",
@@ -786,6 +898,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "113 defaultProductId",
     name: { ru: "Сальса", en: "Salsa" },
     svgKey: "salsa",
     quantity: "",
@@ -793,6 +906,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "114 defaultProductId",
     name: { ru: "Песто", en: "Pesto" },
     svgKey: "pesto",
     quantity: "",
@@ -800,6 +914,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "115 defaultProductId",
     name: { ru: "Сырный соус", en: "Cheese Sauce" },
     svgKey: "cheese_sauce",
     quantity: "",
@@ -807,6 +922,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "116 defaultProductId",
     name: { ru: "Чесночный соус", en: "Garlic Sauce" },
     svgKey: "garlic_sauce",
     quantity: "",
@@ -814,6 +930,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "117 defaultProductId",
     name: { ru: "Острый соус", en: "Hot Sauce" },
     svgKey: "hot_sauce",
     quantity: "",
@@ -821,6 +938,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "118 defaultProductId",
     name: { ru: "Ранч", en: "Ranch Dressing" },
     svgKey: "ranch_dressing",
     quantity: "",
@@ -828,6 +946,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "119 defaultProductId",
     name: { ru: "Терияки", en: "Teriyaki Sauce" },
     svgKey: "teriyaki_sauce",
     quantity: "",
@@ -835,6 +954,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "120 defaultProductId",
     name: { ru: "Сыр", en: "Cheese" },
     svgKey: "cheese",
     quantity: "",
@@ -842,6 +962,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "121 defaultProductId",
     name: { ru: "Сыр твердый", en: "Hard Cheese" },
     svgKey: "hard_cheese",
     quantity: "",
@@ -849,6 +970,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "122 defaultProductId",
     name: { ru: "Сыр мягкий", en: "Soft Cheese" },
     svgKey: "soft_cheese",
     quantity: "",
@@ -856,6 +978,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "123 defaultProductId",
     name: { ru: "Сыр полутвердый", en: "Semi-Hard Cheese" },
     svgKey: "semi_hard_cheese",
     quantity: "",
@@ -863,6 +986,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "124 defaultProductId",
     name: { ru: "Моцарелла", en: "Mozzarella" },
     svgKey: "mozzarella",
     quantity: "",
@@ -870,6 +994,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "125 defaultProductId",
     name: { ru: "Чеддер", en: "Cheddar" },
     svgKey: "cheddar",
     quantity: "",
@@ -877,6 +1002,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "126 defaultProductId",
     name: { ru: "Пармезан", en: "Parmesan" },
     svgKey: "parmesan",
     quantity: "",
@@ -884,6 +1010,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "127 defaultProductId",
     name: { ru: "Фета", en: "Feta" },
     svgKey: "feta",
     quantity: "",
@@ -891,6 +1018,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "128 defaultProductId",
     name: { ru: "Бри", en: "Brie" },
     svgKey: "brie",
     quantity: "",
@@ -898,6 +1026,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "129 defaultProductId",
     name: { ru: "Тофу", en: "Tofu" },
     svgKey: "tofu",
     quantity: "",
@@ -905,6 +1034,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "130 defaultProductId",
     name: { ru: "Гауда", en: "Gouda" },
     svgKey: "gouda",
     quantity: "",
@@ -912,6 +1042,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "131 defaultProductId",
     name: { ru: "Камамбер", en: "Camembert" },
     svgKey: "camembert",
     quantity: "",
@@ -919,6 +1050,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "132 defaultProductId",
     name: { ru: "Рикотта", en: "Ricotta" },
     svgKey: "ricotta",
     quantity: "",
@@ -926,6 +1058,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "133 defaultProductId",
     name: { ru: "Горгонзола", en: "Gorgonzola" },
     svgKey: "gorgonzola",
     quantity: "",
@@ -933,6 +1066,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "134 defaultProductId",
     name: { ru: "Рокфор", en: "Roquefort" },
     svgKey: "roquefort",
     quantity: "",
@@ -940,6 +1074,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "135 defaultProductId",
     name: { ru: "Маскарпоне", en: "Mascarpone" },
     svgKey: "mascarpone",
     quantity: "",
@@ -947,6 +1082,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "136 defaultProductId",
     name: { ru: "Эмменталь", en: "Emmental" },
     svgKey: "emmental",
     quantity: "",
@@ -954,6 +1090,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "137 defaultProductId",
     name: { ru: "Молоко", en: "Milk" },
     svgKey: "milk",
     quantity: "",
@@ -961,6 +1098,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "138 defaultProductId",
     name: { ru: "Йогурт", en: "Yogurt" },
     svgKey: "yogurt",
     quantity: "",
@@ -968,6 +1106,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "139 defaultProductId",
     name: { ru: "Сметана", en: "Sour Cream" },
     svgKey: "sour_cream",
     quantity: "",
@@ -975,6 +1114,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "140 defaultProductId",
     name: { ru: "Творог", en: "Cottage Cheese" },
     svgKey: "cottage_cheese",
     quantity: "",
@@ -982,6 +1122,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "141 defaultProductId",
     name: { ru: "Кефир", en: "Kefir" },
     svgKey: "kefir",
     quantity: "",
@@ -989,6 +1130,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "142 defaultProductId",
     name: { ru: "Сливки", en: "Cream" },
     svgKey: "cream",
     quantity: "",
@@ -996,6 +1138,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "143 defaultProductId",
     name: { ru: "Масло сливочное", en: "Butter" },
     svgKey: "butter",
     quantity: "",
@@ -1003,6 +1146,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "144 defaultProductId",
     name: { ru: "Яйца", en: "Eggs" },
     svgKey: "eggs",
     quantity: "",
@@ -1010,6 +1154,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "145 defaultProductId",
     name: { ru: "Хлеб", en: "Bread" },
     svgKey: "bread",
     quantity: "",
@@ -1017,6 +1162,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "146 defaultProductId",
     name: { ru: "Хлеб черный", en: "Dark Bread" },
     svgKey: "dark_bread",
     quantity: "",
@@ -1024,6 +1170,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "147 defaultProductId",
     name: { ru: "Хлеб белый", en: "White Bread" },
     svgKey: "white_bread",
     quantity: "",
@@ -1031,6 +1178,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "148 defaultProductId",
     name: { ru: "Хлеб серый", en: "Gray Bread" },
     svgKey: "gray_bread",
     quantity: "",
@@ -1038,6 +1186,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "149 defaultProductId",
     name: { ru: "Багет", en: "French Baguette" },
     svgKey: "french_baguette",
     quantity: "",
@@ -1045,6 +1194,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "150 defaultProductId",
     name: { ru: "Чиабатта", en: "Ciabatta" },
     svgKey: "ciabatta",
     quantity: "",
@@ -1052,6 +1202,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "151 defaultProductId",
     name: { ru: "Ржаной хлеб", en: "Rye Bread" },
     svgKey: "rye_bread",
     quantity: "",
@@ -1059,6 +1210,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "152 defaultProductId",
     name: { ru: "Цельнозерновой хлеб", en: "Whole Grain Bread" },
     svgKey: "whole_grain_bread",
     quantity: "",
@@ -1066,6 +1218,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "153 defaultProductId",
     name: { ru: "Хлеб с семечками", en: "Seeded Bread" },
     svgKey: "seeded_bread",
     quantity: "",
@@ -1073,6 +1226,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "154 defaultProductId",
     name: { ru: "Булочки", en: "Buns" },
     svgKey: "buns",
     quantity: "",
@@ -1080,6 +1234,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "155 defaultProductId",
     name: { ru: "Круассаны", en: "Croissants" },
     svgKey: "croissants",
     quantity: "",
@@ -1087,6 +1242,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "156 defaultProductId",
     name: { ru: "Лаваш", en: "Lavash" },
     svgKey: "lavash",
     quantity: "",
@@ -1094,6 +1250,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "157 defaultProductId",
     name: { ru: "Пита", en: "Pita" },
     svgKey: "pita",
     quantity: "",
@@ -1101,6 +1258,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "158 defaultProductId",
     name: { ru: "Фокачча", en: "Focaccia" },
     svgKey: "focaccia",
     quantity: "",
@@ -1108,6 +1266,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "159 defaultProductId",
     name: { ru: "Хлебцы", en: "Crispbread" },
     svgKey: "crispbread",
     quantity: "",
@@ -1115,6 +1274,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "160 defaultProductId",
     name: { ru: "Хлеб с отрубями", en: "Bran Bread" },
     svgKey: "bran_bread",
     quantity: "",
@@ -1122,6 +1282,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "161 defaultProductId",
     name: { ru: "Тостовый хлеб", en: "Toast Bread" },
     svgKey: "toast_bread",
     quantity: "",
@@ -1129,6 +1290,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "162 defaultProductId",
     name: { ru: "Черный перец", en: "Black Pepper" },
     svgKey: "black_pepper",
     quantity: "",
@@ -1136,6 +1298,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "163 defaultProductId",
     name: { ru: "Красный перец", en: "Red Pepper" },
     svgKey: "red_pepper",
     quantity: "",
@@ -1143,6 +1306,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "164 defaultProductId",
     name: { ru: "Куркума", en: "Turmeric" },
     svgKey: "turmeric",
     quantity: "",
@@ -1150,6 +1314,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "165 defaultProductId",
     name: { ru: "Корица", en: "Cinnamon" },
     svgKey: "cinnamon",
     quantity: "",
@@ -1157,6 +1322,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "166 defaultProductId",
     name: { ru: "Кардамон", en: "Cardamom" },
     svgKey: "cardamom",
     quantity: "",
@@ -1164,6 +1330,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "167 defaultProductId",
     name: { ru: "Гвоздика", en: "Cloves" },
     svgKey: "cloves",
     quantity: "",
@@ -1171,6 +1338,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "168 defaultProductId",
     name: { ru: "Мускатный орех", en: "Nutmeg" },
     svgKey: "nutmeg",
     quantity: "",
@@ -1178,6 +1346,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "169 defaultProductId",
     name: { ru: "Паприка", en: "Paprika" },
     svgKey: "paprika",
     quantity: "",
@@ -1185,6 +1354,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "170 defaultProductId",
     name: { ru: "Орегано", en: "Oregano" },
     svgKey: "oregano",
     quantity: "",
@@ -1192,6 +1362,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "171 defaultProductId",
     name: { ru: "Базилик сушеный", en: "Dried Basil" },
     svgKey: "dried_basil",
     quantity: "",
@@ -1199,6 +1370,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "172 defaultProductId",
     name: { ru: "Тимьян сушеный", en: "Dried Thyme" },
     svgKey: "dried_thyme",
     quantity: "",
@@ -1206,6 +1378,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "173 defaultProductId",
     name: { ru: "Розмарин сушеный", en: "Dried Rosemary" },
     svgKey: "dried_rosemary",
     quantity: "",
@@ -1213,6 +1386,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "174 defaultProductId",
     name: { ru: "Карри", en: "Curry" },
     svgKey: "curry",
     quantity: "",
@@ -1220,6 +1394,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "175 defaultProductId",
     name: { ru: "Шафран", en: "Saffron" },
     svgKey: "saffron",
     quantity: "",
@@ -1227,6 +1402,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "176 defaultProductId",
     name: { ru: "Имбирь молотый", en: "Ground Ginger" },
     svgKey: "ground_ginger",
     quantity: "",
@@ -1234,6 +1410,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "177 defaultProductId",
     name: { ru: "Чеснок молотый", en: "Ground Garlic" },
     svgKey: "ground_garlic",
     quantity: "",
@@ -1241,6 +1418,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "178 defaultProductId",
     name: { ru: "Кориандр молотый", en: "Ground Coriander" },
     svgKey: "ground_coriander",
     quantity: "",
@@ -1248,6 +1426,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "179 defaultProductId",
     name: { ru: "Тмин", en: "Cumin" },
     svgKey: "cumin",
     quantity: "",
@@ -1255,6 +1434,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "180 defaultProductId",
     name: { ru: "Семена горчицы", en: "Mustard Seeds" },
     svgKey: "mustard_seeds",
     quantity: "",
@@ -1262,6 +1442,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "181 defaultProductId",
     name: { ru: "Вино", en: "Wine" },
     svgKey: "wine",
     quantity: "",
@@ -1269,6 +1450,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "182 defaultProductId",
     name: { ru: "Вино красное", en: "Red Wine" },
     svgKey: "red_wine",
     quantity: "",
@@ -1276,6 +1458,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "183 defaultProductId",
     name: { ru: "Вино белое", en: "White Wine" },
     svgKey: "white_wine",
     quantity: "",
@@ -1283,6 +1466,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "184 defaultProductId",
     name: { ru: "Вино розовое", en: "Rose Wine" },
     svgKey: "rose_wine",
     quantity: "",
@@ -1290,6 +1474,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "185 defaultProductId",
     name: { ru: "Пиво", en: "Beer" },
     svgKey: "beer",
     quantity: "",
@@ -1297,6 +1482,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "186 defaultProductId",
     name: { ru: "Шампанское", en: "Champagne" },
     svgKey: "champagne",
     quantity: "",
@@ -1304,6 +1490,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "187 defaultProductId",
     name: { ru: "Виски", en: "Whiskey" },
     svgKey: "whiskey",
     quantity: "",
@@ -1311,6 +1498,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "188 defaultProductId",
     name: { ru: "Водка", en: "Vodka" },
     svgKey: "vodka",
     quantity: "",
@@ -1318,6 +1506,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "189 defaultProductId",
     name: { ru: "Джин", en: "Gin" },
     svgKey: "gin",
     quantity: "",
@@ -1325,6 +1514,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "190 defaultProductId",
     name: { ru: "Ром", en: "Rum" },
     svgKey: "rum",
     quantity: "",
@@ -1332,6 +1522,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "191 defaultProductId",
     name: { ru: "Текила", en: "Tequila" },
     svgKey: "tequila",
     quantity: "",
@@ -1339,6 +1530,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "192 defaultProductId",
     name: { ru: "Коньяк", en: "Cognac" },
     svgKey: "cognac",
     quantity: "",
@@ -1346,6 +1538,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "193 defaultProductId",
     name: { ru: "Бренди", en: "Brandy" },
     svgKey: "brandy",
     quantity: "",
@@ -1353,6 +1546,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "194 defaultProductId",
     name: { ru: "Вермут", en: "Vermouth" },
     svgKey: "vermouth",
     quantity: "",
@@ -1360,6 +1554,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "195 defaultProductId",
     name: { ru: "Саке", en: "Sake" },
     svgKey: "sake",
     quantity: "",
@@ -1367,6 +1562,7 @@ export const productsConst: ProductInList[] = [
     isPushed: false,
   },
   {
+    id: "196 defaultProductId",
     name: { ru: "Абсент", en: "Absinthe" },
     svgKey: "absinthe",
     quantity: "",

@@ -26,9 +26,6 @@ export const Search = ({
   const [suggestions, setSuggestions] = useState<ProductInList[]>([]);
   const [currentProduct, setCurrentProduct] = useState<ProductInList | null>(null);
   const customProductsData = useSelector(selectСustomProducts);
-  useEffect(() => {
-    console.log(customProductsData);
-  }, [customProductsData]);
 
   const productsForSearch = type === "custom" ? [...customProductsData] : [...productsConst, ...customProductsData];
 

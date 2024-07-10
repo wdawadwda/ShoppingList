@@ -18,6 +18,7 @@ export interface UpdateingProductInList {
 }
 
 export interface ProductInList {
+  id: string | number;
   quantity: string;
   category: {
     en: string;
@@ -42,6 +43,15 @@ export interface ProductsListData {
   products: ProductInList[] | [];
 }
 
+export interface ProductsListData {
+  id: number | string | null;
+  name: string;
+  products: ProductInList[] | [];
+}
+export interface ProductsListDataRequest extends ProductsListData {
+  owner_id: number | string;
+}
+
 export interface BaseListProps {
   productData: ProductsListData;
   theme: Theme;
@@ -54,6 +64,7 @@ export interface BaseListProps {
   handleAddClick: () => void;
   setshowInputAdd: Dispatch<boolean>;
   setProductData: Dispatch<ProductsListData>;
+  isNewList: boolean;
 }
 
 export type ListAddProductProps = Pick<

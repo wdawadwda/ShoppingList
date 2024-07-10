@@ -22,4 +22,5 @@ export {
   type NewListProps,
   type ProductCustom,
   type Language,
+  type ProductsListDataRequest,
 } from "./products-lists";

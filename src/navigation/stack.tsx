@@ -115,6 +115,15 @@ export const ResiptNavigator = ({ theme }: { theme: Theme }) => (
       >
         {() => <RegAuth theme={theme} />}
       </Stack.Screen>
+
+      <Stack.Screen
+        name="Home"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {() => <Home theme={theme} />}
+      </Stack.Screen>
     </Stack.Navigator>
   </>
 );
@@ -178,6 +187,15 @@ export const StackSettingsNavigator = ({ theme }: { theme: Theme }) => (
         }}
       >
         {() => <DellEditCustomProduct theme={theme} />}
+      </Stack.Screen>
+
+      <Stack.Screen
+        name="Home"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {() => <Home theme={theme} />}
       </Stack.Screen>
     </Stack.Navigator>
   </>

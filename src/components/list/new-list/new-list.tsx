@@ -1,6 +1,7 @@
 import { Text, TextInput, TouchableOpacity } from "react-native";
-import { type NewListProps } from "@/constants";
+import { type ProductsListData, type NewListProps } from "@/constants";
 import { ExistingList } from "../existing-list";
+import { type Dispatch } from "react";
 
 export const NewList = ({
   productData,
@@ -11,7 +12,8 @@ export const NewList = ({
   theme,
   language,
   listId,
-}: NewListProps) => (
+  setProductData,
+}: NewListProps & { setProductData: Dispatch<ProductsListData> }) => (
   <>
     <Text>Создание списка</Text>
     {productData?.name ? (
@@ -22,6 +24,8 @@ export const NewList = ({
         handleAddClick={handleAddClick}
         theme={theme}
         language={language}
+        isNewList={true}
+        setProductData={setProductData}
       />
     ) : (
       <>
