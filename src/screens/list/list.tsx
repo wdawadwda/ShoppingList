@@ -29,9 +29,9 @@ export const List = ({ theme }: { theme: Theme }) => {
   const handleAddClick = () => setShowInputAdd(true);
   const handleAddName = (data: ProductsListData) => setProductData({ ...data, name: listTitle });
 
-  useEffect(() => {
-    console.log(productData);
-  }, [productData]);
+  // useEffect(() => {
+  //   console.log(productData);
+  // }, [productData]);
 
   if (showInputAdd) {
     return (
@@ -55,14 +55,17 @@ export const List = ({ theme }: { theme: Theme }) => {
             listId={listId}
             listName={listName}
             productData={productData}
+            setProductData={setProductData}
             handleAddClick={handleAddClick}
             theme={theme}
             language={i18n.language as "ru" | "en"}
+            isNewList={false}
           />
         ) : (
           <NewList
             listId={listId}
             productData={productData}
+            setProductData={setProductData}
             listTitle={listTitle}
             setListTitle={setListTitle}
             handleAddName={handleAddName}
