@@ -16,6 +16,8 @@ type RootStackParamList = {
   UserTheme: undefined;
   AddList: undefined;
   AddCustomProduct: undefined;
+  Settings: undefined;
+  DellEditCustomProduct: undefined;
   List: NavigationParamsList | undefined;
 };
 

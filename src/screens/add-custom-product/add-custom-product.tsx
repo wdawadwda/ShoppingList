@@ -7,7 +7,7 @@ export const AddCustomProduct = ({ theme }: { theme: Theme }) => {
   return (
     <Layout theme={theme}>
       <Text>{t("text.addCustomProduct.title")}</Text>
-      <AddCustomPr theme={theme} />
+      <AddCustomPr isScreen={true} theme={theme} />
     </Layout>
   );
 };

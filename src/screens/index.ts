@@ -8,3 +8,4 @@ export { RegAuth } from "./reg-auth";
 export { HistoryResipt } from "./history-receipt";
 export { List } from "./list";
 export { AddCustomProduct } from "./add-custom-product";
+export { DellEditCustomProduct } from "./dell-edit-custom-product";

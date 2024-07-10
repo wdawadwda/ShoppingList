@@ -73,6 +73,9 @@ export const darkStyles = StyleSheet.create({
   containerSuccess: {
     backgroundColor: colorDark.backgroundColoSuccess,
   },
+  secondContainer: {
+    backgroundColor: colorDark.backgroundColorSecond,
+  },
 });
 
 export const lightStyles = StyleSheet.create({
@@ -87,5 +90,8 @@ export const lightStyles = StyleSheet.create({
   },
   containerSuccess: {
     backgroundColor: colorLight.backgroundColoSuccess,
+  },
+  secondContainer: {
+    backgroundColor: colorLight.backgroundColorSecond,
   },
 });

@@ -45,6 +45,7 @@ export const InputForm = <T extends FieldValues>({
                   onChangeText={(text) => onChange(text)}
                   keyboardType={field.keyboardType}
                   secureTextEntry={field.secureTextEntry || false}
+                  maxLength={field.maxLength}
                 />
               )}
               name={field.name as Path<T>}
@@ -76,6 +77,7 @@ export const InputForm = <T extends FieldValues>({
                   onChangeText={(text) => onChange(text)}
                   keyboardType={field.keyboardType}
                   secureTextEntry={field.secureTextEntry || false}
+                  maxLength={field.maxLength}
                 />
               )}
               name={field.name as Path<T>}

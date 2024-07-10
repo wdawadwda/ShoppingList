@@ -7,6 +7,7 @@
   "buttonLabels": {
     "themeSettings": "Theme settings",
     "addCustomProduct": "Add custom product",
+    "dellEdit": "Delete or edit",
     "addCustomProductBtn" : {
       "addNames": "Add {{lang}} names"
     },
@@ -46,7 +47,11 @@
   "screensName": {
     "home": "Home",
     "settings": "Settings",
-    "addList": "Add list"
+    "addList": "Add list",
+    "settingsAdditional": {
+      "theme": "Theme",
+      "customProduct": "Custom product"
+    }
   },
   "other": {
     "greetings" : "Hello, "
@@ -73,6 +78,10 @@
       "email": "email",
       "password": "password",
       "repeatPassword": "repeat your password"
+    },
+    "customProduct": {
+      "isReq": "{{lang}} {{type}} is required",
+      "exceedCharacters": "{{type}} must not exceed {{max}} characters"
     }
   },
   "text": {
@@ -85,6 +94,12 @@
       "unitOfMeasurement": "Unit of measurement",
       "confirmDelete": "Are you sure you want to delete?",
       "deleteReceipt": "Удаление чека"
+    },
+    "customProduct": {
+      "labels": {
+        "name": "name",
+        "category": "category"
+      }
     },
     "addCustomProduct": {
       "title": "Add custom product"

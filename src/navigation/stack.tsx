@@ -2,7 +2,19 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "react-native";
 import { type Theme } from "@/store";
 import { colorDark, colorLight } from "@/styles";
-import { AddCustomProduct, HistoryResipt, Home, List, PhotoResipt, RegAuth, Resipt, Settings, User, UserTheme } from "@/screens";
+import {
+  AddCustomProduct,
+  DellEditCustomProduct,
+  HistoryResipt,
+  Home,
+  List,
+  PhotoResipt,
+  RegAuth,
+  Resipt,
+  Settings,
+  User,
+  UserTheme,
+} from "@/screens";
 
 const Stack = createNativeStackNavigator();
 
@@ -157,6 +169,15 @@ export const StackSettingsNavigator = ({ theme }: { theme: Theme }) => (
         }}
       >
         {() => <AddCustomProduct theme={theme} />}
+      </Stack.Screen>
+
+      <Stack.Screen
+        name="DellEditCustomProduct"
+        options={{
+          headerShown: false,
+        }}
+      >
+        {() => <DellEditCustomProduct theme={theme} />}
       </Stack.Screen>
     </Stack.Navigator>
   </>

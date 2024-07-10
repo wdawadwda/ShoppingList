@@ -10,13 +10,20 @@ export interface User {
 
 export type ErrorDetail = {
   detail: string;
+  details?: { ru: string; en: string };
 };
 
 export interface ErrorObject {
   statusErr: string | number;
   detail: string;
   message: string;
+  errorLangData: ErrorMessageType | string;
 }
+
+export type ErrorMessageType = {
+  en: string;
+  ru: string;
+};
 
 export interface JWTTokens {
   access: string;

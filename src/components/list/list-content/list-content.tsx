@@ -1,5 +1,6 @@
 import { svgScheme } from "@/constants";
 import { globalStyles } from "@/styles";
+import { getFirstLetter } from "@/utils";
 import { Text, View } from "react-native";
 
 export const ListContent = ({ productList, language, theme }) => {
@@ -11,11 +12,6 @@ export const ListContent = ({ productList, language, theme }) => {
     acc[category].push(product);
     return acc;
   }, {});
-
-  const getFirstLetter = (productName, language) => {
-    const name = productName[language.toLowerCase()];
-    return name.charAt(0).toUpperCase();
-  };
 
   return (
     <View style={globalStyles.container}>

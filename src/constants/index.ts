@@ -20,4 +20,6 @@ export {
   type ListAddProductProps,
   type ExistingListProps,
   type NewListProps,
+  type ProductCustom,
+  type Language,
 } from "./products-lists";

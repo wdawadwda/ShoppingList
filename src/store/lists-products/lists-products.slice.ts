@@ -1,7 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type ErrorObject, type UserSlice } from "./lists-products.types";
+import { type UserSlice } from "./lists-products.types";
 import { fetchProductsLists } from "../api";
 import { type ProductsListsDataApi } from "@/store/lists-products";
+import { type ErrorObject } from "@/constants";
 
 const getInitialState = (): UserSlice => {
   return {

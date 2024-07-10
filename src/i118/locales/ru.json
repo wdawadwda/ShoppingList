@@ -7,6 +7,7 @@
   "buttonLabels": {
     "themeSettings": "Настройки Темы",
     "addCustomProduct": "Добавить свой продукт",
+    "dellEdit": "Удалить или редактировать",
     "addCustomProductBtn" : {
       "addNames": "Добавить {{lang}} имена"
     },
@@ -46,21 +47,16 @@
   "screensName": {
     "home": "Домашняя",
     "settings": "Настройки",
-    "addList": "Добавить список"
+    "addList": "Добавить список",
+    "settingsAdditional": {
+      "theme": "Тема",
+      "customProduct": "Свой продукт"
+    }
   },
   "other": {
     "greetings" : "Здравствуйте, "
   },
   "validation": {
-    "base": {
-      "integer": "число должно быть целым",
-      "positive": "число должно быть положительным",
-      "mustNumber": "должен быть числом",
-      "cannotBeZero": "не может быть меньше или равен 0",
-      "aboveZero": "введите число от 0 и выше",
-      "isRequired": "обязателен(о) для заполнения",
-      "optional": "не обязателен(о)"
-    },
     "regAuth": {
       "login": {
         "usernameRequired": "Введите имя пользователя",
@@ -82,6 +78,11 @@
       "email": "email",
       "password": "пароль",
       "repeatPassword": "повторите пароль"
+    },
+    "customProduct": {
+      "isReq": "{{lang}} {{type}} обязательно",
+      "exceedCharacters": "{{type}} не должна превышать {{max}} символов"
+
     }
   },
   "text": {
@@ -94,6 +95,12 @@
       "unitOfMeasurement": "Единица измерения",
       "confirmDelete": "Вы уверены, что хотите удалить?",
       "deleteReceipt": "Удаление чека"
+    },
+    "customProduct": {
+      "labels": {
+        "name": "название",
+        "category": "категория"
+      }
     },
     "addCustomProduct": {
       "title": "Добавление соего продукта"
