@@ -1,7 +1,9 @@
-import { Text, TextInput, TouchableOpacity } from "react-native";
+import { Text, TextInput } from "react-native";
 import { type ProductsListData, type NewListProps } from "@/constants";
 import { ExistingList } from "../existing-list";
 import { type Dispatch } from "react";
+import { colorDark, fontsStyles, globalStyles } from "@/styles";
+import { BackButton, Button } from "@/components/ui";
 
 export const NewList = ({
   productData,
@@ -13,9 +15,11 @@ export const NewList = ({
   language,
   listId,
   setProductData,
-}: NewListProps & { setProductData: Dispatch<ProductsListData> }) => (
+}: NewListProps & { setProductData: Dispatch<React.SetStateAction<ProductsListData>> }) => (
   <>
-    <Text>Создание списка</Text>
+    <BackButton theme={theme} />
+
+    <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>Создание списка</Text>
     {productData?.name ? (
       <ExistingList
         listId={listId}
@@ -29,16 +33,17 @@ export const NewList = ({
       />
     ) : (
       <>
-        <Text>Добавить название списка</Text>
+        <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>Добавить название списка</Text>
         <TextInput
-          style={{ height: 40, borderColor: "gray", borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 }}
+          style={globalStyles.input}
           placeholder="Добавить название списка"
           value={listTitle}
           onChangeText={setListTitle}
+          maxLength={15}
         />
-        <TouchableOpacity onPress={() => handleAddName(productData)}>
+        <Button theme={theme} onPress={() => handleAddName(productData)}>
           <Text>Подтвердить</Text>
-        </TouchableOpacity>
+        </Button>
       </>
     )}
   </>

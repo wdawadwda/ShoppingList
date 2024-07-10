@@ -1,12 +1,12 @@
 import { type ProductInList } from "@/constants";
 
 import { type Theme } from "@/store";
+import { colorDark, fontsStyles, globalStyles } from "@/styles";
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity } from "react-native";
 
 export const EditProduct = ({
   product,
-  theme,
   onEdit,
 }: {
   product: ProductInList;
@@ -21,13 +21,14 @@ export const EditProduct = ({
   return (
     <>
       <TextInput
-        style={{ height: 40, borderColor: "gray", borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 }}
+        style={globalStyles.input}
         placeholder="Введите количество"
         value={quantity}
         onChangeText={setQuantity}
+        maxLength={7}
       />
       <TouchableOpacity onPress={handleEdit}>
-        <Text>Подтвердить</Text>
+        <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>Подтвердить</Text>
       </TouchableOpacity>
     </>
   );

@@ -5,7 +5,7 @@ import { useAppDispatch, type Theme } from "@/store";
 import { deleteCustomProduct, fetchCustompProducts } from "@/store/api";
 import { t } from "i18next";
 import { useState, type Dispatch } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { type MainNavigationProp } from "@/navigation";
 import EditForm from "./edit-form";
@@ -28,17 +28,34 @@ export const EditDellProduct = ({
 
   const customProduct = currentProduct as ProductCustom;
 
-  const handleDelete = async (product: ProductCustom) => {
-    setIsLoading(true);
-    try {
-      await deleteCustomProduct(product.id, product.user);
-      dispatch(fetchCustompProducts(product.user));
-      navigation.navigate("Settings");
-    } catch (error) {
-      setError(t("defaultMessage.defaultError"));
-    } finally {
-      setIsLoading(false);
-    }
+  const handleDelete = (product: ProductCustom) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this product?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: async () => {
+            setIsLoading(true);
+            try {
+              await deleteCustomProduct(product.id, product.user);
+              dispatch(fetchCustompProducts(product.user));
+              navigation.navigate("Settings");
+            } catch (error) {
+              setError(t("defaultMessage.defaultError"));
+            } finally {
+              setIsLoading(false);
+            }
+          },
+        },
+      ],
+      { cancelable: true },
+    );
   };
 
   return (
@@ -61,7 +78,7 @@ export const EditDellProduct = ({
         />
       ) : (
         <>
-          <Button theme={theme} onPress={() => setCurrentProduct(null)}>
+          <Button style={styles.buttonTop} theme={theme} onPress={() => setCurrentProduct(null)}>
             <Text>Сбросить</Text>
           </Button>
           <CustomProduct product={customProduct} theme={theme} />
@@ -99,6 +116,9 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "45%",
+  },
+  buttonTop: {
+    marginBottom: 25,
   },
 });
 

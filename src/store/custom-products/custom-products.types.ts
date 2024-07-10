@@ -4,4 +4,6 @@ export interface UserSlice {
   status: Status;
   products: ProductInList[] | [];
   errorFetchCustompProducts: ErrorObject | null;
+  createCustomProductStatus: Status;
+  createCustomProductError: ErrorObject | null;
 }

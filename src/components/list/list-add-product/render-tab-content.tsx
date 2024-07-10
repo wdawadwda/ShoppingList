@@ -42,7 +42,7 @@ export const renderTabContent = ({
             theme={theme}
             productData={productData}
             isScreen={false}
-          ></AddCustomPr>
+          />
         ),
       };
     default:

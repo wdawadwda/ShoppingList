@@ -1,8 +1,9 @@
+import { Button } from "@/components/ui";
 import { ProductInList, type ProductsListData } from "@/constants";
 import { Theme } from "@/store";
+import { globalStyles } from "@/styles";
 import { Dispatch, useState } from "react";
-import { Text, TextInput, TouchableOpacity } from "react-native";
-
+import { Text, TextInput } from "react-native";
 export interface AddQuantityProps {
   productData: ProductsListData;
   currentProduct: ProductInList;
@@ -42,14 +43,15 @@ export const AddQuantity = ({
   return (
     <>
       <TextInput
-        style={{ height: 40, borderColor: "gray", borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 }}
+        style={globalStyles.input}
         placeholder="Введите количество"
         value={quantity}
+        maxLength={7}
         onChangeText={setQuantity}
       />
-      <TouchableOpacity onPress={() => handleAddProduct(productData)}>
+      <Button theme={theme} onPress={() => handleAddProduct(productData)}>
         <Text>Подтвердить</Text>
-      </TouchableOpacity>
+      </Button>
     </>
   );
 };

@@ -12,12 +12,14 @@ export const CustomProduct = ({ product, theme }: { product: ProductInList; them
 
   return (
     <>
-      <Text>{categoryName}</Text>
+      <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>{categoryName}</Text>
 
       <View style={[theme === "dark" ? darkStyles.secondContainer : lightStyles.secondContainer, styles.card]}>
         <View>
           {svgScheme[product.svgKey] || (
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>{getFirstLetter(product.name, language)}</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold", color: colorDark.textColor }}>
+              {getFirstLetter(product.name, language)}
+            </Text>
           )}
         </View>
 

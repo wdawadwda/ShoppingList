@@ -1,4 +1,4 @@
-import { Button, InputForm } from "@/components/ui";
+import { BackButton, Button, InputForm } from "@/components/ui";
 import { type Theme } from "@/store";
 import { StyleSheet, Text } from "react-native";
 import { useConst } from "./use/useConst";
@@ -112,6 +112,8 @@ export const EditForm = ({
 
   return (
     <>
+      <BackButton onPress={() => setIsEddit(false)} theme={theme} />
+
       <InputForm formFields={formFields} formState={formState} theme={theme} control={control as unknown as Control} />
       <Button
         isLoading={isLoading}

@@ -4,7 +4,15 @@ import { type Theme } from "@/store";
 import { colorDark } from "@/styles";
 import { PlusComponent } from "@/assets";
 
-export const AddButton = ({ theme, onPress }: { theme: Theme; onPress?: () => void }) => {
+export const AddButton = ({
+  theme,
+  onPress,
+  iconComponent: IconComponent = PlusComponent,
+}: {
+  theme: Theme;
+  onPress?: () => void;
+  iconComponent?: React.ComponentType<any>;
+}) => {
   const handlePress = () => {
     if (onPress) {
       onPress();
@@ -18,7 +26,7 @@ export const AddButton = ({ theme, onPress }: { theme: Theme; onPress?: () => vo
       style={[styles.buttonContainer, { alignSelf: "flex-start" }]}
       buttonColorVar="backgroundColorThird"
     >
-      <PlusComponent width={20} height={20} color={colorDark.textColor} />
+      <IconComponent width={20} height={20} color={colorDark.textColor} />
     </Button>
   );
 };

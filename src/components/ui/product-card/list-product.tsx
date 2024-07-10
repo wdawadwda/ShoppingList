@@ -83,7 +83,7 @@ export const ListProductItemCard = ({
       <View style={[theme === "dark" ? darkStyles.secondContainer : lightStyles.secondContainer, styles.card]}>
         <View style={styles.iconContainer}>{renderProductIcon(product, language)}</View>
         {renderScrollableText(productName, "40%")}
-        {renderScrollableText(quantity, "15%")}
+        {renderScrollableText(quantity, isPurchased ? "20%" : "40%")}
         {isPurchased ? (
           <>
             {renderActionButton(() => setIsEdit(true), EditSvgComponent)}
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     position: "relative",
     height: 60,
+    marginVertical: 5,
   },
   iconContainer: {
     width: "10%",

@@ -10,7 +10,6 @@ export const stylesHeader = StyleSheet.create({
     paddingRight: 10,
     paddingLeft: 10,
     paddingBottom: 10,
-    marginBottom: 15,
     borderBottomWidth: 1,
     borderBottomColor: "transparent",
   },

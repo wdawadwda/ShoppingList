@@ -1,7 +1,7 @@
 import { ListProductItemCard } from "@/components/ui";
 import { type Language, type ProductInList, type ProductsListData } from "@/constants";
 import { type Theme } from "@/store";
-import { globalStyles } from "@/styles";
+import { colorDark, fontsStyles, globalStyles } from "@/styles";
 import { type Dispatch } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -48,9 +48,12 @@ export const ListContent = ({
   const renderProductList = (categories: CategoryMap, isPurchased: boolean) => {
     return Object.entries(categories).map(([category, products], index) => (
       <View key={`${category}-${isPurchased}-${index + 1}`}>
-        <Text>{category}</Text>
+        <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>{category}</Text>
         {products.map((product) => (
-          <TouchableOpacity key={product.id} onPress={() => toggleProductPushed(product)}>
+          <TouchableOpacity
+            key={product.id || `${product.name}--${index + 1}`}
+            onPress={() => toggleProductPushed(product)}
+          >
             <ListProductItemCard
               setProductData={setProductData}
               productList={productList}
@@ -71,23 +74,27 @@ export const ListContent = ({
 
   return (
     <View style={globalStyles.container}>
-      <View>
-        <Text>Список покупок</Text>
+      <View style={{ marginVertical: 10 }}>
+        <Text style={[fontsStyles.text, { width: "100%", textAlign: "center", color: colorDark.textColor }]}>
+          Список покупок
+        </Text>
         {Object.keys(unpurchasedCategories).length > 0 ? (
           renderProductList(unpurchasedCategories, false)
         ) : (
-          <Text>Список пока пуст</Text>
+          <Text style={[fontsStyles.text, { marginVertical: 15, color: colorDark.textColor }]}>Список пока пуст</Text>
         )}
       </View>
 
-      {/* <View style={globalStyles.separator} /> */}
-
       <View>
-        <Text>Купленные товары</Text>
+        <Text style={[fontsStyles.text, { width: "100%", textAlign: "center", color: colorDark.textColor }]}>
+          Купленные товары
+        </Text>
         {Object.keys(purchasedCategories).length > 0 ? (
           renderProductList(purchasedCategories, true)
         ) : (
-          <Text>Нет купленных товаров</Text>
+          <Text style={[fontsStyles.text, { marginVertical: 15, color: colorDark.textColor }]}>
+            Нет купленных товаров
+          </Text>
         )}
       </View>
     </View>

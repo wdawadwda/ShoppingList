@@ -1,7 +1,7 @@
 import { ExistingList, Layout, ListAddProduct, NewList } from "@/components";
 import { type ProductsListData } from "@/constants";
 import { selectProductListById, type Theme } from "@/store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { useRoute } from "@react-navigation/native";
@@ -9,7 +9,7 @@ import { type ListRouteParamsWithoutData, type ListRouteParamsWithData } from "@
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store.types";
 
-const defaultProductData: ProductsListData = {
+const defaultProductData: any = {
   id: "",
   name: "",
   products: [],

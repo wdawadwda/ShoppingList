@@ -1,5 +1,6 @@
 import { BACKEND_URL, type ProductInList, type ErrorObject, ProductCustom } from "@/constants";
 import { UpdateingProductInList } from "@/constants/products-lists/products-lists.type";
+import { RootState } from "@/store/store.types";
 import { createErrorObject } from "@/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { type AxiosError, type AxiosResponse } from "axios";
@@ -33,18 +34,28 @@ export const deleteCustomProduct = async (
   }
 };
 
-export const createCustomProduct = async (product: Omit<ProductCustom, "id">): Promise<ProductCustom | ErrorObject> => {
+export const createCustomProduct = createAsyncThunk<
+  ProductCustom,
+  Omit<ProductCustom, "id">,
+  {
+    rejectValue: ErrorObject;
+  }
+>("custom-products/createCustomProduct", async (product, thunkAPI) => {
   try {
     const response = await axios.post<Omit<ProductCustom, "id">, AxiosResponse<ProductCustom>>(
       `${BACKEND_URL}api/v1/custom-product/`,
       product,
     );
+    const state = thunkAPI.getState() as RootState;
+    if (state.user.currentUser.status === "success" && state.user.currentUser.data) {
+      thunkAPI.dispatch(fetchCustompProducts(state.user.currentUser.data.id));
+    }
     return response.data;
   } catch (error) {
     const errorObject = createErrorObject(error as AxiosError<ErrorObject>);
-    throw errorObject;
+    return thunkAPI.rejectWithValue(errorObject);
   }
-};
+});
 
 export const fetchCustompProducts = createAsyncThunk<
   ProductInList[],

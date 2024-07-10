@@ -1,4 +1,4 @@
-import { type ErrorObject, type ProductsListData, type ProductCustom } from "@/constants";
+import { type ProductsListData, type ProductCustom } from "@/constants";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TextInput, View } from "react-native";
@@ -14,9 +14,11 @@ import useCustomForm from "./useCustomPr";
 import { t } from "i18next";
 import { colorDark, darkStyles, fontsStyles, globalStyles } from "@/styles";
 import { useNavigation } from "@react-navigation/native";
-import { type ErrorMessageType } from "@/constants/api";
 import { MessForm } from "@/components/mess-form";
 import { Button } from "@/components/ui";
+import { customProductsActions, useAppDispatch } from "@/store";
+import { selectСustomProductError, selectСustomProductStatus } from "@/store";
+import { type ErrorMessageType } from "@/constants/api";
 
 const ErrorMessage = ({ error }: { error: string | undefined }) =>
   error ? (
@@ -29,12 +31,15 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
   const { i18n } = useTranslation();
   const [showSecondLanguage, setShowSecondLanguage] = useState(false);
   const [showAddImageText, setShowAddImageText] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [currentSvgKey, setCurrentSvgKey] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<string>("");
   const [synchronizedData, setSynchronizedData] = useState<AddCustomPrForm | null>(null);
-  const [errorBack, setErrorBack] = useState<ErrorMessageType | null>(null);
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+
+  const customProductError = useSelector(selectСustomProductError);
+  const customProductStatus = useSelector(selectСustomProductStatus);
+  const isLoading = !!(customProductStatus === "loading");
 
   const user = useSelector(selectUser);
 
@@ -62,8 +67,6 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
   };
 
   const onSubmit = async (data: AddCustomPrForm) => {
-    setErrorBack(null);
-    setIsLoading(true);
     if (user?.id) {
       const synchronizedData = synchronizeFields(data);
       const product: Omit<ProductCustom, "id"> = {
@@ -71,23 +74,14 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
         user: user.id,
       };
 
-      try {
+      const resultAction = await dispatch(createCustomProduct(product));
+
+      if (createCustomProduct.fulfilled.match(resultAction)) {
         if (isScreen) {
-          await createCustomProduct(product);
           navigation.goBack();
         } else {
-          await createCustomProduct(product);
           setSynchronizedData(synchronizedData);
         }
-      } catch (error) {
-        const customError = error as ErrorObject;
-        if (customError?.errorLangData) {
-          setErrorBack(customError.errorLangData);
-        } else {
-          setErrorBack({ ru: "Дефолтная ошибка", en: "Default error" });
-        }
-      } finally {
-        setIsLoading(false);
       }
     }
   };
@@ -101,7 +95,15 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
   useEffect(() => {
     reset();
     setCurrentSvgKey(null);
-  }, [primaryLang, errorBack]);
+  }, [primaryLang, customProductError]);
+
+  useEffect(() => {
+    dispatch(customProductsActions.resetCreateCustomProduct());
+
+    return () => {
+      dispatch(customProductsActions.resetCreateCustomProduct());
+    };
+  }, []);
 
   const renderInputs = (lang: "en" | "ru") => (
     <>
@@ -145,9 +147,17 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
 
   return (
     <>
-      {errorBack && (
+      {customProductError && (
         <View style={{ marginTop: 25 }}>
-          <MessForm message={{ detail: errorBack[primaryLang] }} status="error" />
+          <MessForm
+            message={{
+              detail:
+                (customProductError.errorLangData as ErrorMessageType)?.[primaryLang] ??
+                customProductError.errorLangData ??
+                "",
+            }}
+            status="error"
+          />
         </View>
       )}
       {synchronizedData && !isLoading ? (
@@ -156,6 +166,7 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
             style={globalStyles.input}
             placeholder="Введите количество"
             value={quantity}
+            maxLength={7}
             onChangeText={setQuantity}
           />
           {productData && (
@@ -165,7 +176,7 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
           )}
         </>
       ) : (
-        <View style={{ marginBottom: 50, marginTop: 25 }}>
+        <View style={{ marginBottom: 50 }}>
           {renderInputs(primaryLang)}
           {showAddImageText && <AddSvgKey onSelectSvgKey={handleSvgKeySelect} theme={theme} />}
 
