@@ -383,14 +383,9 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             return error_does_not_have_a_record()
 
     def delete(self, request, *args, **kwargs):
-        data = request.data
-        queryset = ProductsListDataModel.objects.filter(id=kwargs['pk'])
-        if queryset:
-            return self.update_common(queryset, request.data['user'], request, method='delete', *args, **kwargs)
-        else:
-            return error_does_not_have_a_record()
+        queryset = ProductsListDataModel.objects.filter(id=kwargs['pk'], owner_id=request.query_params['user'])
+        return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
-        # return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
 def error_not_have_permissions():
     return Response(
