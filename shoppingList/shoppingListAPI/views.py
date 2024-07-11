@@ -69,8 +69,8 @@ class BillView(generics.ListCreateAPIView):
             self.delete_bill_pic(file_path)
 
             try:
-                goods, error = self.ask_AI(text_OCR)
-                return Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods})
+                goods, error, correct_picture = self.ask_AI(text_OCR)
+                return Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods}, status=status.HTTP_201_CREATED) if correct_picture else Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             except Exception as ex:
                 return Response({'error': str(ex), 'message': "чек принят", "AI": False, "goods": text_OCR})
         return Response({"error": form.errors, "message": "Не корректно заполнена форма"})
@@ -83,12 +83,10 @@ class BillView(generics.ListCreateAPIView):
                 f.write(chunk)
         return file_path
 
-
     def get_text_from_photo(self, pic_name) -> [str, str]:
         file_path = f"{BASE_DIR}/media/{pic_name}"
         # return text_from_tesseract_ocr(file_path=file_path), file_path
         return text_recognize(file_path=file_path), file_path
-
 
     def ask_AI(self, text_OCR) -> [list, dict]:
         incorrect_picture_status = "некорректная картинка"
@@ -105,7 +103,7 @@ class BillView(generics.ListCreateAPIView):
         response = response.json()['answer']
         print(response)
         if re.findall(r'некорректная[\s]{0,}картинка', response):
-            return [], incorrect_picture_status
+            return [], incorrect_picture_status, False
         response = response.split("\n")
         for item in response:
             item = item.split("; ")
@@ -114,7 +112,7 @@ class BillView(generics.ListCreateAPIView):
                     good[categories[i]] = item[i]
             goods.append(good)
             good = {}
-        return goods, False
+        return goods, False, True
 
     def delete_bill_pic(self, file_path):
         if os.path.isfile(file_path):
@@ -332,15 +330,17 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        request_data = request.data
-        checking_queryset = ProductsListDataModel.objects.filter(name=request_data['name'], owner_id=request_data['owner_id'])
+        if not shared_with_accepts(request.data):
+            return error_builder(ru_en_dict={'ru': 'Пользователь ограничил возможность делиться с ним списками', 'en': 'The user has limited the ability to share lists with him'})
+        checking_queryset = ProductsListDataModel.objects.filter(name=request.data['name'], owner_id=request.data['owner_id'])
         if not list(checking_queryset.values()):
             return self.create(request, *args, **kwargs)
         else:
-            # return Response({'details': 'products list data model with this name already exists'})
-            return error_builder(ru_en_dict={'ru': 'Список с этим именем уже существует', 'en': 'Products list data model with this name already exists'})
+            return error_builder(ru_en_dict={'ru': 'Список с этим именем уже существует', 'en': 'Products list data model with this name already exists'}, status=status.HTTP_409_CONFLICT)
 
     def patch(self, request, *args, **kwargs):
+        if not shared_with_accepts(request.data):
+            return error_builder(ru_en_dict={'ru': 'Пользователь ограничил возможность делиться с ним списками', 'en': 'The user has limited the ability to share lists with him'})
         user = int(request.query_params['user'])
         request.data['updated_at'] = datetime.now()
         try:
@@ -350,6 +350,8 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         return self.update_common(queryset, user, request, method='patch', *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
+        if not shared_with_accepts(request.data):
+            return error_builder(ru_en_dict={'ru': 'Пользователь ограничил возможность делиться с ним списками', 'en': 'The user has limited the ability to share lists with him'})
         user = int(request.query_params['user'])
         request.data['updated_at'] = datetime.now()
         try:
@@ -386,6 +388,15 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         queryset = ProductsListDataModel.objects.filter(id=kwargs['pk'], owner_id=request.query_params['user'])
         return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
+def shared_with_accepts(request_data):
+    if request_data.get('shared_with_id'):
+        shared_with_user = User.objects.get(id=request_data['shared_with_id'])
+        if shared_with_user:
+            shared_with_user_object = CustomUserSerializer(shared_with_user).data['ready_to_accept_lists']
+            if shared_with_user_object:
+                return True
+        return False
+    return True
 
 def error_not_have_permissions():
     return Response(
@@ -411,7 +422,7 @@ def error_does_not_have_a_record():
         status=status.HTTP_500_INTERNAL_SERVER_ERROR
     )
 
-def error_builder(ru_en_dict:dict):
+def error_builder(ru_en_dict:dict, status=None):
     return Response(
         {
             'error': True,
@@ -420,5 +431,5 @@ def error_builder(ru_en_dict:dict):
                 'en': ru_en_dict['en']
             }
         },
-        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        status=status.HTTP_500_INTERNAL_SERVER_ERROR if not status else status
     )

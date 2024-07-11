@@ -7,12 +7,10 @@ from .models import BillModel, ProductsListDataModel, CustomProductModel
 User = get_user_model()
 
 class CustomUserSerializer(UserSerializer):
-    # pass
-    # user_theme = serializers.CharField(source='userprofile.user_theme', read_only=True)
 
     class Meta:
         model = User
-        fields = ['email', 'is_staff', 'id', 'username', 'user_theme']
+        fields = ['email', 'is_staff', 'id', 'username', 'user_theme', 'ready_to_accept_lists']
 
 class UserSettingsSerializer(serializers.ModelSerializer):
     class Meta:

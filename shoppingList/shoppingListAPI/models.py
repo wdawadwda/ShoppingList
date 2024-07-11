@@ -23,6 +23,7 @@ class CustomUser(AbstractUser):
     choices=[('light', 'Light'), ('dark', 'Dark'), ('auto', 'Auto')],
     default='auto'
   )
+  ready_to_accept_lists = models.BooleanField(blank=False, null=False, default=True)
   USERNAME_FIELD = 'username'
   REQUIRED_FIELDS = ['email', 'is_staff']
   objects = UserManager()
@@ -70,10 +71,12 @@ class ProductsListDataModel(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(blank=True, null=True)
   owner_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_lists')
+  owner_username = models.CharField(max_length=100, unique=False, blank=True, null=True)
   owner_permissions_read = models.BooleanField(default=True)
   owner_permissions_write = models.BooleanField(default=True)
   owner_permissions_admin = models.BooleanField(default=True)
   shared_with_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shared_lists', blank=True, null=True)
+  shared_with_username = models.CharField(max_length=100, unique=False, blank=True, null=True)
   shared_with_permissions_read = models.BooleanField(blank=True, null=True)
   shared_with_permissions_write = models.BooleanField(blank=True, null=True)
   shared_with_permissions_admin = models.BooleanField(blank=True, null=True)

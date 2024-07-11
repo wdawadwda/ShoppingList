@@ -300,15 +300,17 @@ body
 
 MODEL
 ```python
-  name = models.CharField(max_length=50, unique=True, blank=False, null=False)
+  name = models.CharField(max_length=50, unique=False, blank=False, null=False)
   products = models.JSONField(blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(blank=True, null=True)
   owner_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_lists')
+  owner_username = models.CharField(max_length=100, unique=False, blank=True, null=True)
   owner_permissions_read = models.BooleanField(default=True)
   owner_permissions_write = models.BooleanField(default=True)
   owner_permissions_admin = models.BooleanField(default=True)
   shared_with_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shared_lists', blank=True, null=True)
+  shared_with_username = models.CharField(max_length=100, unique=False, blank=True, null=True)
   shared_with_permissions_read = models.BooleanField(blank=True, null=True)
   shared_with_permissions_write = models.BooleanField(blank=True, null=True)
   shared_with_permissions_admin = models.BooleanField(blank=True, null=True)
@@ -320,6 +322,7 @@ Body
 ```json
 {
   "owner_id": 2,
+  "owner_username": "Ruslan", // [optional]
   "name": "test_list",
   "products": [
         {
@@ -348,7 +351,13 @@ Body
             "svgKey": "string",
             "isPushed": "true"
         }
-  ]
+  ],
+    "shared_with_id": 2, // [optional]
+    "shared_with_username": "Denis", // [optional]
+    "shared_with_permissions_read": true, // [optional]
+    "shared_with_permissions_write": true, // [optional]
+    "shared_with_permissions_admin": true // [optional]
+
 }
 ```
 <hr>
@@ -671,7 +680,11 @@ Returns all records by user id trow 'owner' and 'shared' keys
             "svgKey": "string",
             "isPushed": "true"
         }
-  ]
+  ],
+    "shared_with_id": 2, [optional]
+    "shared_with_permissions_read": true, [optional]
+    "shared_with_permissions_write": true, [optional]
+    "shared_with_permissions_admin": true [optional]
 }
 ```
 Response:
