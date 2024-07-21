@@ -9,4 +9,4 @@ export {
   selectProductListById,
 } from "./lists-products";
 export { customProductsSlice, customProductsActions } from "./custom-products";
-export { selectСustomProducts } from "./custom-products";
+export { selectСustomProducts, selectСustomProductError, selectСustomProductStatus } from "./custom-products";

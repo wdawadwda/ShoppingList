@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui";
 import { type ListAddProductProps, type ProductInList, productsConst } from "@/constants";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ScrollView, Text, TextInput } from "react-native";
 import { useSelector } from "react-redux";
 import { selectСustomProducts, Theme } from "@/store";
 import { RadixTree } from "@/utils";
 import { Language } from "@/constants/products-lists/products-lists.type";
 import { HelperRenderComponent } from "./helper";
+import { colorDark, fontsStyles, globalStyles } from "@/styles";
 
 interface SearchProps extends Partial<Omit<ListAddProductProps, "theme" | "language">> {
   theme: Theme;
@@ -52,7 +53,6 @@ export const Search = ({
 
   return (
     <>
-      <Text>Поиск:</Text>
       {currentProduct ? (
         <HelperRenderComponent
           type={type}
@@ -66,8 +66,9 @@ export const Search = ({
         />
       ) : (
         <>
+          <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>Поиск:</Text>
           <TextInput
-            style={{ height: 40, borderColor: "gray", borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 }}
+            style={globalStyles.input}
             placeholder="Введите название продукта"
             value={searchTerm}
             onChangeText={handleSearch}
@@ -76,8 +77,10 @@ export const Search = ({
           <ScrollView>
             {suggestions.length > 0 &&
               suggestions.map((product, index) => (
-                <Button theme={theme} key={index} onPress={() => selectProduct(product)}>
-                  <Text>{(product.name as { [key: string]: string })[language.toLowerCase()]}</Text>
+                <Button style={{ marginVertical: 5 }} theme={theme} key={index} onPress={() => selectProduct(product)}>
+                  <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>
+                    {(product.name as { [key: string]: string })[language.toLowerCase()]}
+                  </Text>
                 </Button>
               ))}
           </ScrollView>

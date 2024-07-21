@@ -1,4 +1,4 @@
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import { getUserTabs } from "./list-add-profuct.utils";
 import { SliderWithButtons, useTabs } from "@/components/tabs";
@@ -37,7 +37,7 @@ export const ListAddProduct = ({
         center={true}
         fixedWidth={true}
       />
-      {content && content.type === "content" && content.component}
+      <View style={{ marginTop: 15 }}>{content && content.type === "content" && content.component}</View>
     </ScrollView>
   );
 };

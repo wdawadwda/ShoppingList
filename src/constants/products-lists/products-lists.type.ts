@@ -41,6 +41,8 @@ export interface ProductsListData {
   id: number | string | null;
   name: string;
   products: ProductInList[] | [];
+  updated_at: string;
+  created_at: string;
 }
 
 export interface ProductsListData {

@@ -29,15 +29,15 @@ export const useCustomForm = (language: "en" | "ru") => {
               ? yup
                   .string()
                   .required(t("validation.customProduct.isReq", { lang: "EN", type: "name" }))
-                  .max(10, t("validation.customProduct.exceedCharacters", { type: "Name", max: "10" }))
-              : yup.string().max(10, t("validation.customProduct.exceedCharacters", { type: "Name", max: "10" })),
+                  .max(25, t("validation.customProduct.exceedCharacters", { type: "Name", max: "25" }))
+              : yup.string().max(25, t("validation.customProduct.exceedCharacters", { type: "Name", max: "25" })),
           ru:
             language === "ru"
               ? yup
                   .string()
                   .required(t("validation.customProduct.isReq", { lang: "RU", type: "название" }))
-                  .max(10, t("validation.customProduct.exceedCharacters", { type: "Название", max: "10" }))
-              : yup.string().max(10, t("validation.customProduct.exceedCharacters", { type: "Название", max: "10" })),
+                  .max(25, t("validation.customProduct.exceedCharacters", { type: "Название", max: "25" }))
+              : yup.string().max(25, t("validation.customProduct.exceedCharacters", { type: "Название", max: "25" })),
         }),
         category: yup.object().shape({
           en:
@@ -45,15 +45,15 @@ export const useCustomForm = (language: "en" | "ru") => {
               ? yup
                   .string()
                   .required(t("validation.customProduct.isReq", { lang: "EN", type: "category" }))
-                  .max(10, t("validation.customProduct.exceedCharacters", { type: "Сategory", max: "10" }))
-              : yup.string().max(10, t("validation.customProduct.exceedCharacters", { type: "Сategory", max: "10" })),
+                  .max(25, t("validation.customProduct.exceedCharacters", { type: "Сategory", max: "25" }))
+              : yup.string().max(25, t("validation.customProduct.exceedCharacters", { type: "Сategory", max: "25" })),
           ru:
             language === "ru"
               ? yup
                   .string()
                   .required(t("validation.customProduct.isReq", { lang: "RU", type: "категория" }))
-                  .max(10, t("validation.customProduct.exceedCharacters", { type: "Категория", max: "10" }))
-              : yup.string().max(10, t("validation.customProduct.exceedCharacters", { type: "Категория", max: "10" })),
+                  .max(25, t("validation.customProduct.exceedCharacters", { type: "Категория", max: "25" }))
+              : yup.string().max(25, t("validation.customProduct.exceedCharacters", { type: "Категория", max: "25" })),
         }),
         quantity: yup.string().defined(),
         svgKey: yup.string().defined(),

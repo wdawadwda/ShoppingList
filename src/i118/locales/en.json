@@ -104,6 +104,9 @@
     "addCustomProduct": {
       "title": "Add custom product"
     },
+    "dellEdit": {
+      "title": "Delete or edit"
+    },
     "home": {
       "yourLists": "Your lists"
     }

@@ -20,8 +20,7 @@ export const globalStyles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingRight: 10,
-    paddingLeft: 10,
+    padding: 10,
   },
   input: {
     width: "100%",

@@ -1,22 +1,17 @@
 import { Text, View } from "react-native";
 
-import { AddButton, Button, Layout } from "@/components";
+import { Button, Layout } from "@/components";
 import { selectProductsData, type Theme } from "@/store";
 import { fontsStyles, globalStyles } from "@/styles/global.style";
 import { KEYS } from "@/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
-import { type MainNavigationProp } from "@/navigation";
 import { colorDark } from "@/styles";
 import { t } from "i18next";
 import { useSelector } from "react-redux";
+import { SortedLists } from "@/components/sorted-lists/sorted-lists";
 
 export function Home({ theme }: { theme: Theme }) {
-  const navigate = useNavigation<MainNavigationProp>();
-  // const listStatus = useSelector(selectProductsStatus);
-
   const listData = useSelector(selectProductsData);
-  // const listError = useSelector(selectProductsError);
 
   // useEffect(() => {
   //   console.log(listData);
@@ -61,46 +56,7 @@ export function Home({ theme }: { theme: Theme }) {
         <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>{t("tabsLabels.home")}</Text>
         <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>{t("text.home.yourLists")}:</Text>
         <View style={{ marginTop: 10 }}>
-          <AddButton onPress={() => navigate.navigate("List")} theme={theme} />
-          {listData ? (
-            <>
-              {listData?.owner?.length > 0 && (
-                <View>
-                  {listData.owner.map((listItem, index) => (
-                    <View key={`owner-${index}`}>
-                      <Button
-                        theme={theme}
-                        style={{ marginTop: 25 }}
-                        onPress={() =>
-                          navigate.navigate("List", { listId: String(listItem.id), listName: listItem.name })
-                        }
-                      >
-                        {listItem.name}
-                      </Button>
-                    </View>
-                  ))}
-                </View>
-              )}
-              {listData?.shared?.length > 0 && (
-                <View>
-                  <Text style={fontsStyles.subtitle}>Переданные списки</Text>
-                  {listData.shared.map((listItem, index) => (
-                    <View key={`shared-${index}`}>
-                      <Button
-                        theme={theme}
-                        style={{ marginTop: 25 }}
-                        onPress={() =>
-                          navigate.navigate("List", { listId: String(listItem.id), listName: listItem.name })
-                        }
-                      >
-                        {listItem.name}
-                      </Button>
-                    </View>
-                  ))}
-                </View>
-              )}
-            </>
-          ) : null}
+          <SortedLists listData={listData} theme={theme} />
         </View>
 
         <View style={{ margin: 50 }}>
@@ -112,14 +68,6 @@ export function Home({ theme }: { theme: Theme }) {
           </Button>
           <Button theme={theme} style={{ marginTop: 25 }} onPress={handleClearStorage}>
             Clear Storage
-          </Button>
-
-          <Button
-            theme={theme}
-            style={{ marginTop: 25 }}
-            onPress={() => navigate.navigate("List", { listId: "1", listName: "Список" })}
-          >
-            List
           </Button>
         </View>
       </View>
