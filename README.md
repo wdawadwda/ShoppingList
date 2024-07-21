@@ -321,9 +321,8 @@ MODEL
 Body
 ```json
 {
-  "owner_id": 2,
-  "owner_username": "Ruslan", // [optional]
-  "name": "test_list",
+  "owner_id": 1,
+  "name": "test_list12",
   "products": [
         {
             "quantity": 40,
@@ -351,13 +350,56 @@ Body
             "svgKey": "string",
             "isPushed": "true"
         }
-  ],
-    "shared_with_id": 2, // [optional]
-    "shared_with_username": "Denis", // [optional]
-    "shared_with_permissions_read": true, // [optional]
-    "shared_with_permissions_write": true, // [optional]
-    "shared_with_permissions_admin": true // [optional]
+  ]
+}
+```
 
+return 
+
+```json
+{
+    "id": 25,
+    "name": "test_list12",
+    "products": [
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Milk 2,8 in plastic bag",
+                "ru": "Молоко 2,8 в пласт бутылке"
+            },
+            "svgKey": "string",
+            "isPushed": "TRUE"
+        },
+        {
+            "quantity": 40,
+            "category": {
+                "en": "milk",
+                "ru": "молоко"
+            },
+            "name": {
+                "en": "Milk 2,8 in plastic bag",
+                "ru": "Молоко 2,8 в пласт бутылке"
+            },
+            "svgKey": "string",
+            "isPushed": "true"
+        }
+    ],
+    "created_at": "2024-07-21T21:43:19.618320+03:00",
+    "updated_at": null,
+    "is_shared": false,
+    "shared_type": null,
+    "owner": {
+        "owner_name": "root",
+        "owner_id": 1
+    },
+    "shared": {
+        "shared_name": null,
+        "shared_id": null
+    }
 }
 ```
 <hr>
@@ -370,35 +412,6 @@ Response:
 
 ```json
 [
-    {
-        "id": 1,
-        "name": "second_list",
-        "products": [
-            {
-                "quantity": 40,
-                "category": {
-                    "en": "milk",
-                    "ru": "молоко"
-                },
-                "name": {
-                    "en": "Milk 2,8 in plastic bag",
-                    "ru": "Молоко 2,8 в пласт бутылке"
-                },
-                "svgKey": "string",
-                "isPushed": "true"
-            }
-        ],
-        "created_at": "2024-06-27T19:58:19.469081+03:00",
-        "updated_at": "2024-07-04T18:45:18.761776+03:00",
-        "owner_permissions_read": true,
-        "owner_permissions_write": false,
-        "owner_permissions_admin": true,
-        "shared_with_permissions_read": true,
-        "shared_with_permissions_write": true,
-        "shared_with_permissions_admin": false,
-        "owner_id": 1,
-        "shared_with_id": 1
-    },
     {
         "id": 2,
         "name": "77777h66dd_list",
@@ -432,18 +445,20 @@ Response:
         ],
         "created_at": "2024-06-27T19:59:01.461024+03:00",
         "updated_at": "2024-07-04T19:52:08.428740+03:00",
-        "owner_permissions_read": true,
-        "owner_permissions_write": false,
-        "owner_permissions_admin": true,
-        "shared_with_permissions_read": true,
-        "shared_with_permissions_write": true,
-        "shared_with_permissions_admin": false,
-        "owner_id": 1,
-        "shared_with_id": 1
+        "is_shared": false,
+        "shared_type": null,
+        "owner": {
+            "owner_name": null,
+            "owner_id": 1
+        },
+        "shared": {
+            "shared_name": null,
+            "shared_id": 1
+        }
     },
     {
-        "id": 14,
-        "name": "test_list",
+        "id": 3,
+        "name": "77777h66dd_list",
         "products": [
             {
                 "quantity": 40,
@@ -454,6 +469,62 @@ Response:
                 "name": {
                     "en": "Milk 2,8 in plastic bag",
                     "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "true"
+            }
+        ],
+        "created_at": "2024-06-27T20:01:08.963187+03:00",
+        "updated_at": "2024-07-04T20:04:17.291915+03:00",
+        "is_shared": false,
+        "shared_type": null,
+        "owner": {
+            "owner_name": null,
+            "owner_id": 1
+        },
+        "shared": {
+            "shared_name": null,
+            "shared_id": 2
+        }
+    }
+]
+```
+<hr>
+
+#### GET (by id) ^/api/v1/products-list-data/id:int/?user=1
+Returns one object by id and checks user_id
+
+Response:
+```json
+{
+    "error": false,
+    "owner": {},
+    "shared": {
+        "id": 14,
+        "name": "test_test34",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Rabbit",
+                    "ru": "Кролик мертвый в пакете"
                 },
                 "svgKey": "string",
                 "isPushed": "TRUE"
@@ -473,70 +544,18 @@ Response:
             }
         ],
         "created_at": "2024-07-04T21:03:56.013027+03:00",
-        "updated_at": null,
-        "owner_permissions_read": true,
-        "owner_permissions_write": true,
-        "owner_permissions_admin": true,
-        "shared_with_permissions_read": null,
-        "shared_with_permissions_write": null,
-        "shared_with_permissions_admin": null,
-        "owner_id": 2,
-        "shared_with_id": null
+        "updated_at": "2024-07-21T23:40:52.197730+03:00",
+        "is_shared": true,
+        "shared_type": "write",
+        "owner": {
+            "owner_name": "ruslan",
+            "owner_id": 1
+        },
+        "shared": {
+            "shared_name": "denis",
+            "shared_id": 2
+        }
     }
-]
-```
-<hr>
-
-#### GET (by id) ^/api/v1/products-list-data/id:int/?user=1
-Returns one object by id and checks user_id
-
-Response:
-```json
-{
-    "error": false,
-    "owner": {
-        "id": 16,
-        "name": "test_list",
-        "products": [
-            {
-                "quantity": 40,
-                "category": {
-                    "en": "milk",
-                    "ru": "молоко"
-                },
-                "name": {
-                    "en": "Milk 2,8 in plastic bag",
-                    "ru": "Молоко 2,8 в пласт бутылке"
-                },
-                "svgKey": "string",
-                "isPushed": "TRUE"
-            },
-            {
-                "quantity": 40,
-                "category": {
-                    "en": "milk",
-                    "ru": "молоко"
-                },
-                "name": {
-                    "en": "Milk 2,8 in plastic bag",
-                    "ru": "Молоко 2,8 в пласт бутылке"
-                },
-                "svgKey": "string",
-                "isPushed": "true"
-            }
-        ],
-        "created_at": "2024-07-04T21:18:22.502065+03:00",
-        "updated_at": null,
-        "owner_permissions_read": true,
-        "owner_permissions_write": true,
-        "owner_permissions_admin": true,
-        "shared_with_permissions_read": null,
-        "shared_with_permissions_write": null,
-        "shared_with_permissions_admin": null,
-        "owner_id": 2,
-        "shared_with_id": null
-    },
-    "shared": []
 }
 ```
 or 
@@ -557,48 +576,50 @@ Returns all records by user id trow 'owner' and 'shared' keys
 ```json
 {
     "owner": [
-        {
-            "id": 6,
-            "name": "th66_list",
-            "products": [
-                {
-                    "quantity": 40,
-                    "category": {
-                        "en": "milk",
-                        "ru": "молоко"
-                    },
-                    "name": {
-                        "en": "Milk 2,8 in plastic bag",
-                        "ru": "Молоко 2,8 в пласт бутылке"
-                    },
-                    "svgKey": "string",
-                    "isPushed": "TRUE"
-                },
-                {
-                    "quantity": 40,
-                    "category": {
-                        "en": "milk",
-                        "ru": "молоко"
-                    },
-                    "name": {
-                        "en": "Milk 2,8 in plastic bag",
-                        "ru": "Молоко 2,8 в пласт бутылке"
-                    },
-                    "svgKey": "string",
-                    "isPushed": "true"
-                }
-            ],
-            "created_at": "2024-07-01T15:45:32.072613+03:00",
-            "updated_at": null,
-            "owner_permissions_read": true,
-            "owner_permissions_write": true,
-            "owner_permissions_admin": true,
-            "shared_with_permissions_read": null,
-            "shared_with_permissions_write": null,
-            "shared_with_permissions_admin": null,
-            "owner_id": 2,
-            "shared_with_id": null
+      {
+        "id": 6,
+        "name": "th66_list",
+        "products": [
+          {
+            "quantity": 40,
+            "category": {
+              "en": "milk",
+              "ru": "молоко"
+            },
+            "name": {
+              "en": "Milk 2,8 in plastic bag",
+              "ru": "Молоко 2,8 в пласт бутылке"
+            },
+            "svgKey": "string",
+            "isPushed": "TRUE"
+          },
+          {
+            "quantity": 40,
+            "category": {
+              "en": "milk",
+              "ru": "молоко"
+            },
+            "name": {
+              "en": "Milk 2,8 in plastic bag",
+              "ru": "Молоко 2,8 в пласт бутылке"
+            },
+            "svgKey": "string",
+            "isPushed": "true"
+          }
+        ],
+        "created_at": "2024-07-01T15:45:32.072613+03:00",
+        "updated_at": null,
+        "is_shared": false,
+        "shared_type": null,
+        "owner": {
+          "owner_name": null,
+          "owner_id": 2
+        },
+        "shared": {
+          "shared_name": null,
+          "shared_id": null
         }
+      }
     ],
     "shared": [
         {
@@ -634,14 +655,16 @@ Returns all records by user id trow 'owner' and 'shared' keys
             ],
             "created_at": "2024-06-27T20:01:08.963187+03:00",
             "updated_at": "2024-07-04T20:04:17.291915+03:00",
-            "owner_permissions_read": true,
-            "owner_permissions_write": true,
-            "owner_permissions_admin": true,
-            "shared_with_permissions_read": true,
-            "shared_with_permissions_write": true,
-            "shared_with_permissions_admin": true,
-            "owner_id": 1,
-            "shared_with_id": 2
+            "is_shared": false,
+            "shared_type": null,
+            "owner": {
+                "owner_name": null,
+                "owner_id": 1
+            },
+            "shared": {
+                "shared_name": null,
+                "shared_id": 2
+            }
         }
     ]
 }
@@ -652,7 +675,7 @@ Returns all records by user id trow 'owner' and 'shared' keys
 ```json
 {
     "owner_id": 2,
-    "name": "test_test",
+    "name": "test_test34",
 	"products": [
         {
             "quantity": 40,
@@ -680,18 +703,25 @@ Returns all records by user id trow 'owner' and 'shared' keys
             "svgKey": "string",
             "isPushed": "true"
         }
-  ],
-    "shared_with_id": 2, [optional]
-    "shared_with_permissions_read": true, [optional]
-    "shared_with_permissions_write": true, [optional]
-    "shared_with_permissions_admin": true [optional]
+    ],
+    "owner": {
+        "owner_id": 1,
+        "owner_name": "ruslan"
+    },
+    "shared": {
+        "shared_id": 2,
+        "shared_name": "denis"
+
+    },
+    "is_shared": true,
+    "shared_type": "write"
 }
 ```
 Response:
 ```json
 {
-    "id": 15,
-    "name": "test_test",
+    "id": 14,
+    "name": "test_test34",
     "products": [
         {
             "quantity": 40,
@@ -720,16 +750,18 @@ Response:
             "isPushed": "true"
         }
     ],
-    "created_at": "2024-07-04T21:09:00.738579+03:00",
-    "updated_at": "2024-07-04T21:10:13.670725+03:00",
-    "owner_permissions_read": true,
-    "owner_permissions_write": true,
-    "owner_permissions_admin": true,
-    "shared_with_permissions_read": null,
-    "shared_with_permissions_write": null,
-    "shared_with_permissions_admin": null,
-    "owner_id": 2,
-    "shared_with_id": null
+    "created_at": "2024-07-04T21:03:56.013027+03:00",
+    "updated_at": "2024-07-21T23:40:52.197730+03:00",
+    "is_shared": true,
+    "shared_type": "write",
+    "owner": {
+        "owner_name": "ruslan",
+        "owner_id": 1
+    },
+    "shared": {
+        "shared_name": "denis",
+        "shared_id": 2
+    }
 }
 ```
 or
@@ -747,19 +779,24 @@ or
 #### PATCH (update) ^/api/v1/api/v1/custom-product/id:int/?user=1
 ```json
 {
-    "owner_permissions_read": true,
-    "owner_permissions_write": true,
-    "shared_with_id": 1,
-    "shared_with_permissions_read": true,
-    "shared_with_permissions_write": true,
-    "shared_with_permissions_admin": true
+    "owner": {
+        "owner_id": 1,
+        "owner_name": "ruslan"
+    },
+    "shared": {
+        "shared_id": 2,
+        "shared_name": "denis"
+
+    },
+    "is_shared": true,
+    "shared_type": "write"
 }
 ```
 Response:
 ```json
 {
-    "id": 15,
-    "name": "test_test",
+    "id": 14,
+    "name": "77777h66dd_list",
     "products": [
         {
             "quantity": 40,
@@ -788,16 +825,18 @@ Response:
             "isPushed": "true"
         }
     ],
-    "created_at": "2024-07-04T21:09:00.738579+03:00",
-    "updated_at": "2024-07-04T21:10:28.801438+03:00",
-    "owner_permissions_read": true,
-    "owner_permissions_write": true,
-    "owner_permissions_admin": true,
-    "shared_with_permissions_read": true,
-    "shared_with_permissions_write": true,
-    "shared_with_permissions_admin": true,
-    "owner_id": 2,
-    "shared_with_id": 1
+    "created_at": "2024-07-04T21:03:56.013027+03:00",
+    "updated_at": "2024-07-21T23:37:09.102490+03:00",
+    "is_shared": true,
+    "shared_type": "write",
+    "owner": {
+        "owner_name": "ruslan",
+        "owner_id": 1
+    },
+    "shared": {
+        "shared_name": "denis",
+        "shared_id": 2
+    }
 }
 ```
 or 
@@ -810,7 +849,10 @@ or
     }
 }
 ```
+<hr>
+
 #### DELETE ^/api/v1/api/v1/products-list-data/id:int/?user=1
+*can only be deleted by the user who created the list*
 
 Response status 204
 or

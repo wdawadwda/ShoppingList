@@ -51,34 +51,22 @@ class CustomProductModel(models.Model):
   svgKey = models.CharField(max_length=20, blank=True, null=True)
   isPushed = models.BooleanField(default=False)
   user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-  # barcode = models.CharField(max_length=50, blank=True, null=True)
-  # unit = models.CharField(max_length=20, choices=[('kg', 'Kg'), ('piece', 'Piece'), ('g', 'G')])
-
-  # def __str__(self):
-  #   return f"{self.name_ru} -> {self.user}"
 
 
 class ProductsListDataModel(models.Model):
-  """
-  export interface ProductsListData {
-    id: number | string | null;
-    name: string;
-    products: ProductInList[] | [];
-  }
-  """
+
   name = models.CharField(max_length=50, unique=False, blank=False, null=False)
   products = models.JSONField(blank=True, null=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(blank=True, null=True)
   owner_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_lists')
-  owner_username = models.CharField(max_length=100, unique=False, blank=True, null=True)
-  owner_permissions_read = models.BooleanField(default=True)
-  owner_permissions_write = models.BooleanField(default=True)
-  owner_permissions_admin = models.BooleanField(default=True)
-  shared_with_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shared_lists', blank=True, null=True)
-  shared_with_username = models.CharField(max_length=100, unique=False, blank=True, null=True)
-  shared_with_permissions_read = models.BooleanField(blank=True, null=True)
-  shared_with_permissions_write = models.BooleanField(blank=True, null=True)
-  shared_with_permissions_admin = models.BooleanField(blank=True, null=True)
-
+  owner_name = models.CharField(max_length=100, unique=False, blank=True, null=True)
+  shared_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shared_lists', blank=True, null=True)
+  shared_name = models.CharField(max_length=100, unique=False, blank=True, null=True)
+  is_shared = models.BooleanField(default=False)
+  shared_type = models.CharField(
+    max_length=10,
+    choices=[('write', 'Write'), ('read', 'Read')],
+    null=True
+  )
 

@@ -4,6 +4,7 @@ from datetime import datetime, date, timedelta
 from django.db.models import Q
 
 import requests
+from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404
 from djoser.conf import User
 from rest_framework import status, generics
@@ -14,9 +15,9 @@ from OCR.get_most_valid_text import text_recognize
 from shoppingList.settings import BASE_DIR
 from OCR.tess_OCR import text_from_tesseract_ocr
 from .forms import BillForm
-from .models import BillModel, ProductsListDataModel, CustomProductModel
+from .models import BillModel, ProductsListDataModel, CustomProductModel, CustomUser
 from .serializers import UserSettingsSerializer, BillSerializer, CustomUserSerializer, ProductsListDataSerializer, \
-    CustomProductSerializer
+    CustomProductSerializer, CustomUserCreateSerializer
 from django.contrib.auth.models import BaseUserManager
 from django.conf import settings
 
@@ -279,6 +280,38 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
 class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView, generics.ListCreateAPIView):
     queryset = ProductsListDataModel.objects.all()
     serializer_class = ProductsListDataSerializer
+    """
+    object = {
+        "name": "test_list",
+        "owner": {
+            "owner_id": 1,
+            "owner_name": "ruslan"
+        },
+        "shared": {
+            "shared_id": 2,
+            "shared_name": "denis"
+        },
+        "isShared": True,
+        "sharedType": "read | write",
+        "products": [
+            {
+                "quantity": 40,
+                "category": {
+                    "en": "milk",
+                    "ru": "молоко"
+                },
+                "name": {
+                    "en": "Milk 2,8 in plastic bag",
+                    "ru": "Молоко 2,8 в пласт бутылке"
+                },
+                "svgKey": "string",
+                "isPushed": "TRUE"
+            },
+            {
+                ...
+            }
+        ]
+    }"""
 
     def get(self, request, *args, **kwargs):
         if kwargs.get('pk'):
@@ -288,13 +321,14 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                     object_owner = ProductsListDataModel.objects.get(id=kwargs['pk'], owner_id=user)
                     object_owner = self.get_serializer(object_owner).data
                 except:
-                    object_owner = []
+                    object_owner = {}
                 try:
-                    object_shared = ProductsListDataModel.objects.get(id=kwargs['pk'], shared_with_id=user)
+                    object_shared = ProductsListDataModel.objects.get(id=kwargs['pk'], shared_id=user)
                     object_shared = self.get_serializer(object_shared).data
                 except:
-                    object_shared = []
-
+                    object_shared = {}
+                object_owner = self.repack_ProductsListData(object_owner)
+                object_shared = self.repack_ProductsListData(object_shared)
                 return Response({'error': False, 'owner': object_owner, 'shared': object_shared}) if object_shared or object_owner else Response(
                     {
                         'error': True,
@@ -322,19 +356,41 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             user = request.query_params['user']
             objects_owner = ProductsListDataModel.objects.filter(owner_id=user)
             objects_owner = self.get_serializer(objects_owner, many=True)
-            objects_shared = ProductsListDataModel.objects.filter(shared_with_id=user)
+            objects_shared = ProductsListDataModel.objects.filter(shared_id=user)
             objects_shared = self.get_serializer(objects_shared, many=True)
-            return Response({'owner': objects_owner.data, 'shared': objects_shared.data})
+            return Response(
+                {
+                    'owner': self.repack_ProductsListData_many(objects_owner.data),
+                    'shared': self.repack_ProductsListData_many(objects_shared.data)
+                }
+            )
 
         else:
             return self.list(request, *args, **kwargs)
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(self.repack_ProductsListData_many(serializer.data))
+
     def post(self, request, *args, **kwargs):
-        if not shared_with_accepts(request.data):
-            return error_builder(ru_en_dict={'ru': 'Пользователь ограничил возможность делиться с ним списками', 'en': 'The user has limited the ability to share lists with him'})
         checking_queryset = ProductsListDataModel.objects.filter(name=request.data['name'], owner_id=request.data['owner_id'])
         if not list(checking_queryset.values()):
-            return self.create(request, *args, **kwargs)
+            user = CustomUser.objects.get(id=request.data['owner_id'])
+            name = model_to_dict(user)['username']
+            request_data = request.data
+            request_data['owner_name'] = name
+            serializer = self.get_serializer(data=request_data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            repacked_object = self.repack_ProductsListData(serializer.data)
+            return Response(repacked_object, status=status.HTTP_201_CREATED, headers=headers)
         else:
             return error_builder(ru_en_dict={'ru': 'Список с этим именем уже существует', 'en': 'Products list data model with this name already exists'}, status=status.HTTP_409_CONFLICT)
 
@@ -363,34 +419,71 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
     def update_common(self, queryset, user, request, method='put', *args, **kwargs):
         serializer = self.get_serializer(queryset)
 
-        if serializer.data['owner_id'] == user:
-            if serializer.data['owner_permissions_write']:
-                match method.lower():
-                    case 'put': return self.update(request, *args, **kwargs)
-                    case 'patch': return self.partial_update(request, *args, **kwargs)
-                    case 'delete': return self.destroy(request, *args, **kwargs)
-            else:
-                return error_not_have_permissions()
+        if serializer.data['owner_id'] == user and (serializer.data['shared_type'] == 'read' or not serializer.data['is_shared']):
+            match method.lower():
+                case 'put': return self.update(request, *args, **kwargs)
+                case 'patch': return self.partial_update(request, *args, **kwargs)
+                case 'delete': return self.destroy(request, *args, **kwargs)
 
-        elif serializer.data['shared_with_id'] == user:
-            if serializer.data['shared_with_permissions_write']:
-                match method.lower():
-                    case 'put': return self.update(request, *args, **kwargs)
-                    case 'patch': return self.partial_update(request, *args, **kwargs)
-                    case 'delete': return self.destroy(request, *args, **kwargs)
-            else:
-                return error_not_have_permissions()
-
+        elif serializer.data['shared_id'] == user and serializer.data['shared_type'] == 'write' and serializer.data['is_shared']:
+            match method.lower():
+                case 'put': return self.update(request, *args, **kwargs)
+                case 'patch': return self.partial_update(request, *args, **kwargs)
+                case 'delete': return self.destroy(request, *args, **kwargs)
         else:
-            return error_does_not_have_a_record()
+            return error_not_have_permissions()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        unpacked_request_data = self.unpack_ProductsListData(request.data)
+        serializer = self.get_serializer(instance, data=unpacked_request_data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        return Response(self.repack_ProductsListData(serializer.data))
 
     def delete(self, request, *args, **kwargs):
         queryset = ProductsListDataModel.objects.filter(id=kwargs['pk'], owner_id=request.query_params['user'])
         return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
+    def repack_ProductsListData_many(self, objects_list):
+        for number in range(len(objects_list)):
+            objects_list[number] = self.repack_ProductsListData(objects_list[number])
+        return objects_list
+
+    def repack_ProductsListData(self, object) -> dict:
+        remove_keys = []
+        object['owner'] = {}
+        object['shared'] = {}
+        for key in object.keys():
+            if key in ['owner_id', 'owner_name']:
+                object['owner'][key] = object[key]
+                remove_keys.append(key)
+            elif key in ['shared_id', 'shared_name']:
+                object['shared'][key] = object[key]
+                remove_keys.append(key)
+        for key in remove_keys:
+            object.pop(key)
+        return object if object['owner'] or object['shared'] else {}
+
+    def unpack_ProductsListData(self, object) -> dict:
+        remove_keys = []
+        for key in list(object.keys()):
+            if key in ['owner', 'shared']:
+                remove_keys.append(key)
+                for sub_key in object[key]:
+                    object[sub_key] = object[key][sub_key]
+        for key in remove_keys:
+            object.pop(key)
+        return object
+
 def shared_with_accepts(request_data):
-    if request_data.get('shared_with_id'):
-        shared_with_user = User.objects.get(id=request_data['shared_with_id'])
+    if request_data.get('shared_id'):
+        shared_with_user = User.objects.get(id=request_data['shared_id'])
         if shared_with_user:
             shared_with_user_object = CustomUserSerializer(shared_with_user).data['ready_to_accept_lists']
             if shared_with_user_object:
@@ -433,3 +526,12 @@ def error_builder(ru_en_dict:dict, status=None):
         },
         status=status.HTTP_500_INTERNAL_SERVER_ERROR if not status else status
     )
+
+class TestUserCreateView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = CustomUserCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
