@@ -310,9 +310,9 @@ shared_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name
 shared_name = models.CharField(max_length=100, unique=False, blank=True, null=True)
 is_shared = models.BooleanField(default=False)
 shared_type = models.CharField(
-max_length=10,
-choices=[('write', 'Write'), ('read', 'Read')],
-null=True
+    max_length=10,
+    choices=[('write', 'Write'), ('read', 'Read')],
+    null=True
 )
 ```
 <hr>
