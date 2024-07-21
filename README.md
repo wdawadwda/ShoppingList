@@ -300,20 +300,20 @@ body
 
 MODEL
 ```python
-  name = models.CharField(max_length=50, unique=False, blank=False, null=False)
-  products = models.JSONField(blank=True, null=True)
-  created_at = models.DateTimeField(auto_now_add=True)
-  updated_at = models.DateTimeField(blank=True, null=True)
-  owner_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_lists')
-  owner_username = models.CharField(max_length=100, unique=False, blank=True, null=True)
-  owner_permissions_read = models.BooleanField(default=True)
-  owner_permissions_write = models.BooleanField(default=True)
-  owner_permissions_admin = models.BooleanField(default=True)
-  shared_with_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shared_lists', blank=True, null=True)
-  shared_with_username = models.CharField(max_length=100, unique=False, blank=True, null=True)
-  shared_with_permissions_read = models.BooleanField(blank=True, null=True)
-  shared_with_permissions_write = models.BooleanField(blank=True, null=True)
-  shared_with_permissions_admin = models.BooleanField(blank=True, null=True)
+name = models.CharField(max_length=50, unique=False, blank=False, null=False)
+products = models.JSONField(blank=True, null=True)
+created_at = models.DateTimeField(auto_now_add=True)
+updated_at = models.DateTimeField(blank=True, null=True)
+owner_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_lists')
+owner_name = models.CharField(max_length=100, unique=False, blank=True, null=True)
+shared_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shared_lists', blank=True, null=True)
+shared_name = models.CharField(max_length=100, unique=False, blank=True, null=True)
+is_shared = models.BooleanField(default=False)
+shared_type = models.CharField(
+max_length=10,
+choices=[('write', 'Write'), ('read', 'Read')],
+null=True
+)
 ```
 <hr>
 
