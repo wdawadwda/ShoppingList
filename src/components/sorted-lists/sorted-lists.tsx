@@ -51,14 +51,16 @@ export const SortedLists = ({ listData, theme }: SortedListsProps) => {
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <AddButton onPress={() => navigate.navigate("List")} theme={theme} />
         <TouchableOpacity onPress={toggleSortOrder}>
-          <View style={arrowStyle.arrow}>
-            <ArrowLeftComponent width={20} height={20} color={colorDark.textColor} />
-          </View>
+          {(sortedLists.owner.length > 0 || sortedLists.shared.length > 0) && (
+            <View style={arrowStyle.arrow}>
+              <ArrowLeftComponent width={20} height={20} color={colorDark.textColor} />
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 
       <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>Ваши списки</Text>
-      {sortedLists.owner.length > 0 && (
+      {sortedLists.owner.length > 0 ? (
         <View>
           {sortedLists.owner.map((listItem) => (
             <View key={`owner-${listItem.id}`}>
@@ -72,7 +74,8 @@ export const SortedLists = ({ listData, theme }: SortedListsProps) => {
             </View>
           ))}
         </View>
-      )}
+      ) : null}
+
       {sortedLists.shared.length > 0 && (
         <View>
           <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>Переданные списки</Text>
@@ -92,3 +95,5 @@ export const SortedLists = ({ listData, theme }: SortedListsProps) => {
     </View>
   );
 };
+
+export default SortedLists;

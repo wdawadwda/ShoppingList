@@ -6,6 +6,7 @@ export {
   PlusComponent,
   TrashSvgComponent,
   EditSvgComponent,
+  SyncSvgComponent,
 } from "./other";
 export { AddPhotoSvgComponent, AddGallerySvgComponent } from "./reciept";
 export {

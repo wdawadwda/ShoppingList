@@ -31,6 +31,7 @@ export {
   GreenOnionSVG,
   Greens,
   Ginger,
+  SyncSvgComponent,
   Fig,
   Cabbage,
   Potato,

@@ -31,4 +31,7 @@ export const stylesHeader = StyleSheet.create({
   user: {
     marginRight: 10,
   },
+  sync: {
+    marginRight: 20,
+  },
 });

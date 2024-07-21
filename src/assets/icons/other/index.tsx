@@ -4,3 +4,4 @@ export { ArrowLeftComponent } from "./arrow-left";
 export { PlusComponent } from "./plus";
 export { TrashSvgComponent } from "./trash";
 export { EditSvgComponent } from "./edit";
+export { SyncSvgComponent } from "./sync-svg";

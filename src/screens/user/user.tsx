@@ -22,7 +22,8 @@ export function User({ theme }: { theme: Theme }) {
             <Text
               style={[fontsStyles.subtitle, { color: colorDark.textColor }]}
             >{`${t("other.greetings")} ${user.username}`}</Text>
-            <Text style={[fontsStyles.text, { color: colorDark.textColor, textAlign: "center" }]}>{user.email}</Text>
+            <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>email: {user.email}</Text>
+            <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>ID: {user.id}</Text>
             <Button style={{ marginTop: 20 }} theme={theme} onPress={() => dispatch(userActions.logout())}>
               {t("buttonLabels.regAuth.logout")}
             </Button>

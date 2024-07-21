@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch } from "@/store";
 import { colorDark, fontsStyles } from "@/styles";
 import { TrashSvgComponent } from "@/assets";
-import { type Dispatch } from "react";
+import { useEffect, type Dispatch } from "react";
 
 export const ExistingList = ({
   listId,
@@ -84,6 +84,43 @@ export const ExistingList = ({
       { cancelable: true },
     );
   };
+
+  useEffect(() => {
+    console.log(productData);
+  }, [productData]);
+
+  if (
+    productData?.shared_with_id &&
+    productData?.shared_with_id !== id && // Список не принадлежит текущему пользователю
+    (productData?.shared_with_permissions_write || productData?.shared_with_permissions_read)
+  ) {
+    return (
+      <>
+        <BackButton theme={theme} />
+        <Text
+          style={[fontsStyles.text, { color: colorDark.textColor }]}
+        >{`Список был передан пользователю c ID: ${productData?.shared_with_id}`}</Text>
+        <Button style={{ marginTop: 25 }} theme={theme} onPress={handleAddClick}>
+          <Text>Вернуть права</Text>
+        </Button>
+      </>
+    );
+  }
+
+  if (
+    productData?.shared_with_id &&
+    productData?.shared_with_id === id &&
+    (productData?.shared_with_permissions_write || productData?.shared_with_permissions_read)
+  ) {
+    return (
+      <>
+        <BackButton theme={theme} />
+        <Text
+          style={[fontsStyles.text, { color: colorDark.textColor }]}
+        >{`Список был передан от пользователя c ID: ${productData?.owner_id}`}</Text>
+      </>
+    );
+  }
 
   return (
     <>
