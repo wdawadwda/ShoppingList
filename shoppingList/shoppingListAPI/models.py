@@ -29,7 +29,7 @@ class CustomUser(AbstractUser):
   objects = UserManager()
 
   def __str__(self):
-    return self.email
+    return f"{self.id}. {self.email}"
 
 class BillModel(models.Model):
     bill = models.FileField(blank=True)
@@ -52,6 +52,8 @@ class CustomProductModel(models.Model):
   isPushed = models.BooleanField(default=False)
   user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
+  def __str__(self):
+    return f"{self.id}. {self.name_ru}"
 
 class ProductsListDataModel(models.Model):
 
@@ -70,3 +72,5 @@ class ProductsListDataModel(models.Model):
     null=True
   )
 
+  def __str__(self):
+    return f"{self.id}. {self.name}"

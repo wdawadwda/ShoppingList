@@ -402,6 +402,30 @@ return
     }
 }
 ```
+
+ERRORS:
+1. Invalid owner_id 
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "Пользователь не существует",
+        "en": "User does not exist"
+    }
+}
+```
+
+2. User has this list name already
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "Список с этим именем уже существует",
+        "en": "Products list data model with this name already exists"
+    }
+}
+```
+
 <hr>
 
 #### GET (all) ^/api/v1/products-list-data/
@@ -558,7 +582,8 @@ Response:
     }
 }
 ```
-or 
+ERRORS
+1. The user does not have a list with the specified id
 ```json
 {
     "error": true,
@@ -568,6 +593,17 @@ or
     }
 }
 ```
+2. User does not exists
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "Пользователь не существует",
+        "en": "User does not exist"
+    }
+}
+```
+
 <hr>
 
 #### GET ^/api/v1/products-list-data?user2
@@ -764,7 +800,8 @@ Response:
     }
 }
 ```
-or
+ERRORS
+1. The user does not have a list with the specified id
 ```json
 {
     "error": true,
@@ -774,29 +811,33 @@ or
     }
 }
 ```
-<hr>
-
-#### PATCH (update) ^/api/v1/api/v1/custom-product/id:int/?user=1
+2. User does not exists
 ```json
 {
-    "owner": {
-        "owner_id": 1,
-        "owner_name": "ruslan"
-    },
+    "error": true,
+    "details": {
+        "ru": "Пользователь не существует",
+        "en": "User does not exist"
+    }
+}
+```
+<hr>
+
+#### PATCH (update) ^/api/v1/api/v1/products-list-data/id:int/?user=1
+```json
+{
     "shared": {
-        "shared_id": 2,
-        "shared_name": "denis"
+        "shared_id": 2
 
     },
-    "is_shared": true,
-    "shared_type": "write"
+    "is_shared": true
 }
 ```
 Response:
 ```json
 {
-    "id": 14,
-    "name": "77777h66dd_list",
+    "id": 26,
+    "name": "test_list12",
     "products": [
         {
             "quantity": 40,
@@ -805,8 +846,8 @@ Response:
                 "ru": "молоко"
             },
             "name": {
-                "en": "Rabbit",
-                "ru": "Кролик мертвый в пакете"
+                "en": "Milk 2,8 in plastic bag",
+                "ru": "Молоко 2,8 в пласт бутылке"
             },
             "svgKey": "string",
             "isPushed": "TRUE"
@@ -825,21 +866,33 @@ Response:
             "isPushed": "true"
         }
     ],
-    "created_at": "2024-07-04T21:03:56.013027+03:00",
-    "updated_at": "2024-07-21T23:37:09.102490+03:00",
+    "created_at": "2024-07-22T22:42:14.686241+03:00",
+    "updated_at": "2024-07-23T00:49:06.521447+03:00",
     "is_shared": true,
-    "shared_type": "write",
+    "shared_type": "read",
     "owner": {
         "owner_name": "ruslan",
         "owner_id": 1
     },
     "shared": {
-        "shared_name": "denis",
+        "shared_name": "kostia",
         "shared_id": 2
     }
 }
 ```
-or 
+ERRORS:
+1. User does not exists (in web link)
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "Пользователь не существует",
+        "en": "User does not exist"
+    }
+}
+```
+
+2. User does not have this record
 ```json
 {
     "error": true,
@@ -849,6 +902,48 @@ or
     }
 }
 ```
+3. User share_id does not exist
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "Пользователь shared_id не существует",
+        "en": "User shared_id does not exist"
+    }
+}
+```
+4. Shared data missing
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "Отсутствуют данные 'shared'",
+        "en": "'shared' data missing"
+    }
+}
+```
+5. Shared_id data missing
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "Отсутствуют данные 'shared_id'",
+        "en": "'shared_id' data missing"
+    }
+}
+```
+
+6. Is_shared is not specified
+```json
+{
+    "error": true,
+    "details": {
+        "ru": "Не указан is_shared",
+        "en": "Is_shared is not specified"
+    }
+}
+```
+
 <hr>
 
 #### DELETE ^/api/v1/api/v1/products-list-data/id:int/?user=1

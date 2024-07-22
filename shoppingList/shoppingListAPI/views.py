@@ -20,6 +20,7 @@ from .serializers import UserSettingsSerializer, BillSerializer, CustomUserSeria
     CustomProductSerializer, CustomUserCreateSerializer
 from django.contrib.auth.models import BaseUserManager
 from django.conf import settings
+from .custom_errors import *
 
 class CustomUserView(APIView):
     def get(self, request, *args, **kwargs):
@@ -212,10 +213,7 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             return Response(
                 {
                 'error': True,
-                'details' :{
-                    'en': 'This list name exists already',
-                    'ru': 'Список с таким именем уже существует'
-                }
+                'details': this_list_name_exists_already
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
@@ -332,10 +330,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                 return Response({'error': False, 'owner': object_owner, 'shared': object_shared}) if object_shared or object_owner else Response(
                     {
                         'error': True,
-                        'details': {
-                            'ru': 'У этого пользователя нет записи с этим id',
-                            'en': 'The user does not have a record with this ID'
-                        }
+                        'details': the_user_does_not_have_a_record
                     },
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
@@ -354,6 +349,8 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
 
         elif request.query_params.get('user'):
             user = request.query_params['user']
+            if not check_user_id_exists(id=user)[0]:
+                return error_builder(ru_en_dict=user_does_not_exists)
             objects_owner = ProductsListDataModel.objects.filter(owner_id=user)
             objects_owner = self.get_serializer(objects_owner, many=True)
             objects_shared = ProductsListDataModel.objects.filter(shared_id=user)
@@ -381,7 +378,10 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
     def post(self, request, *args, **kwargs):
         checking_queryset = ProductsListDataModel.objects.filter(name=request.data['name'], owner_id=request.data['owner_id'])
         if not list(checking_queryset.values()):
-            user = CustomUser.objects.get(id=request.data['owner_id'])
+            try:
+                user = CustomUser.objects.get(id=request.data['owner_id'])
+            except:
+                return error_builder(ru_en_dict={'ru': 'Пользователь не существует', 'en': 'User does not exist'})
             name = model_to_dict(user)['username']
             request_data = request.data
             request_data['owner_name'] = name
@@ -392,12 +392,14 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             repacked_object = self.repack_ProductsListData(serializer.data)
             return Response(repacked_object, status=status.HTTP_201_CREATED, headers=headers)
         else:
-            return error_builder(ru_en_dict={'ru': 'Список с этим именем уже существует', 'en': 'Products list data model with this name already exists'}, status=status.HTTP_409_CONFLICT)
+            return error_builder(ru_en_dict={'ru': 'Список с этим именем уже существует', 'en': 'Products list data model with this name already exists'}, http_status=status.HTTP_409_CONFLICT)
 
     def patch(self, request, *args, **kwargs):
-        if not shared_with_accepts(request.data):
-            return error_builder(ru_en_dict={'ru': 'Пользователь ограничил возможность делиться с ним списками', 'en': 'The user has limited the ability to share lists with him'})
         user = int(request.query_params['user'])
+        if not check_user_id_exists(id=user)[0]:
+            return error_builder(ru_en_dict=user_does_not_exists)
+        if not shared_with_accepts(request.data):
+            return error_builder(ru_en_dict=the_user_has_limited)
         request.data['updated_at'] = datetime.now()
         try:
             queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
@@ -406,9 +408,11 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         return self.update_common(queryset, user, request, method='patch', *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        if not shared_with_accepts(request.data):
-            return error_builder(ru_en_dict={'ru': 'Пользователь ограничил возможность делиться с ним списками', 'en': 'The user has limited the ability to share lists with him'})
         user = int(request.query_params['user'])
+        if not check_user_id_exists(id=user)[0]:
+            return error_builder(ru_en_dict=user_does_not_exists)
+        if not shared_with_accepts(request.data):
+            return error_builder(ru_en_dict=the_user_has_limited)
         request.data['updated_at'] = datetime.now()
         try:
             queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
@@ -419,17 +423,25 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
     def update_common(self, queryset, user, request, method='put', *args, **kwargs):
         serializer = self.get_serializer(queryset)
 
-        if serializer.data['owner_id'] == user and (serializer.data['shared_type'] == 'read' or not serializer.data['is_shared']):
+        if serializer.data['owner_id'] == user: #and (serializer.data['shared_type'] == 'read' or not serializer.data['is_shared']):
             match method.lower():
-                case 'put': return self.update(request, *args, **kwargs)
-                case 'patch': return self.partial_update(request, *args, **kwargs)
-                case 'delete': return self.destroy(request, *args, **kwargs)
+                case 'put':
+                    if serializer.data['shared_type'] == 'read' or not serializer.data['is_shared']:
+                        return self.update(request, *args, **kwargs)
+                case 'patch':
+                    request_data, error = self.check_and_fill_in_the_data(request.data)
+                    return error_builder(ru_en_dict=error) if error else self.partial_update(request, *args, **kwargs)
+                # case 'delete': return self.destroy(request, *args, **kwargs)
 
         elif serializer.data['shared_id'] == user and serializer.data['shared_type'] == 'write' and serializer.data['is_shared']:
             match method.lower():
                 case 'put': return self.update(request, *args, **kwargs)
-                case 'patch': return self.partial_update(request, *args, **kwargs)
-                case 'delete': return self.destroy(request, *args, **kwargs)
+                case 'patch':
+                    request_data, error = self.check_and_fill_in_the_data(request.data)
+                    return error_builder(ru_en_dict=error) if error else self.partial_update(request, *args, **kwargs)
+
+                    # return self.partial_update(request, *args, **kwargs)
+                # case 'delete': return self.destroy(request, *args, **kwargs)
         else:
             return error_not_have_permissions()
 
@@ -481,6 +493,29 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             object.pop(key)
         return object
 
+    def check_and_fill_in_the_data(self, request_data):
+        if 'is_shared' not in  request_data:
+            return request_data, is_shared_is_not_specified
+        if 'is_shared' in request_data and not request_data['is_shared']:
+            request_data['shared']['shared_id'] = None
+            request_data['shared']['shared_name'] = None
+            request_data['shared_type'] = None
+            return request_data, {}
+        elif 'is_shared' in request_data and request_data['is_shared']:
+            if not request_data.get('shared') or not request_data['shared']:
+                return request_data, shared_data_missing
+            if request_data.get('shared') and not request_data['shared'].get('shared_id'):
+                return request_data, shared_id_data_missing
+            if not request_data.get('shared_type') or not request_data['shared_type']:
+                request_data['shared_type'] = 'read'
+            if not request_data.get('shared_name') or not request_data['shared_name']:
+                user_exists, user_object = check_user_id_exists(id=request_data['shared']['shared_id'])
+                if not user_exists:
+                    return request_data, user_shared_id_does_not_exist
+                else:
+                    request_data['shared']['shared_name'] = user_object['username']
+        return request_data, {}
+
 def shared_with_accepts(request_data):
     if request_data.get('shared_id'):
         shared_with_user = User.objects.get(id=request_data['shared_id'])
@@ -495,10 +530,7 @@ def error_not_have_permissions():
     return Response(
         {
             'error': True,
-            'details': {
-                'ru': 'Недостаточно прав',
-                'en': 'Not enough rights'
-            }
+            'details': not_enough_rights
         },
         status=status.HTTP_500_INTERNAL_SERVER_ERROR
     )
@@ -507,15 +539,12 @@ def error_does_not_have_a_record():
     return Response(
         {
             'error': True,
-            'details': {
-                'ru': 'У этого пользователя нет записи с этим id',
-                'en': 'The user does not have a record with this ID'
-            }
+            'details': the_user_does_not_have_a_record
         },
         status=status.HTTP_500_INTERNAL_SERVER_ERROR
     )
 
-def error_builder(ru_en_dict:dict, status=None):
+def error_builder(ru_en_dict:dict, http_status=None):
     return Response(
         {
             'error': True,
@@ -524,8 +553,15 @@ def error_builder(ru_en_dict:dict, status=None):
                 'en': ru_en_dict['en']
             }
         },
-        status=status.HTTP_500_INTERNAL_SERVER_ERROR if not status else status
+        status=status.HTTP_500_INTERNAL_SERVER_ERROR if not http_status else http_status
     )
+
+def check_user_id_exists(id:int|str) -> [bool, dict]:
+    try:
+        user_queryset = CustomUser.objects.get(id=id)
+        return True, model_to_dict(user_queryset)
+    except:
+        return False, {}
 
 class TestUserCreateView(APIView):
     def post(self, request, *args, **kwargs):
