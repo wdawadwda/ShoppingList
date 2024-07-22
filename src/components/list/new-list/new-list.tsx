@@ -17,8 +17,6 @@ export const NewList = ({
   setProductData,
 }: NewListProps & { setProductData: Dispatch<React.SetStateAction<ProductsListData>> }) => (
   <>
-    <BackButton theme={theme} />
-
     <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>Создание списка</Text>
     {productData?.name ? (
       <ExistingList
@@ -33,6 +31,8 @@ export const NewList = ({
       />
     ) : (
       <>
+        <BackButton theme={theme} />
+
         <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>Добавить название списка</Text>
         <TextInput
           style={globalStyles.input}

@@ -43,14 +43,16 @@ export interface ProductsListData {
   products: ProductInList[] | [];
   updated_at: string;
   created_at: string;
-  shared_with_id: number | string | null;
-  owner_id: number | string | null;
-  shared_with_permissions_write: boolean | null;
-  shared_with_permissions_read: boolean | null;
-}
-
-export interface ProductsListDataRequest extends ProductsListData {
-  owner_id: number | string;
+  is_shared: boolean;
+  shared_type: "read" | "write";
+  owner: {
+    owner_name: string;
+    owner_id: number;
+  };
+  shared: {
+    shared_name: string | null;
+    shared_id: number | null;
+  };
 }
 
 export interface BaseListProps {

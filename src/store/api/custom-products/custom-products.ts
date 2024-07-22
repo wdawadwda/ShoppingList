@@ -12,7 +12,7 @@ export const patchCustomProduct = async (
 ): Promise<ProductCustom | ErrorObject> => {
   try {
     const response = await axios.patch<UpdateingProductInList, AxiosResponse<ProductCustom>>(
-      `${BACKEND_URL}api/v1/custom-product/${productId}/?user=${userId}`,
+      `${BACKEND_URL}/api/v1/custom-product/${productId}/?user=${userId}`,
       updatedFields,
     );
     return response.data;
@@ -27,7 +27,7 @@ export const deleteCustomProduct = async (
   userId: string | number,
 ): Promise<void | ErrorObject> => {
   try {
-    await axios.delete<void>(`${BACKEND_URL}api/v1/custom-product/${productId}/?user=${userId}`);
+    await axios.delete<void>(`${BACKEND_URL}/api/v1/custom-product/${productId}/?user=${userId}`);
   } catch (error) {
     const errorObject = createErrorObject(error as AxiosError<ErrorObject>);
     throw errorObject;
@@ -43,7 +43,7 @@ export const createCustomProduct = createAsyncThunk<
 >("custom-products/createCustomProduct", async (product, thunkAPI) => {
   try {
     const response = await axios.post<Omit<ProductCustom, "id">, AxiosResponse<ProductCustom>>(
-      `${BACKEND_URL}api/v1/custom-product/`,
+      `${BACKEND_URL}/api/v1/custom-product/`,
       product,
     );
     const state = thunkAPI.getState() as RootState;
@@ -66,7 +66,7 @@ export const fetchCustompProducts = createAsyncThunk<
 >("custom-products/fetchCustompProducts", async (userId, thunkAPI) => {
   try {
     const response = await axios.get<ProductInList[], AxiosResponse<ProductInList[]>>(
-      `${BACKEND_URL}api/v1/custom-product/`,
+      `${BACKEND_URL}/api/v1/custom-product/`,
       { params: { user: userId } },
     );
 
