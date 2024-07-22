@@ -20,6 +20,7 @@ from .serializers import UserSettingsSerializer, BillSerializer, CustomUserSeria
     CustomProductSerializer, CustomUserCreateSerializer
 from django.contrib.auth.models import BaseUserManager
 from django.conf import settings
+from django.db.models import Q
 from .custom_errors import *
 
 class CustomUserView(APIView):
@@ -459,7 +460,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         return Response(self.repack_ProductsListData(serializer.data))
 
     def delete(self, request, *args, **kwargs):
-        queryset = ProductsListDataModel.objects.filter(id=kwargs['pk'], owner_id=request.query_params['user'])
+        queryset = ProductsListDataModel.objects.get(id=kwargs['pk'], owner_id=request.query_params['user'])
         return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def repack_ProductsListData_many(self, objects_list):
