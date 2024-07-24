@@ -434,15 +434,13 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                     return error_builder(ru_en_dict=error) if error else self.partial_update(request, *args, **kwargs)
                 # case 'delete': return self.destroy(request, *args, **kwargs)
 
-        elif serializer.data['shared_id'] == user and serializer.data['shared_type'] == 'write' and serializer.data['is_shared']:
+        elif (serializer.data['shared_id'] == user and serializer.data['shared_type'] == 'write' and serializer.data['is_shared']) or (serializer.data['shared_id'] == user and not request.data['is_shared']):
             match method.lower():
                 case 'put': return self.update(request, *args, **kwargs)
                 case 'patch':
                     request_data, error = self.check_and_fill_in_the_data(request.data, user)
                     return error_builder(ru_en_dict=error) if error else self.partial_update(request, *args, **kwargs)
 
-                    # return self.partial_update(request, *args, **kwargs)
-                # case 'delete': return self.destroy(request, *args, **kwargs)
         else:
             return error_not_have_permissions()
 
