@@ -42,3 +42,8 @@ is_shared_is_not_specified = {
     "ru": "Не указан is_shared",
     "en": "Is_shared is not specified"
 }
+
+user_cannot_pass_the_list_to_himself = {
+    "ru": "Пользователь не может передать список себе",
+    "en": "The user cannot pass the list to himself"
+}

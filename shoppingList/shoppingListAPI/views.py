@@ -430,7 +430,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                     if serializer.data['shared_type'] == 'read' or not serializer.data['is_shared']:
                         return self.update(request, *args, **kwargs)
                 case 'patch':
-                    request_data, error = self.check_and_fill_in_the_data(request.data)
+                    request_data, error = self.check_and_fill_in_the_data(request.data, user)
                     return error_builder(ru_en_dict=error) if error else self.partial_update(request, *args, **kwargs)
                 # case 'delete': return self.destroy(request, *args, **kwargs)
 
@@ -438,7 +438,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             match method.lower():
                 case 'put': return self.update(request, *args, **kwargs)
                 case 'patch':
-                    request_data, error = self.check_and_fill_in_the_data(request.data)
+                    request_data, error = self.check_and_fill_in_the_data(request.data, user)
                     return error_builder(ru_en_dict=error) if error else self.partial_update(request, *args, **kwargs)
 
                     # return self.partial_update(request, *args, **kwargs)
@@ -494,7 +494,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             object.pop(key)
         return object
 
-    def check_and_fill_in_the_data(self, request_data):
+    def check_and_fill_in_the_data(self, request_data, requested_user):
         if 'is_shared' not in  request_data:
             return request_data, is_shared_is_not_specified
         if 'is_shared' in request_data and not request_data['is_shared']:
@@ -509,6 +509,8 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                 return request_data, shared_data_missing
             if request_data.get('shared') and not request_data['shared'].get('shared_id'):
                 return request_data, shared_id_data_missing
+            if request_data['shared']['shared_id'] == requested_user:
+                return request_data, user_cannot_pass_the_list_to_himself
             if not request_data.get('shared_type') or not request_data['shared_type']:
                 request_data['shared_type'] = 'read'
             if not request_data.get('shared_name') or not request_data['shared_name']:
