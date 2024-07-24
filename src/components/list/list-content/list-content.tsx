@@ -11,18 +11,21 @@ export const ListContent = ({
   theme,
   setProductData,
   productData,
+  isEditable = true,
 }: {
   productList: ProductInList[];
   theme: Theme;
   language: Language;
   setProductData: Dispatch<React.SetStateAction<ProductsListData>>;
   productData: ProductsListData;
+  isEditable?: boolean;
 }) => {
   type CategoryMap = {
     [key: string]: ProductInList[];
   };
 
   const toggleProductPushed = (product: ProductInList) => {
+    if (!isEditable) return;
     const updatedProducts = productData.products.map((p) =>
       p.id === product.id ? { ...p, isPushed: !p.isPushed } : p,
     );
@@ -53,6 +56,7 @@ export const ListContent = ({
           <TouchableOpacity
             key={product.id || `${product.name}--${index + 1}`}
             onPress={() => toggleProductPushed(product)}
+            disabled={!isEditable}
           >
             <ListProductItemCard
               setProductData={setProductData}
@@ -62,6 +66,7 @@ export const ListContent = ({
               product={product}
               theme={theme}
               isPurchased={!isPurchased}
+              isEditable={isEditable}
             />
           </TouchableOpacity>
         ))}

@@ -1,16 +1,20 @@
-import { BackButton, Button } from "@/components/ui";
-import { Alert, Text, View } from "react-native";
-import { ListContent } from "../list-content";
+import { Alert } from "react-native";
 import { type ProductsListData, type ExistingListProps, ErrorObject } from "@/constants";
-import { createProductsLists, deleteProductListData, fetchProductsLists, updateProductsList } from "@/store/api";
+import {
+  canselPermission,
+  createProductsLists,
+  deleteProductListData,
+  fetchProductsLists,
+  updateProductsList,
+} from "@/store/api";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/user";
 import { type MainNavigationProp } from "@/navigation";
 import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch } from "@/store";
-import { colorDark, fontsStyles } from "@/styles";
-import { TrashSvgComponent } from "@/assets";
-import { useEffect, type Dispatch } from "react";
+import { useState, type Dispatch } from "react";
+import useExistingList from "./use/use-existing-list";
+import SharedForm from "./shared-form";
 
 export const ExistingList = ({
   listId,
@@ -24,12 +28,15 @@ export const ExistingList = ({
 }: ExistingListProps & { isNewList: boolean; setProductData: Dispatch<React.SetStateAction<ProductsListData>> }) => {
   const user = useSelector(selectUser);
   const dispatch = useAppDispatch();
-  const id = user?.id;
   const navigation = useNavigation<MainNavigationProp>();
 
-  const hendleSave = async (userId: string | number) => {
+  const [isSharedForm, setIsSharedForm] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSave = async (userId: string | number) => {
     const data = { ...productData, owner_id: userId };
     if (isNewList) {
+      setIsLoading(true);
       try {
         await createProductsLists(data);
         dispatch(fetchProductsLists(userId));
@@ -44,21 +51,26 @@ export const ExistingList = ({
           setProductData({ ...productData, name: "" });
           Alert.alert("Такой список уже существует");
         }
+      } finally {
+        setIsLoading(false);
       }
     } else {
       if (data.id) {
+        setIsLoading(true);
         try {
           await updateProductsList(data.id, data.owner_id, data);
           dispatch(fetchProductsLists(userId));
           navigation.navigate("Home");
         } catch (error) {
           console.error("Ошибка при создании нового списка:", error);
+        } finally {
+          setIsLoading(false);
         }
       }
     }
   };
 
-  const hendleDell = async (objId: string | number, userId: string | number) => {
+  const handleDelete = async (objId: string | number, userId: string | number) => {
     Alert.alert(
       "Confirm Deletion",
       "Are you sure you want to delete this product?",
@@ -71,12 +83,15 @@ export const ExistingList = ({
         {
           text: "OK",
           onPress: async () => {
+            setIsLoading(true);
             try {
               await deleteProductListData(objId, userId);
               dispatch(fetchProductsLists(userId));
               navigation.navigate("Home");
             } catch (error) {
               console.error("Ошибка при удалении списка:", error);
+            } finally {
+              setIsLoading(false);
             }
           },
         },
@@ -85,80 +100,51 @@ export const ExistingList = ({
     );
   };
 
-  useEffect(() => {
-    console.log(productData);
-  }, [productData]);
+  const cancellationPermissions = async () => {
+    if (productData?.id && user?.id) {
+      setIsLoading(true);
+      try {
+        await canselPermission(productData.id, user.id);
+        navigation.navigate("Home");
+      } catch (error) {
+        console.error("Error updating share rights:", error);
+      } finally {
+        dispatch(fetchProductsLists(user.id));
+        setIsLoading(false);
+      }
+    }
+  };
 
-  if (
-    productData?.shared_with_id &&
-    productData?.shared_with_id !== id && // Список не принадлежит текущему пользователю
-    (productData?.shared_with_permissions_write || productData?.shared_with_permissions_read)
-  ) {
-    return (
-      <>
-        <BackButton theme={theme} />
-        <Text
-          style={[fontsStyles.text, { color: colorDark.textColor }]}
-        >{`Список был передан пользователю c ID: ${productData?.shared_with_id}`}</Text>
-        <Button style={{ marginTop: 25 }} theme={theme} onPress={handleAddClick}>
-          <Text>Вернуть права</Text>
-        </Button>
-      </>
-    );
-  }
-
-  if (
-    productData?.shared_with_id &&
-    productData?.shared_with_id === id &&
-    (productData?.shared_with_permissions_write || productData?.shared_with_permissions_read)
-  ) {
-    return (
-      <>
-        <BackButton theme={theme} />
-        <Text
-          style={[fontsStyles.text, { color: colorDark.textColor }]}
-        >{`Список был передан от пользователя c ID: ${productData?.owner_id}`}</Text>
-      </>
-    );
-  }
+  const { renderContent } = useExistingList({
+    listId,
+    listName,
+    productData,
+    handleAddClick,
+    theme,
+    language,
+    isNewList,
+    setProductData,
+    handleSave,
+    handleDelete,
+    cancellationPermissions,
+    user,
+    setIsSharedForm,
+    isLoading,
+  });
 
   return (
     <>
-      <BackButton theme={theme} />
-      <Text style={(fontsStyles.text, { color: colorDark.textColor })}>List ID: {listId}</Text>
-      <Text style={(fontsStyles.text, { color: colorDark.textColor })}>List Name: {listName}</Text>
-      <Button style={{ marginTop: 25 }} theme={theme} onPress={handleAddClick}>
-        <Text>Добавить</Text>
-      </Button>
-      {productData?.products && (
-        <ListContent
-          setProductData={setProductData}
-          productList={productData.products}
-          productData={productData}
-          language={language}
+      {isSharedForm ? (
+        <SharedForm
           theme={theme}
+          setIsSharedForm={setIsSharedForm}
+          productData={productData}
+          user={user}
+          navigation={navigation}
         />
+      ) : (
+        renderContent()
       )}
-      {id ? (
-        <>
-          <Button theme={theme} onPress={() => hendleSave(id)}>
-            <Text>Сохранить список</Text>
-          </Button>
-          {!isNewList && productData && productData?.id ? (
-            <Button
-              theme={theme}
-              style={{ marginTop: 15, marginBottom: 25 }}
-              onPress={() => {
-                productData.id ? hendleDell(productData.id, id) : null;
-              }}
-            >
-              <TrashSvgComponent width={25} height={25} color={colorDark.textColor} />
-            </Button>
-          ) : (
-            <View style={{ height: 25 }} />
-          )}
-        </>
-      ) : null}
     </>
   );
 };

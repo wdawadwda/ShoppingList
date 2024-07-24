@@ -65,6 +65,7 @@ export const ListProductItemCard = ({
   setProductData,
   productData,
   isPurchased,
+  isEditable,
 }: {
   product: ProductInList;
   theme: Theme;
@@ -73,6 +74,7 @@ export const ListProductItemCard = ({
   setProductData: Dispatch<ProductsListData>;
   productData: ProductsListData;
   isPurchased: boolean;
+  isEditable: boolean;
 }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const quantity = product.quantity || " ";
@@ -83,8 +85,8 @@ export const ListProductItemCard = ({
       <View style={[theme === "dark" ? darkStyles.secondContainer : lightStyles.secondContainer, styles.card]}>
         <View style={styles.iconContainer}>{renderProductIcon(product, language)}</View>
         {renderScrollableText(productName, "40%")}
-        {renderScrollableText(quantity, isPurchased ? "20%" : "40%")}
-        {isPurchased ? (
+        {renderScrollableText(quantity, isPurchased || !isEditable ? "20%" : "40%")}
+        {isPurchased && isEditable ? (
           <>
             {renderActionButton(() => setIsEdit(true), EditSvgComponent)}
             {renderActionButton(() => handleDelete(product, productList, productData, setProductData), XSvgComponent)}
