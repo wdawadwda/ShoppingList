@@ -14,7 +14,7 @@ urlpatterns = [
     # path('auth/', include('djoser.urls.authtoken')),
     # path('auth/', include('djoser.urls.jwt')),
     path('auth/users/me/', CustomUserView.as_view(), name='custom_user_me'),
-    # path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls')),
 
     # path('auth/', include('djoser.urls.jwt')),
     # path('auth/', include('rest_framework.urls')),
