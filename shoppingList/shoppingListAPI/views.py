@@ -498,11 +498,13 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         if 'is_shared' not in  request_data:
             return request_data, is_shared_is_not_specified
         if 'is_shared' in request_data and not request_data['is_shared']:
+            if 'shared' not in request_data:
+                request_data['shared'] = {}
             request_data['shared']['shared_id'] = None
             request_data['shared']['shared_name'] = None
             request_data['shared_type'] = None
             return request_data, {}
-        elif 'is_shared' in request_data and request_data['is_shared']:
+        if 'is_shared' in request_data and request_data['is_shared']:
             if not request_data.get('shared') or not request_data['shared']:
                 return request_data, shared_data_missing
             if request_data.get('shared') and not request_data['shared'].get('shared_id'):
