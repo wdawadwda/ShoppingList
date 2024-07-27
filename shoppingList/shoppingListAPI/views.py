@@ -192,7 +192,7 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
                 object = self.transform_data(from_db=object.data) if object.data else []
                 return Response(object)
             except Exception as ex:
-                return Response({'error': True, 'details': {'ru': str(ex), 'en': str(ex)}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({'error': True, 'detail': {'ru': str(ex), 'en': str(ex)}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             queryset = CustomProductModel.objects.filter(user=user)
             serializer = self.get_serializer(queryset, many=True)
@@ -214,7 +214,7 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             return Response(
                 {
                 'error': True,
-                'details': this_list_name_exists_already
+                'detail': this_list_name_exists_already
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
@@ -331,7 +331,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                 return Response({'error': False, 'owner': object_owner, 'shared': object_shared}) if object_shared or object_owner else Response(
                     {
                         'error': True,
-                        'details': the_user_does_not_have_a_record
+                        'detail': the_user_does_not_have_a_record
                     },
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
@@ -339,7 +339,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                 return Response(
                     {
                         'error': True,
-                        'details': {
+                        'detail': {
                             'ru': str(ex),
                             'en': str(ex)
                         }
@@ -458,7 +458,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         return Response(self.repack_ProductsListData(serializer.data))
 
     def delete(self, request, *args, **kwargs):
-        queryset = ProductsListDataModel.objects.get(id=kwargs['pk'], owner_id=request.query_params['user'])
+        queryset = ProductsListDataModel.objects.filter(id=kwargs['pk'], owner_id=request.query_params['user'])
         return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def repack_ProductsListData_many(self, objects_list):
@@ -533,7 +533,7 @@ def error_not_have_permissions():
     return Response(
         {
             'error': True,
-            'details': not_enough_rights
+            'detail': not_enough_rights
         },
         status=status.HTTP_500_INTERNAL_SERVER_ERROR
     )
@@ -542,7 +542,7 @@ def error_does_not_have_a_record():
     return Response(
         {
             'error': True,
-            'details': the_user_does_not_have_a_record
+            'detail': the_user_does_not_have_a_record
         },
         status=status.HTTP_500_INTERNAL_SERVER_ERROR
     )
@@ -551,7 +551,7 @@ def error_builder(ru_en_dict:dict, http_status=None):
     return Response(
         {
             'error': True,
-            'details': {
+            'detail': {
                 'ru': ru_en_dict['ru'],
                 'en': ru_en_dict['en']
             }

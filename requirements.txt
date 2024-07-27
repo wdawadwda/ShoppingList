@@ -2,6 +2,8 @@ asgiref==3.8.1
 certifi==2024.6.2
 cffi==1.16.0
 charset-normalizer==3.3.2
+click==8.1.7
+colorama==0.4.6
 cryptography==42.0.8
 defusedxml==0.8.0rc2
 Django==5.0.6
@@ -15,6 +17,8 @@ djangorestframework==3.15.1
 djangorestframework-simplejwt==5.3.1
 djoser==2.2.2
 idna==3.7
+libretranslatepy==2.1.1
+lxml==5.2.2
 Markdown==3.6
 MarkupSafe==2.1.5
 mysqlclient==2.2.4
@@ -33,6 +37,7 @@ requests-oauthlib==2.0.0
 social-auth-app-django==5.4.1
 social-auth-core==4.5.4
 sqlparse==0.5.0
+translate==3.6.1
 typing_extensions==4.12.1
 tzdata==2024.1
 urllib3==2.2.1
