@@ -30,6 +30,9 @@ def custom_exception_handler(exc, context):
 
 def translate_text(text, target_language='ru'):
     translator = Translator(to_lang=target_language)
-    return translator.translate(text)
+    if isinstance(text, str):
+        return translator.translate(text)
+    else:
+        return text
 
 
