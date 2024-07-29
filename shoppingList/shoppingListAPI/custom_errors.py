@@ -28,6 +28,11 @@ this_list_name_exists_already = {
     'ru': 'Список с таким именем уже существует'
 }
 
+this_custom_product_exists_already = {
+    'en': 'This product name exists already',
+    'ru': 'Продукт с таким именем уже существует'
+}
+
 not_enough_rights = {
     'ru': 'Недостаточно прав',
     'en': 'Not enough rights'

@@ -1,16 +1,12 @@
 import os
 import re
 from datetime import datetime, date, timedelta
-from django.db.models import Q
-
 import requests
 from django.forms import model_to_dict
-from django.shortcuts import get_object_or_404
 from djoser.conf import User
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from OCR.get_most_valid_text import text_recognize
 from shoppingList.settings import BASE_DIR
 from OCR.tess_OCR import text_from_tesseract_ocr
@@ -20,7 +16,6 @@ from .serializers import UserSettingsSerializer, BillSerializer, CustomUserSeria
     CustomProductSerializer, CustomUserCreateSerializer
 from django.contrib.auth.models import BaseUserManager
 from django.conf import settings
-from django.db.models import Q
 from .custom_errors import *
 
 class CustomUserView(APIView):
@@ -37,7 +32,7 @@ class UserManager(BaseUserManager):
         if not username:
             raise ValueError('Users must have a username')
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError('Userммs must have an email address')
         user = self.model(username=username, email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save()
@@ -214,7 +209,7 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             return Response(
                 {
                 'error': True,
-                'detail': this_list_name_exists_already
+                'detail': this_custom_product_exists_already
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

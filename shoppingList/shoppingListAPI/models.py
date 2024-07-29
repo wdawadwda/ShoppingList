@@ -8,14 +8,13 @@ class CustomUser(AbstractUser):
   username = models.CharField(
     ("username"),
     max_length=150,
-    unique=True,
     help_text=(
       "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
     ),
     validators=[username_validator],
-    error_messages={
-      "unique": ("A user with that username already exists."),
-    },
+    # error_messages={
+    #   "unique": ("A user with that username already exists."),
+    # },
   )
   email = models.EmailField(db_index=True, unique=True)
   user_theme = models.CharField(
@@ -24,8 +23,8 @@ class CustomUser(AbstractUser):
     default='auto'
   )
   ready_to_accept_lists = models.BooleanField(blank=False, null=False, default=True)
-  USERNAME_FIELD = 'username'
-  REQUIRED_FIELDS = ['email', 'is_staff']
+  USERNAME_FIELD = 'email'
+  REQUIRED_FIELDS = ['username']
   objects = UserManager()
 
   def __str__(self):
@@ -40,7 +39,6 @@ class BillModel(models.Model):
 
     def __str__(self):
       return str(self.user)
-
 
 class CustomProductModel(models.Model):
   name_en = models.CharField(max_length=150, blank=True, null=True)

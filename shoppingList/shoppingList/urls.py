@@ -7,10 +7,13 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView, To
 
 from shoppingListAPI.views import CustomUserView, TestUserCreateView
 # from views_common.create_user import UserCreateView
+from shoppingListAPI.views_common import register
 from shoppingListAPI.views_common.create_user import UserCreateView
-
+from shoppingListAPI.views_common.login import CustomTokenObtainPairView
+from shoppingListAPI.views_common.register import RegisterView
 
 urlpatterns = [
+    path('api/v1/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('admin/', admin.site.urls),
 
     # path('auth/', include('djoser.urls.authtoken')),

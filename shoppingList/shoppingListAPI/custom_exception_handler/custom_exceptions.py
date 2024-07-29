@@ -5,4 +5,5 @@ custom_exceptions = {
     'No active account found with the given credentials': 'Активная учетная запись с указанными учетными данными не найдена',
     'Token is invalid or expired': 'Токен пользователя истек или некорректен',
     'Given token not valid for any token type': 'Указанный токен недействителен для любого типа токенов',
+    'Incorrect login details.': 'Неверные данные для входа',
 }

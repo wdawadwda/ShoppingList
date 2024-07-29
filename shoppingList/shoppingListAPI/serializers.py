@@ -8,6 +8,7 @@ from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 from rest_framework.settings import api_settings
 from django.core import exceptions as django_exceptions
 from djoser.conf import settings
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import CustomUser
 
@@ -92,10 +93,39 @@ class CustomUserCreateSerializer(DjoserUserCreateSerializer):
     pass
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Пользователь с таким email уже существует.")
+            raise serializers.ValidationError("Женщина с таким email уже существует.")
         return value
 
     def validate_username(self, value):
         if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("Пользователь с таким именем уже существует.")
+            pass
+            # raise serializers.ValidationError("Пользователь с таким именем уже существует.")
         return value
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = 'email'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields[self.username_field] = serializers.CharField()
+        self.fields['username'] = serializers.CharField(required=False)
+
+    def validate(self, attrs):
+        # Получаем email, username и password из запроса
+        email = attrs.get("email")
+        username = attrs.get("username")
+        password = attrs.get("password")
+
+        if email and password:
+            # Получаем пользователя по email
+            user = get_user_model().objects.filter(email=email).first() if not username else get_user_model().objects.filter(email=email, username=username).first()
+            if user and user.check_password(password):
+                # Если пользователь существует и пароль верный, возвращаем токен
+                refresh = self.get_token(user)
+                data = {
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                }
+                return data
+
+        raise serializers.ValidationError("Incorrect login details.")
