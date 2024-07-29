@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from OCR.get_most_valid_text import text_recognize
 from shoppingList.settings import BASE_DIR
 from OCR.tess_OCR import text_from_tesseract_ocr
+from .custom_exception_handler.custom_exception_handler import translate_text
 from .forms import BillForm
 from .models import BillModel, ProductsListDataModel, CustomProductModel, CustomUser
 from .serializers import UserSettingsSerializer, BillSerializer, CustomUserSerializer, ProductsListDataSerializer, \
@@ -54,6 +55,17 @@ class UserSettingsView(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSettingsSerializer
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+        return Response(serializer.data)
+
+
 class BillView(generics.ListCreateAPIView):
     queryset = BillModel.objects.all()
     serializer_class = BillSerializer
@@ -71,7 +83,7 @@ class BillView(generics.ListCreateAPIView):
                 return Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods}, status=status.HTTP_201_CREATED) if correct_picture else Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             except Exception as ex:
                 return Response({'error': str(ex), 'message': "чек принят", "AI": False, "goods": text_OCR})
-        return Response({"error": form.errors, "message": "Не корректно заполнена форма"})
+        return Response({"error": form.errors, "detail": {"ru": "Не корректно заполнена форма", "en": "The form is filled out incorrectly"}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def save_file(self, request):
         file = request.FILES['bill']
@@ -336,7 +348,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                         'error': True,
                         'detail': {
                             'ru': str(ex),
-                            'en': str(ex)
+                            'en': translate_text(str(ex))
                         }
                     },
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -388,7 +400,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             repacked_object = self.repack_ProductsListData(serializer.data)
             return Response(repacked_object, status=status.HTTP_201_CREATED, headers=headers)
         else:
-            return error_builder(ru_en_dict={'ru': 'Список с этим именем уже существует', 'en': 'Products list data model with this name already exists'}, http_status=status.HTTP_409_CONFLICT)
+            return error_builder(ru_en_dict=list_with_this_name_already_exists, http_status=status.HTTP_409_CONFLICT)
 
     def patch(self, request, *args, **kwargs):
         user = int(request.query_params['user'])

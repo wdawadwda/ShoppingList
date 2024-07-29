@@ -52,3 +52,8 @@ user_cannot_pass_the_list_to_himself = {
     "ru": "Пользователь не может передать список себе",
     "en": "The user cannot pass the list to himself"
 }
+
+list_with_this_name_already_exists = {
+    "ru": "Список с этим именем уже существует",
+    "en": "A list with this name already exists."
+}
