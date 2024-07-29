@@ -4,6 +4,10 @@
     "settings": "Settings",
     "receipts": "Receipts"
   },
+  "languages": {
+    "en": "English",
+    "ru": "Russian"
+  },
   "buttonLabels": {
     "themeSettings": "Theme settings",
     "addCustomProduct": "Add custom product",
@@ -82,9 +86,75 @@
     "customProduct": {
       "isReq": "{{lang}} {{type}} is required",
       "exceedCharacters": "{{type}} must not exceed {{max}} characters"
+    },
+    "permission": {
+      "user": {
+        "userId": "User ID must be a number",
+        "required": "User ID is required",
+        "positive": "User ID must be positive",
+        "integer": "User ID must be an integer"
+      },
+      "permission": {
+        "permissionRequired":  "Permission is required",
+        "permissionInvalid": "Invalid permission value"
+      }
     }
   },
   "text": {
+    "lists": {
+      "id": "List ID",
+      "name": "List name",
+      "ownerPrefix": "from user",
+      "sharedPrefix": "to user",
+      "idPrefix": "with",
+      "yourLists": "Your Lists",
+      "sharedLists": "Shared Lists",
+      "newList": {
+        "createList": "Create List",
+        "addListName": "Add list name"
+      },
+      "listsLabels": {
+        "shoppingList": "Shopping List",
+        "emptyList": "The list is currently empty",
+        "noPurchasedItems": "No purchased items",
+        "purchasedItems": "Purchased Items"
+      },
+      "buttons": {
+        "shareRights": "Transfer Rights",
+        "revokeRights": "Revoke Rights",
+        "rejectRights": "Reject Rights",
+        "saveList": "Save List"
+      },
+      "messages": {
+        "listSharedForReading": "The list has been shared for reading",
+        "listSharedForWriting": "The list has been shared for writing",
+        "listReceivedForWriting": "The list has been received for writing",
+        "listReceivedForReading": "The list has been received for reading"
+      },
+      "permissions": {
+        "selectRights": "Select Rights",
+        "read": "Read",
+        "write": "Write"
+      },
+      "placeholders": {
+        "enterUserId": "Enter user ID to share with"
+      },
+      "tabs":{
+        "searh": "Search",
+        "customProduct": "Custom product"
+      }
+    },
+    "regAuth": {
+      "regSuccess": "Registration successful"
+    },
+    "search": {
+      "placeholders": {
+        "enterProductName": "Enter product name"
+      }
+    },
+    "receipts": {
+      "deleteReceipt": "Delete receipt"
+    },
     "reviseReceipt": {
       "productName": "Product name",
       "price": "Price",
@@ -98,7 +168,12 @@
     "customProduct": {
       "labels": {
         "name": "name",
-        "category": "category"
+        "namePlasholder": "Enter name in",
+        "category": "category",
+        "categoryPlasholder": "Enter category in",
+        "save": "Save product",
+        "saveAndAdd": "Save and add product",
+        "addImage": "Add image"
       }
     },
     "addCustomProduct": {
@@ -116,7 +191,17 @@
     "errorSavingTheme": "Error saving theme",
     "errorPhoto": "Error sending photo",
     "errorReceipt": "Error deleting receipt",
-    "defaultError": "Something went wrong"
+    "defaultError": "Something went wrong",
+    "defaultCanselPermission": "Try refreshing the lists, the permissions may no longer be available",
+    "enterQuantity": "Enter quantity",
+    "confirm": "Confirm",
+    "reset": "Reset",
+    "delete": "Delete",
+    "edit": "Edit",
+    "send": "Send",
+    "add": "Add",
+    "search": "Search",
+    "share": "Share"
   },
   "permission": {
     "receipt": "We need permission to use the camera. Please set it in your device settings"

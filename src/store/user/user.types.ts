@@ -1,4 +1,4 @@
-import { type JWTTokens, type User } from "@/constants";
+import { Language, type JWTTokens, type User } from "@/constants";
 
 export interface UserSlice {
   currentUser:
@@ -15,6 +15,6 @@ export interface UserSlice {
 }
 export interface ErrorObject {
   statusErr: string | number;
-  detail: string;
+  detail: string | { [key in Language]: string };
   message: string;
 }

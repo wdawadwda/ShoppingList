@@ -77,6 +77,7 @@ export const usePhotoHandler = (userId: string | null | undefined) => {
         }
       }
     } catch (error) {
+      console.log(error);
       setError(t("defaultMessage.defaultError"));
     } finally {
       setLoading(false);

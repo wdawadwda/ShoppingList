@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { Theme, useAppDispatch } from "@/store";
 import { Layout } from "@/components";
-import { colorDark, fontsStyles, globalStyles } from "@/styles";
+import { fontsStyles, globalStyles } from "@/styles";
 import { t } from "i18next";
 import { Button } from "@/components";
 import { useNavigation } from "@react-navigation/native";
@@ -20,10 +20,10 @@ export function User({ theme }: { theme: Theme }) {
         {user ? (
           <>
             <Text
-              style={[fontsStyles.subtitle, { color: colorDark.textColor }]}
+              style={[fontsStyles.subtitle, fontsStyles.defaultColor]}
             >{`${t("other.greetings")} ${user.username}`}</Text>
-            <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>email: {user.email}</Text>
-            <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>ID: {user.id}</Text>
+            <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>email: {user.email}</Text>
+            <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>ID: {user.id}</Text>
             <Button style={{ marginTop: 20 }} theme={theme} onPress={() => dispatch(userActions.logout())}>
               {t("buttonLabels.regAuth.logout")}
             </Button>

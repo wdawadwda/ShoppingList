@@ -1,7 +1,7 @@
 import { Language, type ProductInList, svgScheme } from "@/constants";
 import i18n from "@/i118/i18n";
 import { type Theme } from "@/store";
-import { colorDark, darkStyles, fontsStyles, lightStyles } from "@/styles";
+import { darkStyles, fontsStyles, lightStyles } from "@/styles";
 import { getFirstLetter } from "@/utils";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -12,19 +12,17 @@ export const CustomProduct = ({ product, theme }: { product: ProductInList; them
 
   return (
     <>
-      <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>{categoryName}</Text>
+      <Text style={[fontsStyles.subtitle, fontsStyles.defaultColor]}>{categoryName}</Text>
 
       <View style={[theme === "dark" ? darkStyles.secondContainer : lightStyles.secondContainer, styles.card]}>
         <View>
           {svgScheme[product.svgKey] || (
-            <Text style={{ fontSize: 20, fontWeight: "bold", color: colorDark.textColor }}>
-              {getFirstLetter(product.name, language)}
-            </Text>
+            <Text style={[fontsStyles.defaultColor, styles.boldText]}>{getFirstLetter(product.name, language)}</Text>
           )}
         </View>
 
         <View style={styles.textWrapper}>
-          <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>{productName}</Text>
+          <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>{productName}</Text>
         </View>
       </View>
     </>
@@ -48,6 +46,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  boldText: { fontSize: 20, fontWeight: "bold" },
 });
 
 export default CustomProduct;

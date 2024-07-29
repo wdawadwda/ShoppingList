@@ -57,6 +57,9 @@ export const fontsStyles = StyleSheet.create({
     fontFamily: "Lato-Medium",
     textTransform: "none",
   },
+  defaultColor: {
+    color: colorDark.textColor,
+  },
 });
 
 export const darkStyles = StyleSheet.create({

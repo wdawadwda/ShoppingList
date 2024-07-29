@@ -82,11 +82,11 @@ export function HistoryList({ historyData, theme }: { historyData: History[] | n
                 isLoading={isLoading}
                 disabled={isLoading}
                 buttonColorVar="backgroundAlert"
-                style={{ marginTop: 5 }}
+                style={styles.defaultMargin}
                 theme={theme}
                 onPress={() => handleDeleteItem(item.id)}
               >
-                Удалить чек
+                {t("text.receipts.deleteReceipt")}
               </Button>
               {error && error.id === item.id && !isLoading && (
                 <View style={styles.error}>
@@ -103,6 +103,9 @@ export function HistoryList({ historyData, theme }: { historyData: History[] | n
 }
 
 const styles = StyleSheet.create({
+  defaultMargin: {
+    marginBottom: 5,
+  },
   text: {
     color: colorDark.textColor,
     marginBottom: 5,

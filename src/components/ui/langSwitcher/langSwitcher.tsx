@@ -3,21 +3,23 @@ import { colorDark, colorLight, fontsStyles } from "@/styles";
 
 import { useState } from "react";
 import { Theme } from "@/store";
-import i18n from "@/i118/i18n";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store.types";
+import { langActions } from "@/store/lang/language.slice";
 
 export const LangSwitcher = ({ theme }: { theme: Theme }) => {
-  const [language, setLanguage] = useState(i18n.language);
+  const language = useSelector((state: RootState) => state.language.currentLanguage);
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
+
   const handlePress = () => {
     setIsOpen(!isOpen);
   };
   const handleChangeLanguage = () => {
     const newLanguage = language === "en" ? "ru" : "en";
-    i18n.changeLanguage(newLanguage);
-    setLanguage(newLanguage);
+    dispatch(langActions.setLanguage(newLanguage));
     setIsOpen(false);
   };
-
   return (
     <View>
       <TouchableOpacity onPress={handlePress} style={{ width: 50 }}>

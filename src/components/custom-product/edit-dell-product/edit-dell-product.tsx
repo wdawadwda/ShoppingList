@@ -79,7 +79,7 @@ export const EditDellProduct = ({
       ) : (
         <>
           <Button style={styles.buttonTop} theme={theme} onPress={() => setCurrentProduct(null)}>
-            <Text>Сбросить</Text>
+            <Text>{t("defaultMessage.reset")}</Text>
           </Button>
           <CustomProduct product={customProduct} theme={theme} />
           <View style={styles.buttonRow}>
@@ -90,7 +90,7 @@ export const EditDellProduct = ({
               disabled={isLoading}
               onPress={() => handleDelete(customProduct)}
             >
-              <Text>Удалить</Text>
+              <Text>{t("defaultMessage.delete")}</Text>
             </Button>
             <Button
               theme={theme}
@@ -99,7 +99,7 @@ export const EditDellProduct = ({
               onPress={() => setIsEddit(true)}
               style={styles.button}
             >
-              <Text>Редактировать</Text>
+              <Text>{t("defaultMessage.edit")}</Text>
             </Button>
           </View>
         </>

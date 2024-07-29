@@ -34,7 +34,6 @@ export const ThemeToggleButtons = ({ theme }: { theme: Theme }) => {
         });
       }
     } catch (error) {
-      console.error("Error saving theme", error);
       setMessage({ type: "error", text: t("defaultMessage.errorSavingTheme") });
     } finally {
       setLoading(false);

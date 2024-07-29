@@ -8,6 +8,7 @@ import { AddButton, Button } from "../ui";
 import { colorDark, fontsStyles } from "@/styles";
 import { useNavigation } from "@react-navigation/native";
 import { ArrowLeftComponent } from "@/assets";
+import { t } from "i18next";
 
 type SortedListsProps = {
   listData: ProductsListsDataApi | null;
@@ -48,7 +49,7 @@ export const SortedLists = ({ listData, theme }: SortedListsProps) => {
 
   return (
     <View>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+      <View style={styles.headerContainer}>
         <AddButton onPress={() => navigate.navigate("List")} theme={theme} />
         <TouchableOpacity onPress={toggleSortOrder}>
           {(sortedLists.owner.length > 0 || sortedLists.shared.length > 0) && (
@@ -59,14 +60,14 @@ export const SortedLists = ({ listData, theme }: SortedListsProps) => {
         </TouchableOpacity>
       </View>
 
-      <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>Ваши списки</Text>
+      <Text style={[fontsStyles.subtitle, fontsStyles.defaultColor]}>{t("lists.yourLists")}</Text>
       {sortedLists.owner.length > 0 ? (
         <View>
           {sortedLists.owner.map((listItem) => (
             <View key={`owner-${listItem.id}`}>
               <Button
                 theme={theme}
-                style={{ marginTop: 10 }}
+                style={styles.button}
                 onPress={() => navigate.navigate("List", { listId: String(listItem.id), listName: listItem.name })}
               >
                 {listItem.name}
@@ -78,12 +79,12 @@ export const SortedLists = ({ listData, theme }: SortedListsProps) => {
 
       {sortedLists.shared.length > 0 && (
         <View>
-          <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>Переданные списки</Text>
+          <Text style={[fontsStyles.subtitle, fontsStyles.defaultColor]}>{t("lists.sharedLists")}</Text>
           {sortedLists.shared.map((listItem) => (
             <View key={`shared-${listItem.id}`}>
               <Button
                 theme={theme}
-                style={{ marginTop: 10 }}
+                style={styles.button}
                 onPress={() => navigate.navigate("List", { listId: String(listItem.id), listName: listItem.name })}
               >
                 {listItem.name}
@@ -95,5 +96,16 @@ export const SortedLists = ({ listData, theme }: SortedListsProps) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  button: {
+    marginTop: 10,
+  },
+});
 
 export default SortedLists;

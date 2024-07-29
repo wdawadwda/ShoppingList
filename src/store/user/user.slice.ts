@@ -68,10 +68,12 @@ export const userSlice = createSlice({
       if (action.error.name === "AbortError") {
         return;
       }
+      const errorPayload = action.payload as ErrorObject | undefined;
       state.tokens = {
         status: "error",
-        error: action.error.message || "Something went wrong",
+        error: errorPayload?.message || action.error.message || "Something went wrong",
       };
+      state.error = errorPayload || null;
     });
   },
 });

@@ -18,14 +18,14 @@ export function TakePhoto({ userId, theme }: { userId: string | null | undefined
     return (
       <>
         <GoodsList userId={userId} theme={theme} goods={goods} />
-        {capturedPhoto && <Image source={{ uri: capturedPhoto }} style={{ flex: 1, height: 500, marginBottom: 10 }} />}
+        {capturedPhoto && <Image source={{ uri: capturedPhoto }} style={styles.capturedPhotoStyles} />}
       </>
     );
   }
 
   if (loading) {
     return (
-      <View style={[globalStyles.container, { marginTop: 10 }]}>
+      <View style={[globalStyles.container, styles.defaultMarginTop]}>
         <Loader theme={theme} size={50} />
       </View>
     );
@@ -76,6 +76,9 @@ const styles = StyleSheet.create({
   photoButton: {
     marginBottom: 10,
   },
+  defaultMarginTop: {
+    marginTop: 10,
+  },
   camera: {
     flex: 1,
     height: 500,
@@ -84,6 +87,7 @@ const styles = StyleSheet.create({
   image: {
     height: 500,
   },
+  capturedPhotoStyles: { flex: 1, height: 500, marginBottom: 10 },
 });
 
 export default TakePhoto;

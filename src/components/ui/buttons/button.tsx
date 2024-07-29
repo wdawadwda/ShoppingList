@@ -25,7 +25,7 @@ export const Button = ({ children, onPress, style, disabled, theme, buttonColorV
         disabled && styles.disabled,
       ]}
       onPress={onPress}
-      disabled={disabled}
+      disabled={disabled || isLoading}
     >
       {isLoading ? (
         <Loader inButton={true} theme={theme} size={18} />

@@ -1,9 +1,9 @@
-import { Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { Theme } from "@/store";
 import { Button, Layout } from "@/components";
 import { useNavigation } from "@react-navigation/native";
 import { t } from "i18next";
-import { colorDark, fontsStyles } from "@/styles";
+import { fontsStyles } from "@/styles";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/user";
 import { type MainNavigationProp } from "@/navigation";
@@ -14,24 +14,28 @@ export function Settings({ theme }: { theme: Theme }) {
 
   return (
     <Layout theme={theme}>
-      <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>{t("screensName.settings")}</Text>
+      <Text style={[fontsStyles.subtitle, fontsStyles.defaultColor]}>{t("screensName.settings")}</Text>
       {user ? (
         <>
-          <Text style={[fontsStyles.text, { color: colorDark.textColor, marginBottom: 10 }]}>
+          <Text style={[fontsStyles.text, fontsStyles.defaultColor, styles.marginForELements]}>
             {t("screensName.settingsAdditional.theme")}:
           </Text>
 
           <Button theme={theme} onPress={() => navigation.navigate("UserTheme")}>
             <Text>{t("buttonLabels.themeSettings")}</Text>
           </Button>
-          <Text style={[fontsStyles.text, { color: colorDark.textColor, marginBottom: 10, marginTop: 25 }]}>
+          <Text style={[fontsStyles.text, fontsStyles.defaultColor, styles.marginForELements, styles.marginForChapter]}>
             {t("screensName.settingsAdditional.customProduct")}:
           </Text>
 
-          <Button theme={theme} onPress={() => navigation.navigate("AddCustomProduct")}>
+          <Button
+            style={styles.marginForELements}
+            theme={theme}
+            onPress={() => navigation.navigate("AddCustomProduct")}
+          >
             <Text>{t("buttonLabels.addCustomProduct")}</Text>
           </Button>
-          <Button style={{ marginTop: 10 }} theme={theme} onPress={() => navigation.navigate("DellEditCustomProduct")}>
+          <Button theme={theme} onPress={() => navigation.navigate("DellEditCustomProduct")}>
             <Text>{t("buttonLabels.dellEdit")}</Text>
           </Button>
         </>
@@ -43,5 +47,11 @@ export function Settings({ theme }: { theme: Theme }) {
     </Layout>
   );
 }
+const styles = StyleSheet.create({
+  marginForELements: {
+    marginBottom: 10,
+  },
+  marginForChapter: { marginTop: 25 },
+});
 
 export default Settings;

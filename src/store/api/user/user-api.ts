@@ -4,7 +4,6 @@ import axios, { type AxiosError, type AxiosResponse } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BACKEND_URL, KEYS, type ErrorDetail, type JWTTokens, type User, type UserRequest } from "@/constants";
 import { createErrorObject } from "@/utils";
-import { userActions } from "@/store/user";
 import { UserTheme } from "@/store/theme";
 
 export const saveThemeToServer = async (userId: number, theme: UserTheme) => {
@@ -45,8 +44,7 @@ export const createTokens = createAsyncThunk<
     return response.data;
   } catch (error) {
     const errorObject = createErrorObject(error as AxiosError<ErrorDetail>);
-    thunkAPI.dispatch(userActions.setError(errorObject));
-    throw error;
+    return thunkAPI.rejectWithValue(errorObject);
   }
 });
 
@@ -87,7 +85,7 @@ export const fetchUser = createAsyncThunk(
           } catch (refreshError) {
             if (axios.isAxiosError(refreshError)) {
               // Если обновление токена не удалось
-              userActions.logout();
+              thunkAPI.dispatch({ type: "user/logout" });
               return thunkAPI.rejectWithValue(refreshError.response?.data);
             } else {
               // если ошибки не относятся к AxiosError

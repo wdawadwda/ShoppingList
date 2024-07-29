@@ -29,10 +29,6 @@ export const List = ({ theme }: { theme: Theme }) => {
   const handleAddClick = () => setShowInputAdd(true);
   const handleAddName = (data: ProductsListData) => setProductData({ ...data, name: listTitle });
 
-  // useEffect(() => {
-  //   console.log(productData);
-  // }, [productData]);
-
   if (showInputAdd) {
     return (
       <Layout theme={theme}>
