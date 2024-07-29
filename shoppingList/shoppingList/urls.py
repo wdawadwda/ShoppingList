@@ -2,29 +2,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView, TokenObtainPairView
-
-from shoppingListAPI.views import CustomUserView, TestUserCreateView
-# from views_common.create_user import UserCreateView
-from shoppingListAPI.views_common import register
-from shoppingListAPI.views_common.create_user import UserCreateView
+from shoppingListAPI.views import CustomUserView
 from shoppingListAPI.views_common.login import CustomTokenObtainPairView
-from shoppingListAPI.views_common.register import RegisterView
 
 urlpatterns = [
     path('api/v1/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('admin/', admin.site.urls),
-
-    # path('auth/', include('djoser.urls.authtoken')),
-    # path('auth/', include('djoser.urls.jwt')),
     path('auth/users/me/', CustomUserView.as_view(), name='custom_user_me'),
-    # path('auth/', include(router.urls)),
     path('auth/', include('djoser.urls')),
-
-    # path('auth/', include('djoser.urls.jwt')),
-    # path('auth/', include('rest_framework.urls')),
-
     path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/token/verify/', TokenVerifyView.as_view(), name='token_verify'),

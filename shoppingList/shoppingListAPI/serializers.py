@@ -111,21 +111,17 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         self.fields['username'] = serializers.CharField(required=False)
 
     def validate(self, attrs):
-        # Получаем email, username и password из запроса
         email = attrs.get("email")
         username = attrs.get("username")
         password = attrs.get("password")
 
         if email and password:
-            # Получаем пользователя по email
             user = get_user_model().objects.filter(email=email).first() if not username else get_user_model().objects.filter(email=email, username=username).first()
             if user and user.check_password(password):
-                # Если пользователь существует и пароль верный, возвращаем токен
                 refresh = self.get_token(user)
                 data = {
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
                 }
                 return data
-
         raise serializers.ValidationError("Incorrect login details.")
