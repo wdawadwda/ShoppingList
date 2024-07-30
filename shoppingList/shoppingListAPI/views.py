@@ -2,6 +2,7 @@ import os
 import re
 from datetime import datetime, date, timedelta
 import requests
+from django.db.models.functions import Lower
 from django.forms import model_to_dict
 from djoser.conf import User
 from rest_framework import status, generics
@@ -384,7 +385,9 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         return Response(self.repack_ProductsListData_many(serializer.data))
 
     def post(self, request, *args, **kwargs):
-        checking_queryset = ProductsListDataModel.objects.filter(name=request.data['name'], owner_id=request.data['owner_id'])
+        # checking_queryset = ProductsListDataModel.objects.filter(name=request.data['name'], owner_id=request.data['owner_id'])
+        name_lower = request.data['name'].lower()
+        checking_queryset = ProductsListDataModel.objects.annotate(name_lower=Lower('name')).filter(name_lower=name_lower, owner_id=request.data['owner_id'])
         if not list(checking_queryset.values()):
             try:
                 user = CustomUser.objects.get(id=request.data['owner_id'])
