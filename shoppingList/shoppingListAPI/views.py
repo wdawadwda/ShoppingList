@@ -210,7 +210,9 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        if not self.check_exists(name=data['name'], user=data['user']):
+        # checking_queryset = ProductsListDataModel.objects.annotate(name_lower=Lower('name')).filter(name_lower=name_lower, owner_id=data['user'])
+        # if not checking_queryset:
+        if not self.check_exists(name=data['name'], user=data['user'], lower=True):
             data_to_db = self.transform_data(to_db=data)
             serializer = self.get_serializer(data=data_to_db)
             serializer.is_valid(raise_exception=True)
@@ -276,12 +278,23 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
                     data_from_db[key] = item
             return data_from_db
     
-    def check_exists(self, name, user):
+    def check_exists(self, name, user, lower=False):
         exists = {}
+        # name_lower = name.lower()
+
         if name.get('ru'):
-            exists['ru'] = True if list(CustomProductModel.objects.filter(name_ru=name['ru'], user=user).values()) else False
+            if not lower:
+                exists['ru'] = CustomProductModel.objects.filter(name_ru=name['ru'], user=user).exists()
+            else:
+                # exists['ru'] = True if list(CustomProductModel.objects.filter(name_ru=name['ru'], user=user).values()) else False
+                exists['ru'] = CustomProductModel.objects.annotate(name_ru_lower=Lower('name_ru')).filter(name_ru_lower=name['ru'].lower(), user=user).exists()
+
         if name.get('en'):
-            exists['en'] = True if list(CustomProductModel.objects.filter(name_en=name['en'], user=user).values()) else False
+            if not lower:
+                exists['en'] = CustomProductModel.objects.filter(name_en=name['en'], user=user).exists()
+            else:
+                exists['en'] = CustomProductModel.objects.annotate(name_en_lower=Lower('name_en')).filter(name_en_lower=name['en'].lower(), user=user).exists()
+
         return True if exists['ru'] or exists['en'] else False
 
 class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView, generics.ListCreateAPIView):
