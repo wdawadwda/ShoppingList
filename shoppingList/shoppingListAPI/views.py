@@ -11,6 +11,8 @@ from rest_framework.views import APIView
 from OCR.get_most_valid_text import text_recognize
 from shoppingList.settings import BASE_DIR
 from OCR.tess_OCR import text_from_tesseract_ocr
+from django.db.models import Q
+
 from .custom_exception_handler.custom_exception_handler import translate_text
 from .forms import BillForm
 from .models import BillModel, ProductsListDataModel, CustomProductModel, CustomUser
@@ -65,7 +67,6 @@ class UserSettingsView(generics.UpdateAPIView):
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
         return Response(serializer.data)
-
 
 class BillView(generics.ListCreateAPIView):
     queryset = BillModel.objects.all()
@@ -210,9 +211,8 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        # checking_queryset = ProductsListDataModel.objects.annotate(name_lower=Lower('name')).filter(name_lower=name_lower, owner_id=data['user'])
-        # if not checking_queryset:
-        if not self.check_exists(name=data['name'], user=data['user'], lower=True):
+        exists, _ = self.check_exists(name=data['name'], user=data['user'], lower=True)
+        if not exists:
             data_to_db = self.transform_data(to_db=data)
             serializer = self.get_serializer(data=data_to_db)
             serializer.is_valid(raise_exception=True)
@@ -235,7 +235,21 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
 
     def put(self, request, *args, **kwargs):
         queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.query_params['user'])
-        return self.update(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
+        if queryset:
+            if self.exists_besides_current_one(request=request, **kwargs):
+                return error_builder(ru_en_dict=this_custom_product_exists_already)
+        else:
+            return error_does_not_have_a_record()
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.query_params['user'])
+        if queryset:
+            if self.exists_besides_current_one(request=request, **kwargs):
+                return error_builder(ru_en_dict=this_custom_product_exists_already)
+        else:
+            return error_does_not_have_a_record()
+        return self.partial_update(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def update(self, request, *args, **kwargs):
         request_data = self.transform_data(to_db=request.data)
@@ -248,11 +262,6 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             instance._prefetched_objects_cache = {}
         serializer_data = self.transform_data(from_db=serializer.data)
         return Response(serializer_data)
-
-    def patch(self, request, *args, **kwargs):
-        queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.query_params['user'])
-
-        return self.partial_update(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def transform_data(self, *args, **kwargs):
         if kwargs.get('to_db'):
@@ -280,13 +289,10 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
     
     def check_exists(self, name, user, lower=False):
         exists = {}
-        # name_lower = name.lower()
-
         if name.get('ru'):
             if not lower:
                 exists['ru'] = CustomProductModel.objects.filter(name_ru=name['ru'], user=user).exists()
             else:
-                # exists['ru'] = True if list(CustomProductModel.objects.filter(name_ru=name['ru'], user=user).values()) else False
                 exists['ru'] = CustomProductModel.objects.annotate(name_ru_lower=Lower('name_ru')).filter(name_ru_lower=name['ru'].lower(), user=user).exists()
 
         if name.get('en'):
@@ -295,7 +301,31 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             else:
                 exists['en'] = CustomProductModel.objects.annotate(name_en_lower=Lower('name_en')).filter(name_en_lower=name['en'].lower(), user=user).exists()
 
-        return True if exists['ru'] or exists['en'] else False
+        if exists['ru'] or exists['en'] :
+            return True, exists
+        else:
+            return False, exists
+
+    def exists_besides_current_one(self, request, **kwargs):
+        if request.data.get('name'):
+            name_ru_low = request.data['name']['ru'].lower() if request.data['name'].get('ru') else ""
+            name_en_low = request.data['name']['en'].lower() if request.data['name'].get('en') else ""
+
+            if name_ru_low or name_en_low:
+
+                exists_besides_current_one = CustomProductModel.objects.annotate(
+                    name_ru_lower=Lower('name_ru'),
+                    name_en_lower=Lower('name_en')
+                ).filter(
+                    Q(name_ru_lower=name_ru_low) | Q(name_en_lower=name_en_low),
+                    user=request.query_params['user']
+                ).exclude(
+                    id=kwargs['pk']
+                ).exists()
+
+                if exists_besides_current_one:
+                    return True
+        return False
 
 class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, generics.UpdateAPIView, generics.ListCreateAPIView):
     queryset = ProductsListDataModel.objects.all()
@@ -420,10 +450,12 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
 
     def patch(self, request, *args, **kwargs):
         user = int(request.query_params['user'])
-        if not check_user_id_exists(id=user)[0]:
-            return error_builder(ru_en_dict=user_does_not_exists)
-        if not shared_with_accepts(request.data):
-            return error_builder(ru_en_dict=the_user_has_limited)
+
+        # data validation
+        validation, error = self.update_validations(request, user, **kwargs)
+        if not validation:
+            return error
+
         request.data['updated_at'] = datetime.now()
         try:
             queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
@@ -433,16 +465,39 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
 
     def put(self, request, *args, **kwargs):
         user = int(request.query_params['user'])
-        if not check_user_id_exists(id=user)[0]:
-            return error_builder(ru_en_dict=user_does_not_exists)
-        if not shared_with_accepts(request.data):
-            return error_builder(ru_en_dict=the_user_has_limited)
+
+        # data validation
+        validation, error = self.update_validations(request, user, **kwargs)
+        if not validation:
+            return error
+
         request.data['updated_at'] = datetime.now()
         try:
             queryset = ProductsListDataModel.objects.get(id=kwargs['pk'])
         except:
             return error_does_not_have_a_record()
         return self.update_common(queryset, user, request, method='put', *args, **kwargs)
+
+    def update_validations(self, request, user, **kwargs):
+        # does user exist
+        user_exists, user_object = check_user_id_exists(id=user)
+        if not user_exists:
+            return False, error_builder(ru_en_dict=user_does_not_exists)
+
+        # are user ready to accept the list transfer
+        if not shared_with_accepts(request.data):
+            return False, error_builder(ru_en_dict=the_user_has_limited)
+
+        # does user have permissions to update
+        if not self.valid_permission(kwargs['pk'], user):
+            return False, error_builder(ru_en_dict=not_enough_rights)
+
+        # does list name exists exclude this pk
+        exists_besides_current, error = self.exists_besides_current_one(request=request, **kwargs)
+        if exists_besides_current:
+            return False, error
+
+        return True, None
 
     def update_common(self, queryset, user, request, method='put', *args, **kwargs):
         serializer = self.get_serializer(queryset)
@@ -541,6 +596,48 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                 else:
                     request_data['shared']['shared_name'] = user_object['username']
         return request_data, {}
+
+    def exists_besides_current_one(self, request, **kwargs):
+        try:
+            list_object = ProductsListDataModel.objects.get(id=kwargs['pk'])
+            list_object = model_to_dict(list_object)
+            owner_id = list_object['owner_id']
+        except Exception as ex:
+            print("views.ProductsListDataView.exists_besides_current_one", ex)
+            return False, error_builder(ru_en_dict={'en': str(ex), 'ru': translate_text(ex.args[0])})
+
+        if request.data.get('name'):
+            name_low = request.data['name'].lower()
+            if name_low:
+
+                exists_besides_current_one = ProductsListDataModel.objects.annotate(
+                    name_lower=Lower('name')
+                ).filter(
+                    name_lower=name_low,
+                    owner_id = int(owner_id)
+                ).exclude(
+                    id=kwargs['pk']
+                ).exists()
+
+                if exists_besides_current_one:
+                    return True, error_builder(ru_en_dict=list_with_this_name_already_exists)
+        return False, None
+
+    def valid_permission(self, pk, user):
+        try:
+            queryset = ProductsListDataModel.objects.get(id=pk)
+
+            custom_list = model_to_dict(queryset)
+            if custom_list.get('owner_id') and custom_list['owner_id'] and custom_list['owner_id'] == user:
+                return True
+            if custom_list.get('shared_id') and custom_list['shared_id'] == user:
+                if custom_list.get('is_shared') and custom_list['is_shared'] and custom_list.get('shared_type') and custom_list['shared_type'] == "write":
+                    return True
+        except Exception as ex:
+            print('view.ProductsListDataView.valid_permission', ex)
+            return False
+        return False
+
 
 def shared_with_accepts(request_data):
     if request_data.get('shared_id'):
