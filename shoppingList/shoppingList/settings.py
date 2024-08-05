@@ -154,12 +154,26 @@ DJOSER = {
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# # SQLite
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# MySQL
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shopping',
+        'USER': 'admin',
+        'PASSWORD': 'ShPn@gls44#t!',
+        'HOST': 'localhost',  # Обычно 'localhost' или IP-адрес сервера
+        'PORT': '3306',  # Обычно '3306'
     }
 }
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

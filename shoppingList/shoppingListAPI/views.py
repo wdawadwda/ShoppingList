@@ -240,6 +240,7 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
                 return error_builder(ru_en_dict=this_custom_product_exists_already)
         else:
             return error_does_not_have_a_record()
+        request.data['user'] = int(request.query_params['user'])
         return self.update(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
@@ -288,7 +289,10 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             return data_from_db
     
     def check_exists(self, name, user, lower=False):
-        exists = {}
+        exists = {
+            "ru": False,
+            "en": False
+        }
         if name.get('ru'):
             if not lower:
                 exists['ru'] = CustomProductModel.objects.filter(name_ru=name['ru'], user=user).exists()
@@ -323,7 +327,13 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
                     id=kwargs['pk']
                 ).exists()
 
-                if exists_besides_current_one:
+                exists_from_check_exists, _ = self.check_exists(
+                    name=request.data['name'],
+                    user=request.query_params['user'],
+                    lower=True
+                )
+
+                if exists_besides_current_one or exists_from_check_exists:
                     return True
         return False
 
@@ -489,8 +499,9 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             return False, error_builder(ru_en_dict=the_user_has_limited)
 
         # does user have permissions to update
-        if not self.valid_permission(kwargs['pk'], user):
-            return False, error_builder(ru_en_dict=not_enough_rights)
+        permission, error = self.valid_permission(kwargs['pk'], user, request)
+        if not permission:
+            return False, error
 
         # does list name exists exclude this pk
         exists_besides_current, error = self.exists_besides_current_one(request=request, **kwargs)
@@ -623,20 +634,22 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
                     return True, error_builder(ru_en_dict=list_with_this_name_already_exists)
         return False, None
 
-    def valid_permission(self, pk, user):
+    def valid_permission(self, pk, user, request):
         try:
             queryset = ProductsListDataModel.objects.get(id=pk)
 
             custom_list = model_to_dict(queryset)
             if custom_list.get('owner_id') and custom_list['owner_id'] and custom_list['owner_id'] == user:
-                return True
+                return True, None
             if custom_list.get('shared_id') and custom_list['shared_id'] == user:
                 if custom_list.get('is_shared') and custom_list['is_shared'] and custom_list.get('shared_type') and custom_list['shared_type'] == "write":
-                    return True
+                    return True, None
+                if 'is_shared' in request.data and request.data['is_shared'] == False and custom_list.get('shared_type') and custom_list['shared_type'] == 'read':
+                    return True, None
         except Exception as ex:
             print('view.ProductsListDataView.valid_permission', ex)
-            return False
-        return False
+            return False, error_builder(ru_en_dict=there_is_no_record_with_this_id)
+        return False, error_builder(ru_en_dict=not_enough_rights)
 
 
 def shared_with_accepts(request_data):

@@ -39,8 +39,8 @@ not_enough_rights = {
 }
 
 user_shared_id_does_not_exist = {
-    "ru": "Пользователь shared_id не существует",
-    "en": "User shared_id does not exist"
+    "ru": "Id пользователя не существует",
+    "en": "User id does not exist"
 }
 
 is_shared_is_not_specified = {
@@ -56,4 +56,8 @@ user_cannot_pass_the_list_to_himself = {
 list_with_this_name_already_exists = {
     "ru": "Список с этим именем уже существует",
     "en": "A list with this name already exists."
+}
+there_is_no_record_with_this_id = {
+    "en": "There is no record with this id",
+    "ru": "Записи с таким id не существует"
 }
