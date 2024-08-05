@@ -82,7 +82,10 @@ class BillView(generics.ListCreateAPIView):
 
             try:
                 goods, error, correct_picture = self.ask_AI(text_OCR)
-                return Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods}, status=status.HTTP_201_CREATED) if correct_picture else Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                if correct_picture:
+                    return Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods}, status=status.HTTP_201_CREATED)
+                else:
+                    return error_builder(ru_en_dict=incorrect_picture) #Response({"error": error, 'message': "чек принят", "AI": True, "goods": goods}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             except Exception as ex:
                 return Response({'error': str(ex), 'message': "чек принят", "AI": False, "goods": text_OCR})
         return Response({"error": form.errors, "detail": {"ru": "Не корректно заполнена форма", "en": "The form is filled out incorrectly"}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

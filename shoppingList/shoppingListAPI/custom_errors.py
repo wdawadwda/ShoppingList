@@ -61,3 +61,8 @@ there_is_no_record_with_this_id = {
     "en": "There is no record with this id",
     "ru": "Записи с таким id не существует"
 }
+
+incorrect_picture = {
+    "en": "Incorrect picture",
+    "ru": "Некорректная картинка"
+}
