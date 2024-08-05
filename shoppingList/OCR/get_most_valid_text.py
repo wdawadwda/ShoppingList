@@ -31,6 +31,12 @@ def choose_most_valid_text(amount:dict):
         max_el_index = ru_list.index(max_el)
         valid_amount_key = list(amount.keys())[max_el_index]
         return valid_amount_key
+    else:
+        max_el = max(en_list)
+        max_el_index = en_list.index(max_el)
+        valid_amount_key = list(amount.keys())[max_el_index]
+        return valid_amount_key
+
 
 def text_recognize(file_path):
     results = {}
