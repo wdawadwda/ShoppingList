@@ -18,7 +18,6 @@ import { MessForm } from "@/components/mess-form";
 import { Button } from "@/components/ui";
 import { customProductsActions, useAppDispatch } from "@/store";
 import { selectСustomProductError, selectСustomProductStatus } from "@/store";
-import { type ErrorMessageType } from "@/constants/api";
 
 const ErrorMessage = ({ error }: { error: string | undefined }) =>
   error ? (
@@ -107,8 +106,8 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
 
   const renderInputs = (lang: "en" | "ru") => (
     <>
-      <Text style={[fontsStyles.text2, { color: colorDark.textColor }]}>
-        <Text>Name ({lang})</Text>
+      <Text style={[fontsStyles.text2, fontsStyles.defaultColor]}>
+        <Text>{`${t("text.customProduct.labels.name")} (${lang})`}</Text>
       </Text>
       <Controller
         control={control}
@@ -119,14 +118,18 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            placeholder={`Enter product name in ${lang === "en" ? "English" : "Russian"}`}
+            placeholder={`${t("text.customProduct.labels.namePlasholder")} ${
+              lang === "en" ? `${t("languages.en", { end: "ом" })}` : `${t("languages.ru", { end: "ом" })}`
+            }`}
           />
         )}
         name={`name.${lang}`}
       />
       <ErrorMessage error={errors.name?.[lang]?.message} />
 
-      <Text style={[fontsStyles.text2, { color: colorDark.textColor }]}>Category ({lang})</Text>
+      <Text
+        style={[fontsStyles.text2, fontsStyles.defaultColor]}
+      >{`${t("text.customProduct.labels.category")} (${lang})`}</Text>
       <Controller
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
@@ -136,7 +139,9 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            placeholder={`Enter category in ${lang === "en" ? "English" : "Russian"}`}
+            placeholder={`${t("text.customProduct.labels.categoryPlasholder")} ${
+              lang === "en" ? `${t("languages.en", { end: "ом" })}` : `${t("languages.ru", { end: "ом" })}`
+            }`}
           />
         )}
         name={`category.${lang}`}
@@ -148,13 +153,13 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
   return (
     <>
       {customProductError && (
-        <View style={{ marginTop: 25 }}>
+        <View>
           <MessForm
             message={{
               detail:
-                (customProductError.errorLangData as ErrorMessageType)?.[primaryLang] ??
-                customProductError.errorLangData ??
-                "",
+                typeof customProductError.detail === "object"
+                  ? customProductError?.detail?.[primaryLang] || customProductError?.message
+                  : customProductError?.detail || customProductError?.message,
             }}
             status="error"
           />
@@ -164,19 +169,19 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
         <>
           <TextInput
             style={globalStyles.input}
-            placeholder="Введите количество"
+            placeholder={t("defaultMessage.enterQuantity")}
             value={quantity}
             maxLength={7}
             onChangeText={setQuantity}
           />
           {productData && (
             <Button theme={theme} onPress={() => handleAddProduct(productData)}>
-              Подтвердить
+              {t("defaultMessage.confirm")}
             </Button>
           )}
         </>
       ) : (
-        <View style={{ marginBottom: 50 }}>
+        <View style={styles.container}>
           {renderInputs(primaryLang)}
           {showAddImageText && <AddSvgKey onSelectSvgKey={handleSvgKeySelect} theme={theme} />}
 
@@ -194,7 +199,7 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
             disabled={!isValid || isLoading}
             theme={theme}
           >
-            {isScreen ? "Save product" : "Save and add product"}
+            {isScreen ? `${t("text.customProduct.labels.save")}` : `${t("text.customProduct.labels.saveAndAdd")}`}
           </Button>
           {!showAddImageText &&
             (currentSvgKey ? (
@@ -203,7 +208,7 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
               </Button>
             ) : (
               <Button style={styles.button} theme={theme} onPress={() => setShowAddImageText(true)}>
-                Добавить изображение
+                {t("text.customProduct.labels.addImage")}
               </Button>
             ))}
         </View>
@@ -215,6 +220,9 @@ export const AddCustomPr = ({ setshowInputAdd, setProductData, theme, productDat
 const styles = StyleSheet.create({
   button: {
     marginBottom: 10,
+  },
+  container: {
+    marginBottom: 50,
   },
 });
 

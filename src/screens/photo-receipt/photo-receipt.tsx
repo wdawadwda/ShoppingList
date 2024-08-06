@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { BackButton, Layout, SliderWithButtons, useTabs } from "@/components";
 import { Theme } from "@/store";
-import { colorDark, darkStyles, fontsStyles, globalStyles, lightStyles } from "@/styles";
-import { ScrollView, Text, View } from "react-native";
+import { darkStyles, fontsStyles, globalStyles, lightStyles } from "@/styles";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { useCameraPermissions } from "expo-camera";
 import { getResiptTabs } from "./photo-receipt.utils";
@@ -37,7 +37,7 @@ export function PhotoResipt({ theme }: { theme: Theme }) {
         <BackButton theme={theme} />
 
         <View style={globalStyles.container}>
-          <Text style={[fontsStyles.text, { color: colorDark.textColor, textAlign: "center", marginBottom: 10 }]}>
+          <Text style={[fontsStyles.text, fontsStyles.defaultColor, style.textAdditional]}>
             {t("permission.receipt")}
           </Text>
         </View>
@@ -66,5 +66,9 @@ export function PhotoResipt({ theme }: { theme: Theme }) {
     </Layout>
   );
 }
+
+const style = StyleSheet.create({
+  textAdditional: { textAlign: "center", marginBottom: 10 },
+});
 
 export default PhotoResipt;

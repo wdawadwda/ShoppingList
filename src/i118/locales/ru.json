@@ -4,6 +4,10 @@
     "settings": "Настройки",
     "receipts": "Чеки"
   },
+  "languages": {
+    "en": "Английск{{end}}",
+    "ru": "Русск{{end}}"
+  },
   "buttonLabels": {
     "themeSettings": "Настройки Темы",
     "addCustomProduct": "Добавить свой продукт",
@@ -82,10 +86,75 @@
     "customProduct": {
       "isReq": "{{lang}} {{type}} обязательно",
       "exceedCharacters": "{{type}} не должна превышать {{max}} символов"
-
+    },
+    "permission": {
+      "user": {
+        "userId": "ID пользователя должен быть числом",
+        "required": "ID пользователя обязателен",
+        "positive": "ID пользователя должен быть положительный",
+        "integer": "ID пользователя должен быть целым числом"
+      },
+      "permission": {
+        "permissionRequired":  "Значение разрешения обязательно",
+        "permissionInvalid": "Недопустимое значение разрешения"
+      }
     }
   },
   "text": {
+    "lists": {
+      "id": "ID списка",
+      "name": "Название списка",
+      "ownerPrefix": "от пользователя",
+      "sharedPrefix": "пользователю",
+      "idPrefix": "с",
+      "yourLists": "Ваши списки",
+      "sharedLists": "Переданные списки",
+      "newList": {
+        "createList": "Создание списка",
+        "addListName": "Добавить название списка"
+      },
+      "listsLabels": {
+        "shoppingList": "Список покупок",
+        "emptyList": "Список пока пуст",
+        "noPurchasedItems": "Нет купленных товаров",
+        "purchasedItems": "Купленные товары"
+      },
+      "buttons": {
+        "shareRights": "Передать права",
+        "revokeRights": "Отозвать права",
+        "rejectRights": "Отказаться от прав",
+        "saveList": "Сохранить список"
+      },
+      "messages": {
+        "listSharedForReading": "Список был передан для чтения",
+        "listSharedForWriting": "Список был передан для записи",
+        "listReceivedForWriting": "Список получен для записи",
+        "listReceivedForReading": "Список получен для чтения"
+      },
+      "permissions": {
+        "selectRights": "Выберите права",
+        "read": "Чтение",
+        "write": "Запись"
+      },
+      "placeholders": {
+        "enterUserId": "Введите ID пользователя для передачи"
+      },
+      "tabs":{
+        "searh": "Поиск",
+        "customProduct": "Свой продукт"
+      }
+    },
+    "regAuth": {
+      "regSuccess": "Регистрация успешна"
+    },
+    "search": {
+      "placeholders": {
+        "enterProductName": "Введите название продукта"
+      }
+    },
+    "receipts": {
+      "deleteReceipt": "Удалить чек"
+    },
     "reviseReceipt": {
       "productName": "Название товара",
       "price": "Цена",
@@ -99,7 +168,12 @@
     "customProduct": {
       "labels": {
         "name": "название",
-        "category": "категория"
+        "namePlasholder": "Введите название на",
+        "category": "категория",
+        "categoryPlasholder": "Введите категорию на",
+        "save": "Сохранить продукт",
+        "saveAndAdd": "Сохранить и добавить продукт",
+        "addImage": "Добавить изображение"
       }
     },
     "addCustomProduct": {
@@ -117,7 +191,17 @@
     "errorSavingTheme": "Ошибка при сохранении темы",
     "errorPhoto": "Ошибка отправки фото",
     "errorReceipt": "Ошибка удаления чека",
-    "defaultError": "Что-то пошло не так"
+    "defaultError": "Что-то пошло не так",
+    "defaultCanselPermission": "Попробуйте обновить списки, возможно права уже отсутствуют",
+    "enterQuantity": "Введите количество",
+    "confirm": "Подтвердить",
+    "reset": "Сбросить",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "send": "Отправить",
+    "add": "Добавить",
+    "search": "Поиск",
+    "share": "Поделиться"
   },
   "permission": {
     "receipt": "Нам требуется разрешение для использования камеры, установите в настройках вашей устройство"

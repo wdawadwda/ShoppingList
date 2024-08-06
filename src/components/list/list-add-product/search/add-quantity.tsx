@@ -2,6 +2,7 @@ import { Button } from "@/components/ui";
 import { ProductInList, type ProductsListData } from "@/constants";
 import { Theme } from "@/store";
 import { globalStyles } from "@/styles";
+import { t } from "i18next";
 import { Dispatch, useState } from "react";
 import { Text, TextInput } from "react-native";
 export interface AddQuantityProps {
@@ -44,13 +45,13 @@ export const AddQuantity = ({
     <>
       <TextInput
         style={globalStyles.input}
-        placeholder="Введите количество"
+        placeholder={t("defaultMessage.enterQuantity")}
         value={quantity}
         maxLength={7}
         onChangeText={setQuantity}
       />
       <Button theme={theme} onPress={() => handleAddProduct(productData)}>
-        <Text>Подтвердить</Text>
+        <Text> {t("defaultMessage.confirm")}</Text>
       </Button>
     </>
   );

@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Layout } from "@/components";
 import { Theme } from "@/store";
-import { colorDark, fontsStyles, globalStyles } from "@/styles";
-import { Text, View } from "react-native";
+import { fontsStyles, globalStyles } from "@/styles";
+import { StyleSheet, Text, View } from "react-native";
 import { t } from "i18next";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
@@ -16,10 +16,10 @@ export function Resipt({ theme }: { theme: Theme }) {
   return (
     <Layout theme={theme}>
       <View style={globalStyles.container}>
-        <Text style={[fontsStyles.subtitle, { color: colorDark.textColor }]}>{t("tabsLabels.receipts")}</Text>
+        <Text style={[fontsStyles.subtitle, fontsStyles.defaultColor]}>{t("tabsLabels.receipts")}</Text>
         {user ? (
           <>
-            <Button theme={theme} style={{ marginBottom: 10 }} onPress={() => navigation.navigate("PhotoResipt")}>
+            <Button theme={theme} style={style.btnAdditional} onPress={() => navigation.navigate("PhotoResipt")}>
               {t("buttonLabels.reviseReceipt.add")}
             </Button>
             <Button theme={theme} onPress={() => navigation.navigate("HistoryResipt")}>
@@ -36,5 +36,9 @@ export function Resipt({ theme }: { theme: Theme }) {
     </Layout>
   );
 }
+
+const style = StyleSheet.create({
+  btnAdditional: { marginBottom: 10 },
+});
 
 export default Resipt;

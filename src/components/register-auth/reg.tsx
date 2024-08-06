@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { t } from "i18next";
 import * as yup from "yup";
 import { type Control, useForm } from "react-hook-form";
@@ -12,10 +12,12 @@ import { Button, InputForm } from "../ui";
 import { colorDark, darkStyles, fontsStyles, globalStyles } from "@/styles";
 import { type Theme } from "@/store";
 import { MessForm } from "../mess-form";
+import i18n from "@/i118/i18n";
+import { UserError } from "@/constants/api/api.type";
 
 export function Reg({ theme }: { theme: Theme }) {
   const { formFields } = useConst({ reg: true });
-  const { control, handleSubmit, formState } = useForm({
+  const { control, handleSubmit, formState, reset } = useForm({
     mode: "onChange",
     defaultValues: {
       username: "",
@@ -58,10 +60,15 @@ export function Reg({ theme }: { theme: Theme }) {
       await registerUser({ username, email, password });
       setRegistrationStatus("success");
       setRegistrationError(null);
+      reset();
     } catch (error) {
-      const axiosError = error as AxiosError<UserRequest>;
+      const axiosError = error as AxiosError<UserError>;
       setRegistrationStatus("error");
-      const errorMessage = axiosError.response?.data || { email: "", password: "", username: "" };
+      const errorMessage = axiosError?.response?.data?.detail?.[i18n.language] || {
+        email: "",
+        password: "",
+        username: "",
+      };
       const defaultMessage = axiosError.message;
       setRegistrationError({
         email: errorMessage.email || "",
@@ -73,17 +80,17 @@ export function Reg({ theme }: { theme: Theme }) {
   };
 
   return (
-    <View style={{ marginBottom: 50, marginTop: 25 }}>
+    <View style={styles.container}>
       {registrationStatus === "success" && (
         <View style={[darkStyles.containerSuccess, globalStyles.containerSuccess]}>
-          <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>Регистрация успешна!</Text>
+          <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>{t("text.regAuth.regSuccess")}</Text>
         </View>
       )}
       {registrationStatus === "error" && <MessForm message={registrationError || {}} status={registrationStatus} />}
       <InputForm formFields={formFields} formState={formState} theme={theme} control={control as unknown as Control} />
       <Button
         theme={theme}
-        style={{ marginTop: 10 }}
+        style={styles.button}
         disabled={!formState.isValid || registrationStatus === "loading"}
         isLoading={registrationStatus === "loading"}
         onPress={handleSubmit(onSubmit)}
@@ -93,5 +100,15 @@ export function Reg({ theme }: { theme: Theme }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 50,
+    marginTop: 25,
+  },
+  button: {
+    marginTop: 10,
+  },
+});
 
 export default Reg;

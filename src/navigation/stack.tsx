@@ -97,33 +97,6 @@ export const ResiptNavigator = ({ theme }: { theme: Theme }) => (
       >
         {() => <HistoryResipt theme={theme} />}
       </Stack.Screen>
-
-      <Stack.Screen
-        name="User"
-        options={{
-          headerShown: false,
-        }}
-      >
-        {() => <User theme={theme} />}
-      </Stack.Screen>
-
-      <Stack.Screen
-        name="RegAuth"
-        options={{
-          headerShown: false,
-        }}
-      >
-        {() => <RegAuth theme={theme} />}
-      </Stack.Screen>
-
-      <Stack.Screen
-        name="Home"
-        options={{
-          headerShown: false,
-        }}
-      >
-        {() => <Home theme={theme} />}
-      </Stack.Screen>
     </Stack.Navigator>
   </>
 );
@@ -154,15 +127,6 @@ export const StackSettingsNavigator = ({ theme }: { theme: Theme }) => (
       </Stack.Screen>
 
       <Stack.Screen
-        name="RegAuth"
-        options={{
-          headerShown: false,
-        }}
-      >
-        {() => <RegAuth theme={theme} />}
-      </Stack.Screen>
-
-      <Stack.Screen
         name="UserTheme"
         options={{
           headerShown: false,
@@ -187,15 +151,6 @@ export const StackSettingsNavigator = ({ theme }: { theme: Theme }) => (
         }}
       >
         {() => <DellEditCustomProduct theme={theme} />}
-      </Stack.Screen>
-
-      <Stack.Screen
-        name="Home"
-        options={{
-          headerShown: false,
-        }}
-      >
-        {() => <Home theme={theme} />}
       </Stack.Screen>
     </Stack.Navigator>
   </>

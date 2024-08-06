@@ -71,14 +71,14 @@ export const GoodsList = ({
 
   if (loading) {
     return (
-      <View style={[globalStyles.container, { marginTop: 10 }]}>
+      <View style={[globalStyles.container, styles.defaultMarginTop]}>
         <Loader theme={theme} size={50} />
       </View>
     );
   }
 
   return (
-    <View style={[globalStyles.container, { marginBottom: 10 }]}>
+    <View style={[globalStyles.container, styles.defaultMarginBottom]}>
       {error && (
         <View style={styles.errorContainer}>
           <MessForm message={{ defaultAxios: error }} status={"error"} />
@@ -136,19 +136,19 @@ export const GoodsList = ({
             </>
           ) : (
             <>
-              <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>
+              <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>
                 {t("text.reviseReceipt.productName")}: {item.product_name}
               </Text>
-              <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>
+              <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>
                 {t("text.reviseReceipt.unitOfMeasurement")}: {item.unit}
               </Text>
-              <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>
+              <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>
                 {t("text.reviseReceipt.price")}: {item.price}
               </Text>
-              <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>
+              <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>
                 {t("text.reviseReceipt.amount")}: {item.amount}
               </Text>
-              <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>
+              <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>
                 {t("text.reviseReceipt.cost")}: {item.cost}
               </Text>
               <Button style={styles.button} theme={theme} onPress={() => setEditMode(index)}>
@@ -171,6 +171,12 @@ export const GoodsList = ({
 };
 
 const styles = StyleSheet.create({
+  defaultMarginBottom: {
+    marginBottom: 10,
+  },
+  defaultMarginTop: {
+    marginTop: 10,
+  },
   item: {
     padding: 10,
     borderBottomWidth: 1,

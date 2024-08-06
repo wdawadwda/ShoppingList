@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { type ProductsListData, type ExistingListProps, ErrorObject } from "@/constants";
+import { type ProductsListData, type ExistingListProps, type ErrorObject, Language } from "@/constants";
 import {
   canselPermission,
   createProductsLists,
@@ -15,6 +15,13 @@ import { useAppDispatch } from "@/store";
 import { useState, type Dispatch } from "react";
 import useExistingList from "./use/use-existing-list";
 import SharedForm from "./shared-form";
+import i18n from "@/i118/i18n";
+import { t } from "i18next";
+
+export interface ErrorState {
+  detail: string | null;
+  status: "idle" | "error";
+}
 
 export const ExistingList = ({
   listId,
@@ -32,37 +39,48 @@ export const ExistingList = ({
 
   const [isSharedForm, setIsSharedForm] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorState, setErrorState] = useState<ErrorState>({ detail: null, status: "idle" });
 
   const handleSave = async (userId: string | number) => {
     const data = { ...productData, owner_id: userId };
+    setErrorState({ detail: null, status: "idle" });
+    setIsLoading(true);
     if (isNewList) {
-      setIsLoading(true);
       try {
         await createProductsLists(data);
         dispatch(fetchProductsLists(userId));
         navigation.navigate("Home");
       } catch (error) {
-        if (
-          typeof error === "object" &&
-          error !== null &&
-          "statusErr" in error &&
-          (error as ErrorObject).statusErr === 409
-        ) {
+        const err = error as ErrorObject;
+        if (err.statusErr === 409) {
           setProductData({ ...productData, name: "" });
-          Alert.alert("Такой список уже существует");
+          let errorMessage: string;
+          if (typeof err.detail === "object" && (i18n?.language as keyof typeof err.detail)) {
+            errorMessage = err.detail[i18n.language as Language] || err.message;
+          } else {
+            errorMessage = typeof err.detail === "string" ? err.detail : err.message;
+          }
+          Alert.alert(errorMessage);
+        } else {
+          setErrorState({
+            detail: t("defaultMessage.defaultError"),
+            status: "error",
+          });
         }
       } finally {
         setIsLoading(false);
       }
     } else {
       if (data.id) {
-        setIsLoading(true);
         try {
           await updateProductsList(data.id, data.owner_id, data);
           dispatch(fetchProductsLists(userId));
           navigation.navigate("Home");
         } catch (error) {
-          console.error("Ошибка при создании нового списка:", error);
+          setErrorState({
+            detail: t("defaultMessage.defaultError"),
+            status: "error",
+          });
         } finally {
           setIsLoading(false);
         }
@@ -84,12 +102,16 @@ export const ExistingList = ({
           text: "OK",
           onPress: async () => {
             setIsLoading(true);
+            setErrorState({ detail: null, status: "idle" });
             try {
               await deleteProductListData(objId, userId);
               dispatch(fetchProductsLists(userId));
               navigation.navigate("Home");
             } catch (error) {
-              console.error("Ошибка при удалении списка:", error);
+              setErrorState({
+                detail: t("defaultMessage.defaultError"),
+                status: "error",
+              });
             } finally {
               setIsLoading(false);
             }
@@ -103,11 +125,31 @@ export const ExistingList = ({
   const cancellationPermissions = async () => {
     if (productData?.id && user?.id) {
       setIsLoading(true);
+      setErrorState({ detail: null, status: "idle" });
       try {
         await canselPermission(productData.id, user.id);
         navigation.navigate("Home");
       } catch (error) {
-        console.error("Error updating share rights:", error);
+        const err = error as ErrorObject;
+        if (err && typeof err.detail === "object" && "ru" in err.detail && "en" in err.detail) {
+          const detail = err.detail as { [key: string]: string };
+          if (detail[i18n.language]) {
+            setErrorState({
+              detail: `${detail[i18n.language]}. ${t("defaultMessage.defaultCanselPermission")}`,
+              status: "error",
+            });
+          } else {
+            setErrorState({
+              detail: t("defaultMessage.defaultError"),
+              status: "error",
+            });
+          }
+        } else {
+          setErrorState({
+            detail: t("defaultMessage.defaultError"),
+            status: "error",
+          });
+        }
       } finally {
         dispatch(fetchProductsLists(user.id));
         setIsLoading(false);
@@ -130,6 +172,7 @@ export const ExistingList = ({
     user,
     setIsSharedForm,
     isLoading,
+    errorState,
   });
 
   return (
@@ -143,7 +186,7 @@ export const ExistingList = ({
           navigation={navigation}
         />
       ) : (
-        renderContent()
+        <>{renderContent()}</>
       )}
     </>
   );

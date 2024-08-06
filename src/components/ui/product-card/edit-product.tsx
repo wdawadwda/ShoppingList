@@ -1,7 +1,8 @@
 import { type ProductInList } from "@/constants";
 
 import { type Theme } from "@/store";
-import { colorDark, fontsStyles, globalStyles } from "@/styles";
+import { fontsStyles, globalStyles } from "@/styles";
+import { t } from "i18next";
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity } from "react-native";
 
@@ -22,13 +23,13 @@ export const EditProduct = ({
     <>
       <TextInput
         style={globalStyles.input}
-        placeholder="Введите количество"
+        placeholder={t("defaultMessage.enterQuantity")}
         value={quantity}
         onChangeText={setQuantity}
         maxLength={7}
       />
       <TouchableOpacity onPress={handleEdit}>
-        <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>Подтвердить</Text>
+        <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>{t("defaultMessage.confirm")}</Text>
       </TouchableOpacity>
     </>
   );

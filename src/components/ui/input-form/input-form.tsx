@@ -22,16 +22,16 @@ export const InputForm = <T extends FieldValues>({
         {formFields.map((field: FormField) => (
           <View key={field.name}>
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-              <Text style={[fontsStyles.text2, { color: colorDark.textColor }]}>{`${field.label}:`}</Text>
+              <Text style={[fontsStyles.text2, fontsStyles.defaultColor]}>{`${field.label}:`}</Text>
               {field.detail && <DetailButton theme={theme} onPress={() => setIsTextVisible(!isTextVisible)} />}
             </View>
             {field.detail && isTextVisible && (
               <>
                 {field.detailText1 && (
-                  <Text style={[fontsStyles.text2, { color: colorDark.textColor }]}>{`${field.detailText1}`}</Text>
+                  <Text style={[fontsStyles.text2, fontsStyles.defaultColor]}>{`${field.detailText1}`}</Text>
                 )}
                 {field.detailText2 && (
-                  <Text style={[fontsStyles.text2, { color: colorDark.textColor }]}>{`${field.detailText2}`}</Text>
+                  <Text style={[fontsStyles.text2, fontsStyles.defaultColor]}>{`${field.detailText2}`}</Text>
                 )}
               </>
             )}
@@ -66,7 +66,7 @@ export const InputForm = <T extends FieldValues>({
       <>
         {formFields.map((field: FormField) => (
           <View key={field.name}>
-            <Text style={[fontsStyles.text2, { color: colorDark.textColor }]}>{`${field.label}:`}</Text>
+            <Text style={[fontsStyles.text2, fontsStyles.defaultColor]}>{`${field.label}:`}</Text>
             <Controller
               control={control}
               render={({ field: { onChange, value } }) => (

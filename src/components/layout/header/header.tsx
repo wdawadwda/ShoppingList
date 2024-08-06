@@ -7,14 +7,13 @@ import { useNavigation } from "@react-navigation/native";
 import { selectUser } from "@/store/user";
 import { useSelector } from "react-redux";
 import { SyncSvgComponent, UserSvgComponent } from "@/assets";
-import { type MainNavigationProp } from "@/navigation";
 import { useAppDispatch } from "@/store";
 import { fetchCustompProducts, fetchProductsLists } from "@/store/api";
 import { useRef } from "react";
 
 export const Header = ({ theme }: HeaderProps) => {
   const user = useSelector(selectUser);
-  const navigation = useNavigation<MainNavigationProp>();
+  const navigation = useNavigation<any>();
   const dispatch = useAppDispatch();
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
@@ -41,7 +40,10 @@ export const Header = ({ theme }: HeaderProps) => {
 
   return (
     <View style={[theme === "dark" ? darkStyles.headerContainer : lightStyles.headerContainer, stylesHeader.container]}>
-      <TouchableOpacity style={stylesHeader.logoWrapper} onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity
+        style={stylesHeader.logoWrapper}
+        onPress={() => navigation.navigate("HomeTab", { screen: "Home" })}
+      >
         <Image style={stylesHeader.logo} source={require("../../../assets/logo/logo.png")} />
       </TouchableOpacity>
       <View style={stylesHeader.switchersWrapper}>
@@ -52,7 +54,7 @@ export const Header = ({ theme }: HeaderProps) => {
             </Animated.View>
           </TouchableOpacity>
         )}
-        <TouchableOpacity style={stylesHeader.user} onPress={() => navigation.navigate("User")}>
+        <TouchableOpacity style={stylesHeader.user} onPress={() => navigation.navigate("HomeTab", { screen: "User" })}>
           <UserSvgComponent color={user ? "#98CA06" : colorDark.textColor} width={20} height={20} />
         </TouchableOpacity>
         <LangSwitcher theme={theme} />

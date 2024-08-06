@@ -15,7 +15,7 @@ export const renderTabContent = ({
   productData,
 }: ExtendedRenderTabContentProps): Content => {
   switch (activeTab) {
-    case "Поиск":
+    case `${t("text.lists.tabs.searh")}`:
       return {
         type: "content",
         component: (
@@ -32,7 +32,7 @@ export const renderTabContent = ({
           />
         ),
       };
-    case "Cвой продукт":
+    case `${t("text.lists.tabs.customProduct")}`:
       return {
         type: "content",
         component: (

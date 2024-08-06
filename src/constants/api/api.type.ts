@@ -1,4 +1,5 @@
 import { UserTheme } from "@/store";
+import { Language } from "../products-lists";
 
 export interface User {
   username: string;
@@ -9,21 +10,14 @@ export interface User {
 }
 
 export type ErrorDetail = {
-  detail: string;
-  details?: { ru: string; en: string };
+  detail: string | { ru: string; en: string };
 };
 
 export interface ErrorObject {
   statusErr: string | number;
-  detail: string;
+  detail: string | { [key in Language]: string };
   message: string;
-  errorLangData: ErrorMessageType | string;
 }
-
-export type ErrorMessageType = {
-  en: string;
-  ru: string;
-};
 
 export interface JWTTokens {
   access: string;
@@ -38,6 +32,16 @@ export type UserRequest = {
   email: string;
   username: string;
   password: string;
+};
+
+export type UserError = {
+  detail: {
+    [key: string]: {
+      email: string;
+      username: string;
+      password: string;
+    };
+  };
 };
 
 export type MessageType = {

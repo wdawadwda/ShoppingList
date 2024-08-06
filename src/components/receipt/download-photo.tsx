@@ -15,21 +15,21 @@ export function DownloadPhoto({ userId, theme }: { userId: string | null | undef
     return (
       <>
         <GoodsList userId={userId} theme={theme} goods={goods} />
-        {capturedPhoto && <Image source={{ uri: capturedPhoto }} style={{ flex: 1, height: 500, marginBottom: 10 }} />}
+        {capturedPhoto && <Image source={{ uri: capturedPhoto }} style={styles.capturedPhotoStyles} />}
       </>
     );
   }
 
   if (loading) {
     return (
-      <View style={[globalStyles.container, { marginTop: 10 }]}>
+      <View style={[globalStyles.container, styles.defaultMarginTop]}>
         <Loader theme={theme} size={50} />
       </View>
     );
   }
 
   return (
-    <View style={[globalStyles.container, { marginTop: 10 }]}>
+    <View style={[globalStyles.container, styles.defaultMarginTop]}>
       {error && <MessForm message={{ defaultAxios: error }} status={"error"} />}
       {capturedPhoto ? (
         <>
@@ -53,7 +53,7 @@ export function DownloadPhoto({ userId, theme }: { userId: string | null | undef
         </>
       ) : (
         <>
-          <Button theme={theme} style={{ marginBottom: 10 }} onPress={pickImage}>
+          <Button theme={theme} style={styles.defaultMarginBottom} onPress={pickImage}>
             <AddGallerySvgComponent color={colorDark.textColor} width={35} height={35} />
           </Button>
         </>
@@ -75,7 +75,10 @@ const styles = StyleSheet.create({
   button: {
     width: "49%",
   },
-  photoButton: {
+  defaultMarginBottom: {
+    marginBottom: 10,
+  },
+  defaultMarginTop: {
     marginBottom: 10,
   },
   camera: {
@@ -86,6 +89,7 @@ const styles = StyleSheet.create({
   image: {
     height: 500,
   },
+  capturedPhotoStyles: { flex: 1, height: 500, marginBottom: 10 },
 });
 
 export default DownloadPhoto;

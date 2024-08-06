@@ -6,9 +6,12 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { colorDark, darkStyles, fontsStyles, globalStyles } from "@/styles";
-import { type User, type ProductsListData } from "@/constants";
+import { type User, type ProductsListData, ErrorObject } from "@/constants";
 import { fetchProductsLists, sharedPermission } from "@/store/api";
 import { type MainNavigationProp } from "@/navigation";
+import { t } from "i18next";
+import { MessForm } from "@/components/mess-form";
+import i18n from "@/i118/i18n";
 
 type FormValues = {
   userId: number;
@@ -30,6 +33,7 @@ export const SharedForm = ({
 }) => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     control,
@@ -46,11 +50,14 @@ export const SharedForm = ({
       yup.object().shape({
         userId: yup
           .number()
-          .typeError("User ID must be a number")
-          .required("User ID is required")
-          .positive("User ID must be positive")
-          .integer("User ID must be an integer"),
-        permission: yup.string().oneOf(["read", "write"], "Invalid permission").required("Permission is required"),
+          .typeError(t("validation.permission.user.userId"))
+          .required(t("validation.permission.user.required"))
+          .positive(t("validation.permission.user.positive"))
+          .integer(t("validation.permission.user.integer")),
+        permission: yup
+          .string()
+          .oneOf(["read", "write"], t("validation.permission.permission.permissionRequired"))
+          .required(t("validation.permission.permission.permissionInvalid")),
       }),
     ),
   });
@@ -62,7 +69,17 @@ export const SharedForm = ({
         await sharedPermission(productData.id, user.id, data);
         navigation.navigate("Home");
       } catch (error) {
-        console.error("Error updating share rights:", error);
+        const err = error as ErrorObject;
+        if (err && typeof err.detail === "object" && "ru" in err.detail && "en" in err.detail) {
+          const detail = err.detail as { [key: string]: string };
+          if (detail[i18n.language]) {
+            setError(detail[i18n.language]);
+          } else {
+            setError(t("defaultMessage.defaultError"));
+          }
+        } else {
+          setError(t("defaultMessage.defaultError"));
+        }
       } finally {
         reset();
         dispatch(fetchProductsLists(user.id));
@@ -81,7 +98,18 @@ export const SharedForm = ({
             setIsSharedForm(false);
           }}
         />
-        <Text style={[fontsStyles.text2, { color: colorDark.textColor }]}>Enter user ID to share with:</Text>
+        {error && (
+          <MessForm
+            message={{
+              detail: error,
+            }}
+            status={"error"}
+          />
+        )}
+
+        <Text
+          style={[fontsStyles.text2, fontsStyles.defaultColor]}
+        >{`${t("text.lists.placeholders.enterUserId")}:`}</Text>
         <Controller
           control={control}
           name="userId"
@@ -100,12 +128,14 @@ export const SharedForm = ({
           )}
         />
         {errors.userId && (
-          <View style={[darkStyles.containerAlert, globalStyles.containerAlert, { marginBottom: 10 }]}>
+          <View style={[darkStyles.containerAlert, globalStyles.containerAlert, styles.defaultMargin]}>
             <Text style={[fontsStyles.text, { color: colorDark.textAlertColor }]}>{errors.userId.message}</Text>
           </View>
         )}
         <View style={styles.radioGroup}>
-          <Text style={[fontsStyles.text2, { color: colorDark.textColor, marginBottom: 10 }]}>Выберите права:</Text>
+          <Text
+            style={[fontsStyles.text2, fontsStyles.defaultColor, styles.defaultMargin]}
+          >{`${t("text.lists.permissions.selectRights")}:`}</Text>
           <Controller
             control={control}
             name="permission"
@@ -113,11 +143,11 @@ export const SharedForm = ({
               <>
                 <TouchableOpacity style={styles.radioButton} onPress={() => onChange("read")}>
                   <View style={[styles.radio, value === "read" && styles.radioSelected]} />
-                  <Text style={[styles.radioText, fontsStyles.text2]}>Чтение</Text>
+                  <Text style={[styles.radioText, fontsStyles.text2]}>{t("text.lists.permissions.read")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.radioButton} onPress={() => onChange("write")}>
                   <View style={[styles.radio, value === "write" && styles.radioSelected]} />
-                  <Text style={[styles.radioText, fontsStyles.text2]}>Запись</Text>
+                  <Text style={[styles.radioText, fontsStyles.text2]}>{t("text.lists.permissions.write")}</Text>
                 </TouchableOpacity>
               </>
             )}
@@ -129,7 +159,7 @@ export const SharedForm = ({
           theme={theme}
           onPress={handleSubmit(handleShareRights)}
         >
-          Share
+          {t("defaultMessage.share")}
         </Button>
       </View>
     </>
@@ -139,6 +169,9 @@ export const SharedForm = ({
 export default SharedForm;
 
 const styles = StyleSheet.create({
+  defaultMargin: {
+    marginBottom: 10,
+  },
   container: {
     padding: 20,
   },

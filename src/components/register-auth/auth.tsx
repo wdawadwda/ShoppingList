@@ -13,6 +13,7 @@ import { Button, InputForm } from "../ui";
 import { selectError, selectTokensStatus, userActions } from "@/store/user";
 import { type Theme, useAppDispatch } from "@/store";
 import { MessForm } from "../mess-form";
+import i18n from "@/i118/i18n";
 
 export function Auth({ theme }: { theme: Theme }) {
   const dispatch = useAppDispatch();
@@ -21,6 +22,7 @@ export function Auth({ theme }: { theme: Theme }) {
 
   const { formFields } = useConst({});
   const { control, handleSubmit, formState } = useForm({
+    mode: "onChange",
     defaultValues: {
       username: "",
       email: "",
@@ -46,15 +48,10 @@ export function Auth({ theme }: { theme: Theme }) {
           .matches(/\d/, `${t("validation.regAuth.reg.passwordInvalid")}`),
       }),
     ),
-    mode: "onChange",
   });
 
   const onSubmit = async ({ username, email, password }: UserRequest) => {
-    try {
-      dispatch(createTokens({ username, email, password }));
-    } catch (error) {
-      console.error("Error while dispatching createTokens:", error);
-    }
+    dispatch(createTokens({ username, email, password }));
   };
 
   useEffect(() => {
@@ -64,7 +61,19 @@ export function Auth({ theme }: { theme: Theme }) {
   return (
     <View style={{ marginBottom: 50, marginTop: 25 }}>
       {tokensStatus === "error" && (
-        <>{error && <MessForm message={{ detail: error.detail || error.message }} status={tokensStatus} />}</>
+        <>
+          {error && (
+            <MessForm
+              message={{
+                detail:
+                  typeof error.detail === "object"
+                    ? error?.detail?.[i18n?.language as keyof typeof error.detail] || error?.message
+                    : error?.detail || error?.message,
+              }}
+              status={tokensStatus}
+            />
+          )}
+        </>
       )}
       <InputForm formFields={formFields} formState={formState} theme={theme} control={control as unknown as Control} />
       <Button

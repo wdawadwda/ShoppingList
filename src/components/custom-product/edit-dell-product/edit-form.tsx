@@ -2,7 +2,7 @@ import { BackButton, Button, InputForm } from "@/components/ui";
 import { type Theme } from "@/store";
 import { StyleSheet, Text } from "react-native";
 import { useConst } from "./use/useConst";
-import { ProductCustom } from "@/constants";
+import { ErrorObject, ProductCustom } from "@/constants";
 import { type Control, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -14,6 +14,7 @@ import { t } from "i18next";
 import { fetchCustompProducts, patchCustomProduct } from "@/store/api";
 import { type AppDispatch } from "@/store/store.types";
 import { MainNavigationProp } from "@/navigation";
+import i18n from "@/i118/i18n";
 
 interface FormData {
   nameRu?: string;
@@ -99,9 +100,20 @@ export const EditForm = ({
       dispatch(fetchCustompProducts(customProduct.user));
       navigation.navigate("Settings");
     } catch (error) {
-      setError(t("defaultMessage.defaultError"));
+      const err = error as ErrorObject;
+      if (err && typeof err.detail === "object" && "ru" in err.detail && "en" in err.detail) {
+        const detail = err.detail as { [key: string]: string };
+        if (detail[i18n.language]) {
+          setError(detail[i18n.language]);
+        } else {
+          setError(t("defaultMessage.defaultError"));
+        }
+      } else {
+        setError(t("defaultMessage.defaultError"));
+      }
     } finally {
       setIsEddit(false);
+      setIsLoading(false);
     }
   };
 
@@ -122,7 +134,7 @@ export const EditForm = ({
         theme={theme}
         onPress={handleSubmit(onSubmit)}
       >
-        <Text>Отпраить</Text>
+        <Text>{t("defaultMessage.send")}</Text>
       </Button>
       {!showAddImageText &&
         (currentSvgKey ? (
@@ -143,7 +155,7 @@ export const EditForm = ({
             theme={theme}
             onPress={() => setShowAddImageText(true)}
           >
-            Добавить изображение
+            {t("text.customProduct.addImage")}
           </Button>
         ))}
       {showAddImageText && <AddSvgKey onSelectSvgKey={handleSvgKeySelect} theme={theme} />}

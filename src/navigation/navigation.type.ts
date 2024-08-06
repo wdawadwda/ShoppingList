@@ -24,4 +24,4 @@ type RootStackParamList = {
 export type ListRouteParamsWithData = RouteProp<RootStackParamList, "List"> & NavigationParamsList;
 export type ListRouteParamsWithoutData = RouteProp<RootStackParamList, "List">;
 
-export type MainNavigationProp = NativeStackNavigationProp<RootStackParamList, "Home">;
+export type MainNavigationProp = NativeStackNavigationProp<RootStackParamList, "Home" | "User" | "List">;

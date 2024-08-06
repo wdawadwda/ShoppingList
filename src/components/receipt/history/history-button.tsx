@@ -73,7 +73,7 @@ export function HistoryButton({
           />
           <Button
             theme={theme}
-            style={[styles.button, { marginBottom: 10 }]}
+            style={[styles.button, styles.buttonContainer]}
             onPress={() => {
               handleCustomDateSubmit();
               setError(null);

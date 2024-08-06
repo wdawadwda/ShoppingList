@@ -1,9 +1,10 @@
 import { ListProductItemCard } from "@/components/ui";
 import { type Language, type ProductInList, type ProductsListData } from "@/constants";
 import { type Theme } from "@/store";
-import { colorDark, fontsStyles, globalStyles } from "@/styles";
+import { fontsStyles, globalStyles } from "@/styles";
+import { t } from "i18next";
 import { type Dispatch } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export const ListContent = ({
   productList,
@@ -51,10 +52,10 @@ export const ListContent = ({
   const renderProductList = (categories: CategoryMap, isPurchased: boolean) => {
     return Object.entries(categories).map(([category, products], index) => (
       <View key={`${category}-${isPurchased}-${index + 1}`}>
-        <Text style={[fontsStyles.text, { color: colorDark.textColor }]}>{category}</Text>
+        <Text style={[fontsStyles.text, fontsStyles.defaultColor]}>{category}</Text>
         {products.map((product) => (
           <TouchableOpacity
-            key={product.id || `${product.name}--${index + 1}`}
+            key={`${product.id}--${index + 1}` || `${product.name}--${index + 1}`}
             onPress={() => toggleProductPushed(product)}
             disabled={!isEditable}
           >
@@ -79,31 +80,46 @@ export const ListContent = ({
 
   return (
     <View style={globalStyles.container}>
-      <View style={{ marginVertical: 10 }}>
-        <Text style={[fontsStyles.text, { width: "100%", textAlign: "center", color: colorDark.textColor }]}>
-          Список покупок
+      <View style={styles.emptyText}>
+        <Text style={[fontsStyles.text, fontsStyles.defaultColor, styles.headerText]}>
+          {t("text.lists.listsLabels.shoppingList")}
         </Text>
         {Object.keys(unpurchasedCategories).length > 0 ? (
           renderProductList(unpurchasedCategories, false)
         ) : (
-          <Text style={[fontsStyles.text, { marginVertical: 15, color: colorDark.textColor }]}>Список пока пуст</Text>
+          <Text style={[fontsStyles.text, fontsStyles.defaultColor, styles.section]}>
+            {t("text.lists.listsLabels.emptyList")}
+          </Text>
         )}
       </View>
 
       <View>
-        <Text style={[fontsStyles.text, { width: "100%", textAlign: "center", color: colorDark.textColor }]}>
-          Купленные товары
+        <Text style={[fontsStyles.text, fontsStyles.defaultColor, styles.headerText]}>
+          {t("text.lists.listsLabels.purchasedItems")}
         </Text>
         {Object.keys(purchasedCategories).length > 0 ? (
           renderProductList(purchasedCategories, true)
         ) : (
-          <Text style={[fontsStyles.text, { marginVertical: 15, color: colorDark.textColor }]}>
-            Нет купленных товаров
+          <Text style={[fontsStyles.text, fontsStyles.defaultColor, styles.section]}>
+            {t("text.lists.listsLabels.noPurchasedItems")}
           </Text>
         )}
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  section: {
+    marginVertical: 10,
+  },
+  headerText: {
+    width: "100%",
+    textAlign: "center",
+  },
+  emptyText: {
+    marginVertical: 15,
+  },
+});
 
 export default ListContent;
