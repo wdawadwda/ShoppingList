@@ -8,6 +8,8 @@ import { formatDate, getPeriodDates } from "@/utils";
 import { Button } from "@/components/ui";
 import HistoryDatePicker from "./history-datepicker";
 import { MessForm } from "@/components/mess-form";
+import { ErrorObject, Language } from "@/constants";
+import i18n from "@/i118/i18n";
 export function HistoryButton({
   setIsLoading,
   isLoading,
@@ -36,7 +38,15 @@ export function HistoryButton({
         const data = await fetchHistory(fromDate, toDate, userId);
         setHistoryData(data);
       } catch (error) {
-        setError(t("defaultMessage.defaultError"));
+        const err = error as ErrorObject;
+        let errorMessage = null;
+        if (typeof err.detail === "object" && (i18n?.language as keyof typeof err.detail)) {
+          errorMessage = err.detail[i18n.language as Language] || t("defaultMessage.defaultError");
+        } else {
+          errorMessage =
+            typeof err.detail === "string" && err.detail !== "" ? err.detail : t("defaultMessage.defaultError");
+        }
+        setError(errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -47,12 +57,24 @@ export function HistoryButton({
   const handleCustomDateSubmit = async () => {
     if (userId) {
       setIsLoading(true);
-
+      if (startDate > endDate) {
+        setError(t("defaultMessage.invalidDateRange"));
+        setIsLoading(false);
+        return;
+      }
       try {
         const data = await fetchHistory(formatDate(startDate), formatDate(endDate), userId);
         setHistoryData(data);
       } catch (error) {
-        setError(t("defaultMessage.defaultError"));
+        const err = error as ErrorObject;
+        let errorMessage = null;
+        if (typeof err.detail === "object" && (i18n?.language as keyof typeof err.detail)) {
+          errorMessage = err.detail[i18n.language as Language] || t("defaultMessage.defaultError");
+        } else {
+          errorMessage =
+            typeof err.detail === "string" && err.detail !== "" ? err.detail : t("defaultMessage.defaultError");
+        }
+        setError(errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -75,8 +97,8 @@ export function HistoryButton({
             theme={theme}
             style={[styles.button, styles.buttonContainer]}
             onPress={() => {
-              handleCustomDateSubmit();
               setError(null);
+              handleCustomDateSubmit();
             }}
           >
             {t("buttonLabels.reviseReceipt.submitCustomDate")}

@@ -1,6 +1,7 @@
 import { Good } from "@/components/receipt/receipt.type";
-import { BACKEND_URL, type BillResponse } from "@/constants";
-import axios, { type AxiosResponse } from "axios";
+import { BACKEND_URL, ErrorObject, type BillResponse } from "@/constants";
+import { createErrorObject } from "@/utils";
+import axios, { AxiosError, type AxiosResponse } from "axios";
 
 export async function sendBillPhoto(formData: FormData): Promise<BillResponse> {
   try {
@@ -12,12 +13,8 @@ export async function sendBillPhoto(formData: FormData): Promise<BillResponse> {
 
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error.message;
-    } else {
-      console.error("Error sending bill photo2:", error);
-    }
-    throw error;
+    const errorObject = createErrorObject(error as AxiosError<ErrorObject>);
+    throw errorObject;
   }
 }
 
@@ -29,13 +26,8 @@ export const acceptBillText = async (userId: string, goods: Good[]) => {
     });
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Error sending bill photo2:", error);
-      throw error.message;
-    } else {
-      console.error("Error sending bill photo2:", error);
-    }
-    throw error;
+    const errorObject = createErrorObject(error as AxiosError<ErrorObject>);
+    throw errorObject;
   }
 };
 
@@ -55,21 +47,19 @@ export const fetchHistory = async (from: string, to: string, userId: number) => 
     const data = response.data;
     return data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Error sending bill photo2:", error);
-      throw error.message;
-    } else {
-      console.error("Error sending bill photo2:", error);
-    }
-    throw error;
+    const errorObject = createErrorObject(error as AxiosError<ErrorObject>);
+    throw errorObject;
   }
 };
 
-export const deleteBillHistoryItem = async (itemId: string | number) => {
+export const deleteBillHistoryItem = async (itemId: string | number, userId: string | number) => {
   try {
     const url = `${BACKEND_URL}/api/v1/bill-history/${itemId}/`;
-    const response = await fetch(url, {
-      method: "DELETE",
+
+    const response = await axios.delete(url, {
+      params: {
+        user_id: userId,
+      },
       headers: {
         "Content-Type": "application/json",
       },
@@ -81,7 +71,7 @@ export const deleteBillHistoryItem = async (itemId: string | number) => {
       throw new Error(`Unexpected response status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error deleting bill history item:", error);
-    throw error;
+    const errorObject = createErrorObject(error as AxiosError<ErrorObject>);
+    throw errorObject;
   }
 };

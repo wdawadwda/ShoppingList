@@ -201,7 +201,9 @@
     "send": "Send",
     "add": "Add",
     "search": "Search",
-    "share": "Share"
+    "share": "Share",
+    "longProcess": "This may take a while",
+    "invalidDateRange": "The start date cannot be later than the end date"
   },
   "permission": {
     "receipt": "We need permission to use the camera. Please set it in your device settings"

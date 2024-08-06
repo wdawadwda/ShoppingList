@@ -5,6 +5,8 @@ import { CameraPictureOptions } from "expo-camera";
 import { sendBillPhoto } from "@/store/api";
 import { type Good } from "./receipt.type";
 import { t } from "i18next";
+import i18n from "@/i118/i18n";
+import { ErrorObject, Language } from "@/constants";
 
 export const usePhotoHandler = (userId: string | null | undefined) => {
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
@@ -77,8 +79,15 @@ export const usePhotoHandler = (userId: string | null | undefined) => {
         }
       }
     } catch (error) {
-      console.log(error);
-      setError(t("defaultMessage.defaultError"));
+      const err = error as ErrorObject;
+      let errorMessage = null;
+      if (typeof err.detail === "object" && (i18n?.language as keyof typeof err.detail)) {
+        errorMessage = err.detail[i18n.language as Language] || t("defaultMessage.defaultError");
+      } else {
+        errorMessage =
+          typeof err.detail === "string" && err.detail !== "" ? err.detail : t("defaultMessage.defaultError");
+      }
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -10,10 +10,15 @@ import { deleteBillHistoryItem } from "@/store/api";
 import { useNavigation } from "@react-navigation/native";
 import { MessForm } from "@/components/mess-form";
 import { type MainNavigationProp } from "@/navigation";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/store/user";
+import { ErrorObject, Language } from "@/constants";
+import i18n from "@/i118/i18n";
 
 export function HistoryList({ historyData, theme }: { historyData: History[] | null; theme: Theme }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<{ id: string | number; error: string } | null>(null);
+  const user = useSelector(selectUser);
 
   const navigation = useNavigation<MainNavigationProp>();
   const handleDeleteItem = (itemId: string | number) => {
@@ -39,16 +44,28 @@ export function HistoryList({ historyData, theme }: { historyData: History[] | n
   };
 
   const deleteItem = async (itemId: string | number) => {
-    try {
-      setIsLoading(true);
-      const deletedSuccessfully = await deleteBillHistoryItem(itemId);
-      if (deletedSuccessfully) {
-        navigation.navigate("Receipt");
+    if (user && user.id) {
+      try {
+        setIsLoading(true);
+        const deletedSuccessfully = await deleteBillHistoryItem(itemId, user.id);
+        if (deletedSuccessfully) {
+          navigation.navigate("Receipt");
+        }
+      } catch (error) {
+        const err = error as ErrorObject;
+        let errorMessage = null;
+        if (typeof err.detail === "object" && (i18n?.language as keyof typeof err.detail)) {
+          errorMessage = err.detail[i18n.language as Language] || t("defaultMessage.defaultError");
+        } else {
+          errorMessage =
+            typeof err.detail === "string" && err.detail !== "" ? err.detail : t("defaultMessage.defaultError");
+        }
+        setError({ id: itemId, error: errorMessage });
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
+    } else {
       setError({ id: itemId, error: t("defaultMessage.errorReceipt") });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -104,7 +121,8 @@ export function HistoryList({ historyData, theme }: { historyData: History[] | n
 
 const styles = StyleSheet.create({
   defaultMargin: {
-    marginBottom: 5,
+    marginBottom: 10,
+    marginTop: 10,
   },
   text: {
     color: colorDark.textColor,
