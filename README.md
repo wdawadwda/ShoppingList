@@ -156,11 +156,29 @@ METHODS = [GET, DELETE]
 
 ^/api/v1//bill-history/pk:int/ - get one bill by pk\
 ^/api/v1//bill-history/?user=<user_id>&date_from<date_from>&date_to=<date_to>
-^/api/v1//bill-history/pk:int/ - DELETE one bill by pk\
 
-- ### SEND BILL (TEST)
-^/api/v1/test-send-bill/
+- ### DELETE BILL
+^/api/v1/bill-history/5/?user_id=id
 
+errors:
+```json
+{
+    "error": true,
+    "detail": {
+        "ru": "Пользователь не существует",
+        "en": "User does not exist"
+    }
+}
+```
+```json
+{
+    "error": true,
+    "detail": {
+        "ru": "Записи с таким id не существует",
+        "en": "There is no record with this id"
+    }
+}
+```
 <hr>
 
 ## *** CUSTOM PRODUCTS *** 

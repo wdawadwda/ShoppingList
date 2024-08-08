@@ -38,7 +38,7 @@ class BillModel(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
-      return str(self.user)
+      return str(self.id)
 
 class CustomProductModel(models.Model):
   name_en = models.CharField(max_length=150, blank=True, null=True)

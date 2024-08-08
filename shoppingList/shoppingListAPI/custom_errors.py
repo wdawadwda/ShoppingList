@@ -23,6 +23,16 @@ the_user_does_not_have_a_record = {
     'en': 'The user does not have a record with this ID'
 }
 
+the_user_has_no_records_between_dates = {
+    'ru': 'У этого пользователя нет записи в этом диапазоне дат',
+    'en': 'This user has no records in this date range.'
+}
+
+the_user_does_have_any_record = {
+    'ru': 'У этого пользователя нет записей',
+    'en': 'The user has no records'
+}
+
 this_list_name_exists_already = {
     'en': 'This list name exists already',
     'ru': 'Список с таким именем уже существует'
@@ -65,4 +75,34 @@ there_is_no_record_with_this_id = {
 incorrect_picture = {
     "en": "Incorrect picture",
     "ru": "Некорректная картинка"
+}
+
+incorrect_date_format = {
+    "en": "incorrect date format",
+    "ru": "Некорректный формат даты"
+}
+
+date_from_not_specified = {
+    "en": "No 'date from' specified",
+    "ru": "Не указана 'дата начала периода'"
+}
+
+user_id_not_specified = {
+    "en": "User id not specified",
+    "ru": "Не указан Id пользователя"
+}
+
+bill_text_cannot_be_empty = {
+    "en": "Bill text cannot be an empty list",
+    "ru": "Текст чека не может быть пустым списком"
+}
+
+no_record_pk_specified = {
+    "en": "No record 'pk' specified",
+    "ru": "Не указан 'pk' записи"
+}
+
+user_ids_dont_match = {
+    "en": "User ids don't match",
+    "ru": "User ids не совпадают"
 }

@@ -117,7 +117,8 @@ class BillView(generics.ListCreateAPIView):
         response = requests.post(url="http://194.163.44.157/gpt_request", json={"request": ai_text, "tokens": 500})
         response = response.json()['answer']
         print(response)
-        if re.findall(r'некорректная[\s]{0,}картинка', response):
+        incorrect_image_regex = r"[Нн]екорректная[\s]{0,}[Кк]артинка|НЕКОРРЕКТНАЯ[\s]{0,}КАРТИНКА"
+        if re.findall(incorrect_image_regex, response):
             return [], incorrect_picture_status, False
         response = response.split("\n")
         for item in response:
@@ -140,6 +141,17 @@ class CustomBillTextView(generics.CreateAPIView, generics.ListAPIView):
     queryset = BillModel.objects.all()
     serializer_class = BillSerializer
 
+    def post(self, request, *args, **kwargs):
+        if not request.data.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+        user_exists, _ = check_user_id_exists(id=request.data['user'])
+        if not user_exists:
+            return error_builder(ru_en_dict=user_does_not_exists)
+        if not request.data.get('bill_text'):
+            return error_builder(ru_en_dict=bill_text_cannot_be_empty)
+        return self.create(request, *args, **kwargs)
+
+
 class GetBillsHistoryView(generics.ListAPIView, generics.DestroyAPIView):
     queryset = BillModel.objects.all()
     serializer_class = BillSerializer
@@ -147,23 +159,49 @@ class GetBillsHistoryView(generics.ListAPIView, generics.DestroyAPIView):
     def get(self, request, *args, **kwargs):
 
         params = {}
+
         if request.query_params.get('user'):
-            params['user'] = request.query_params['user']
-        if request.query_params.get('date_from'):
-            date = self.normalize_date(request.query_params['date_from'])
-            if not date['error']:
-                params['date_from'] = date['date']
-        if request.query_params.get('date_to'):
-            date = self.normalize_date(request.query_params['date_to'])
-            if not date['error']:
-                params['date_to'] = date['date'] + timedelta(days=1)
+            exists, _ = check_user_id_exists(id=request.query_params['user'])
+            if not exists:
+                return error_builder(ru_en_dict=user_does_not_exists)
+        else:
+            return error_builder(ru_en_dict=user_id_not_specified)
+
+        if not kwargs.get('pk'):
+            if 'date_from' in request.query_params.keys() or 'date_to' in request.query_params.keys():
+                params['user'] = request.query_params['user']
+
+                if request.query_params.get('date_from'):
+                    date = self.normalize_date(request.query_params['date_from'])
+                    if not date['error']:
+                        params['date_from'] = date['date']
+                    else:
+                        return error_builder(ru_en_dict=incorrect_date_format)
+                else:
+                    return error_builder(ru_en_dict=date_from_not_specified)
+
+                if request.query_params.get('date_to'):
+                    date = self.normalize_date(request.query_params['date_to'])
+                    if not date['error']:
+                        params['date_to'] = date['date'] + timedelta(days=1)
+                    else:
+                        return error_builder(ru_en_dict=incorrect_date_format)
+                else:
+                    params['date_to'] = datetime.now()
 
         if params:
             bills = BillModel.objects.filter(date__range=(params['date_from'], params['date_to']), user=params['user'])
+            if not bills:
+                return error_builder(ru_en_dict=the_user_has_no_records_between_dates)
+
         elif kwargs.get('pk'):
             bills = BillModel.objects.filter(id=int(kwargs['pk']))
+            if not bills:
+                return error_builder(ru_en_dict=the_user_does_not_have_a_record)
         else:
-            bills = self.get_queryset()
+            bills = BillModel.objects.filter(user=request.query_params['user'])
+            if not bills:
+                return error_builder(ru_en_dict=the_user_does_have_any_record)
         return self.list(bills, *args, **kwargs)
 
     def list(self, bills, *args, **kwargs):
@@ -181,7 +219,21 @@ class GetBillsHistoryView(generics.ListAPIView, generics.DestroyAPIView):
                 return {'error': False, 'date': datetime.strptime(str(date), format)}
             except Exception as ex:
                 print(ex)
-                return {'error': ex, "date": None}
+        return {'error': 'does not match date format', "date": None}
+
+    def delete(self, request, *args, **kwargs):
+        if not kwargs.get('pk'):
+            return error_builder(ru_en_dict=no_record_pk_specified)
+        if not request.query_params.get('user_id'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+        exists, _ = check_user_id_exists(request.query_params['user_id'])
+        if not exists:
+            return error_builder(ru_en_dict=user_does_not_exists)
+        user_has_record = BillModel.objects.filter(user=request.query_params['user_id'], id=kwargs['pk'])
+        if not user_has_record:
+            return error_builder(ru_en_dict=there_is_no_record_with_this_id)
+        return self.destroy(request, *args, **kwargs)
+
 
 class TestSendBillView(generics.CreateAPIView):
     queryset = BillModel.objects.all()
@@ -192,6 +244,9 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
     serializer_class = CustomProductSerializer
 
     def get(self, request, *args, **kwargs):
+        if not request.query_params.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+
         user = request.query_params['user']
         serializer_data = []
         if kwargs.get('pk'):
@@ -199,7 +254,7 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
                 try:
                     object = CustomProductModel.objects.get(id=kwargs['pk'], user=user)
                 except:
-                    return Response([])
+                    return error_builder(ru_en_dict=the_user_does_not_have_a_record)
                 object = self.get_serializer(object)
                 object = self.transform_data(from_db=object.data) if object.data else []
                 return Response(object)
@@ -213,7 +268,13 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             return Response(serializer_data)
 
     def post(self, request, *args, **kwargs):
+        if not request.data.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
         data = request.data
+        user_exists, _ = check_user_id_exists(id=request.data['user'])
+        if not user_exists:
+            return error_builder(ru_en_dict=user_does_not_exists)
+
         exists, _ = self.check_exists(name=data['name'], user=data['user'], lower=True)
         if not exists:
             data_to_db = self.transform_data(to_db=data)
@@ -233,10 +294,22 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
             )
 
     def delete(self, request, *args, **kwargs):
+        if not request.query_params.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+        user_exists, _ = check_user_id_exists(id=request.query_params.get('user'))
+        if not user_exists:
+            return error_builder(ru_en_dict=user_does_not_exists)
+
         queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.query_params['user'])
         return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
     def put(self, request, *args, **kwargs):
+        if not request.query_params.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+        user_exists, _ = check_user_id_exists(id=request.query_params.get('user'))
+        if not user_exists:
+            return error_builder(ru_en_dict=user_does_not_exists)
+
         queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.query_params['user'])
         if queryset:
             if self.exists_besides_current_one(request=request, **kwargs):
@@ -247,6 +320,12 @@ class CustomProductView(generics.CreateAPIView, generics.DestroyAPIView, generic
         return self.update(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
+        if not request.query_params.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+        user_exists, _ = check_user_id_exists(id=request.query_params.get('user'))
+        if not user_exists:
+            return error_builder(ru_en_dict=user_does_not_exists)
+
         queryset = CustomProductModel.objects.filter(id=kwargs['pk'], user=request.query_params['user'])
         if queryset:
             if self.exists_besides_current_one(request=request, **kwargs):
@@ -377,6 +456,12 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
     }"""
 
     def get(self, request, *args, **kwargs):
+        if not request.query_params.get('user'):
+            return self.list(request, *args, **kwargs)
+        user_exists, _ = check_user_id_exists(id=request.query_params['user'])
+        if not user_exists:
+            return error_builder(ru_en_dict=user_does_not_exists)
+
         if kwargs.get('pk'):
             user = request.query_params['user']
             try:
@@ -417,6 +502,8 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             if not check_user_id_exists(id=user)[0]:
                 return error_builder(ru_en_dict=user_does_not_exists)
             objects_owner = ProductsListDataModel.objects.filter(owner_id=user)
+            if not objects_owner:
+                return error_builder(ru_en_dict=the_user_does_have_any_record)
             objects_owner = self.get_serializer(objects_owner, many=True)
             objects_shared = ProductsListDataModel.objects.filter(shared_id=user)
             objects_shared = self.get_serializer(objects_shared, many=True)
@@ -442,6 +529,9 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
 
     def post(self, request, *args, **kwargs):
         # checking_queryset = ProductsListDataModel.objects.filter(name=request.data['name'], owner_id=request.data['owner_id'])
+        if not request.data.get('owner_id'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+
         name_lower = request.data['name'].lower()
         checking_queryset = ProductsListDataModel.objects.annotate(name_lower=Lower('name')).filter(name_lower=name_lower, owner_id=request.data['owner_id'])
         if not list(checking_queryset.values()):
@@ -462,6 +552,8 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             return error_builder(ru_en_dict=list_with_this_name_already_exists, http_status=status.HTTP_409_CONFLICT)
 
     def patch(self, request, *args, **kwargs):
+        if not request.query_params.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
         user = int(request.query_params['user'])
 
         # data validation
@@ -496,6 +588,10 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         user_exists, user_object = check_user_id_exists(id=user)
         if not user_exists:
             return False, error_builder(ru_en_dict=user_does_not_exists)
+
+        if request.data.get('owner_id') and request.data['owner_id'] != user:
+            return False, error_builder(ru_en_dict=user_ids_dont_match)
+            pass
 
         # are user ready to accept the list transfer
         if not shared_with_accepts(request.data):
@@ -535,8 +631,10 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
 
         else:
             return error_not_have_permissions()
+        return Response({"error": "Update not allowed"}, status=403)
 
     def update(self, request, *args, **kwargs):
+        pass
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         unpacked_request_data = self.unpack_ProductsListData(request.data)
@@ -550,6 +648,12 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         return Response(self.repack_ProductsListData(serializer.data))
 
     def delete(self, request, *args, **kwargs):
+        if not request.query_params.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+        user_exists, _ = check_user_id_exists(id=request.query_params['user'])
+        if not user_exists:
+            return error_builder(ru_en_dict=user_does_not_exists)
+
         queryset = ProductsListDataModel.objects.filter(id=kwargs['pk'], owner_id=request.query_params['user'])
         return self.destroy(request, *args, **kwargs) if queryset else error_does_not_have_a_record()
 
