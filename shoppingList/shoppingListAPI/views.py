@@ -73,6 +73,11 @@ class BillView(generics.ListCreateAPIView):
     serializer_class = BillSerializer
 
     def post(self, request, *args, **kwargs):
+        if not request.data.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+        user_exists, _ = check_user_id_exists(id=request.data['user'])
+        if not user_exists:
+            return error_builder(ru_en_dict=user_does_not_exists)
         form = BillForm(request.POST, request.FILES)
         print(request.data)
         if form.is_valid():
@@ -569,6 +574,9 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
         return self.update_common(queryset, user, request, method='patch', *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
+        if not request.query_params.get('user'):
+            return error_builder(ru_en_dict=user_id_not_specified)
+
         user = int(request.query_params['user'])
 
         # data validation
@@ -616,6 +624,7 @@ class ProductsListDataView(generics.CreateAPIView, generics.DestroyAPIView, gene
             match method.lower():
                 case 'put':
                     if serializer.data['shared_type'] == 'read' or not serializer.data['is_shared']:
+                        request_data = self.unpack_ProductsListData(request.data)
                         return self.update(request, *args, **kwargs)
                 case 'patch':
                     request_data, error = self.check_and_fill_in_the_data(request.data, user)
