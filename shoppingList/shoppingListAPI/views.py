@@ -196,17 +196,17 @@ class GetBillsHistoryView(generics.ListAPIView, generics.DestroyAPIView):
 
         if params:
             bills = BillModel.objects.filter(date__range=(params['date_from'], params['date_to']), user=params['user'])
-            if not bills:
-                return error_builder(ru_en_dict=the_user_has_no_records_between_dates)
+            # if not bills:
+            #     return error_builder(ru_en_dict=the_user_has_no_records_between_dates)
 
         elif kwargs.get('pk'):
             bills = BillModel.objects.filter(id=int(kwargs['pk']))
-            if not bills:
-                return error_builder(ru_en_dict=the_user_does_not_have_a_record)
+            # if not bills:
+            #     return error_builder(ru_en_dict=the_user_does_not_have_a_record)
         else:
             bills = BillModel.objects.filter(user=request.query_params['user'])
-            if not bills:
-                return error_builder(ru_en_dict=the_user_does_have_any_record)
+            # if not bills:
+            #     return error_builder(ru_en_dict=the_user_does_have_any_record)
         return self.list(bills, *args, **kwargs)
 
     def list(self, bills, *args, **kwargs):
