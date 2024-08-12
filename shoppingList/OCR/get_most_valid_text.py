@@ -26,12 +26,15 @@ def choose_most_valid_text(amount:dict):
         en_list.append(value['en'])
         num_list.append(value['num'])
         incorrect_list.append(value['incorrect'])
-    if sum(ru_list) > sum(en_list):
+    if sum(ru_list) >= sum(en_list):
         max_el = max(ru_list)
         max_el_index = ru_list.index(max_el)
         valid_amount_key = list(amount.keys())[max_el_index]
         return valid_amount_key
     else:
+        print("EN_LIST", en_list)
+        print("RU_LIST", ru_list)
+
         max_el = max(en_list)
         max_el_index = en_list.index(max_el)
         valid_amount_key = list(amount.keys())[max_el_index]

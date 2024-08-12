@@ -7,7 +7,7 @@ import os
 from .config import system_conf
 
 
-def text_from_tesseract_ocr(file_path, rate=150, psm=6, oem=2): # 170
+def text_from_tesseract_ocr(file_path, rate=150, psm=6, oem=3): # 170
 
     print("rate ", rate)
     print("psm ", psm)
@@ -27,9 +27,12 @@ def text_from_tesseract_ocr(file_path, rate=150, psm=6, oem=2): # 170
             custom_config = fr'--oem {oem} --psm {psm} -l eng+rus'
         case 'ubuntu':
             # Ubuntu
-            pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
-            os.environ['TESSDATA_PREFIX'] = '/usr/bin/tesseract/tessdata'
-            custom_config = fr'--oem {oem} --psm {psm} -l eng+rus --tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/"'
+            # pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
+            # os.environ['TESSDATA_PREFIX'] = '/usr/bin/tesseract-ocr/5/tessdata'
+            # custom_config = fr'--oem {oem} --psm {psm} -l rus+eng --tessdata-dir "/usr/share/tesseract-ocr/5/tessdata"'
+            pytesseract.pytesseract.tesseract_cmd = 'OCR/tesseract-5.4.1/tesseract'
+            os.environ['TESSDATA_PREFIX'] = 'OCR/tesseract-5.4.1/tessdata'
+            custom_config = fr'--oem {oem} --psm {psm} -l rus+eng --tessdata-dir "OCR/tesseract-5.4.1/tessdata"'
 
     raw_text = pytesseract.image_to_string(thresh, config=custom_config)
     return raw_text
