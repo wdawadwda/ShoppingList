@@ -62,6 +62,7 @@ export function PhotoResipt({ theme }: { theme: Theme }) {
           />
           {content && content.type === "content" && content.component}
         </ScrollView>
+        <View style={style.emptyBlock} />
       </View>
     </Layout>
   );
@@ -69,6 +70,7 @@ export function PhotoResipt({ theme }: { theme: Theme }) {
 
 const style = StyleSheet.create({
   textAdditional: { textAlign: "center", marginBottom: 10 },
+  emptyBlock: { height: 10 },
 });
 
 export default PhotoResipt;

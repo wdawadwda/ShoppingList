@@ -10,7 +10,6 @@ export const useLoadAsyncInState = (dispatch: AppDispatch) => {
       try {
         const access = await AsyncStorage.getItem(KEYS.USER.ACCESS_TOKEN);
         const refresh = await AsyncStorage.getItem(KEYS.USER.REFRESH_TOKEN);
-
         if (access !== null && refresh !== null) {
           dispatch(userActions.updateTokens({ access, refresh }));
         }

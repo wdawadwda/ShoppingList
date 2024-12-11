@@ -1,7 +1,7 @@
 import { Button, MessForm } from "@/components";
 import { Theme } from "@/store";
-import { Image, StyleSheet, View } from "react-native";
-import { colorDark, globalStyles } from "@/styles";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { colorDark, fontsStyles, globalStyles } from "@/styles";
 import { t } from "i18next";
 import { AddGallerySvgComponent, XSvgComponent } from "@/assets";
 import { usePhotoHandler } from "./usePhotoHandler";
@@ -24,13 +24,22 @@ export function DownloadPhoto({ userId, theme }: { userId: string | null | undef
     return (
       <View style={[globalStyles.container, styles.defaultMarginTop]}>
         <Loader theme={theme} size={50} />
+        <View style={styles.mainContainer}>
+          <Text style={[fontsStyles.text, fontsStyles.defaultColor, { textAlign: "center" }]}>
+            {t("defaultMessage.longProcess")}
+          </Text>
+        </View>
       </View>
     );
   }
 
   return (
-    <View style={[globalStyles.container, styles.defaultMarginTop]}>
-      {error && <MessForm message={{ defaultAxios: error }} status={"error"} />}
+    <View style={[globalStyles.container, styles.mainContainer]}>
+      {error && (
+        <View style={{ marginBottom: 10 }}>
+          <MessForm message={{ defaultAxios: error }} status={"error"} />
+        </View>
+      )}
       {capturedPhoto ? (
         <>
           <View style={[globalStyles.container, styles.buttonsContainer]}>

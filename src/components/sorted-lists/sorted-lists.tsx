@@ -59,10 +59,9 @@ export const SortedLists = ({ listData, theme }: SortedListsProps) => {
           )}
         </TouchableOpacity>
       </View>
-
-      <Text style={[fontsStyles.subtitle, fontsStyles.defaultColor]}>{t("lists.yourLists")}</Text>
+      <Text style={[fontsStyles.subtitle, fontsStyles.defaultColor]}>{t("text.lists.yourLists")}</Text>
       {sortedLists.owner.length > 0 ? (
-        <View>
+        <View style={styles.container}>
           {sortedLists.owner.map((listItem) => (
             <View key={`owner-${listItem.id}`}>
               <Button
@@ -79,7 +78,7 @@ export const SortedLists = ({ listData, theme }: SortedListsProps) => {
 
       {sortedLists.shared.length > 0 && (
         <View>
-          <Text style={[fontsStyles.subtitle, fontsStyles.defaultColor]}>{t("lists.sharedLists")}</Text>
+          <Text style={[fontsStyles.subtitle, fontsStyles.defaultColor]}>{t("text.lists.sharedLists")}</Text>
           {sortedLists.shared.map((listItem) => (
             <View key={`shared-${listItem.id}`}>
               <Button
@@ -105,6 +104,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
+  },
+  container: {
+    paddingBottom: 20,
   },
 });
 

@@ -9,6 +9,8 @@ import { useNavigation } from "@react-navigation/native";
 import { MessForm } from "@/components/mess-form";
 import { t } from "i18next";
 import { type MainNavigationProp } from "@/navigation";
+import { ErrorObject, Language } from "@/constants";
+import i18n from "@/i118/i18n";
 
 export const GoodsList = ({
   userId,
@@ -49,7 +51,15 @@ export const GoodsList = ({
         await acceptBillText(userId, editedGoods);
         navigation.navigate("Receipt");
       } catch (error) {
-        setError(t("defaultMessage.errorPhoto"));
+        const err = error as ErrorObject;
+        let errorMessage = null;
+        if (typeof err.detail === "object" && (i18n?.language as keyof typeof err.detail)) {
+          errorMessage = err.detail[i18n.language as Language] || t("defaultMessage.errorPhoto");
+        } else {
+          errorMessage =
+            typeof err.detail === "string" && err.detail !== "" ? err.detail : t("defaultMessage.errorPhoto");
+        }
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

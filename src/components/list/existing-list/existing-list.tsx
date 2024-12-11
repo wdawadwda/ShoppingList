@@ -58,7 +58,7 @@ export const ExistingList = ({
           if (typeof err.detail === "object" && (i18n?.language as keyof typeof err.detail)) {
             errorMessage = err.detail[i18n.language as Language] || err.message;
           } else {
-            errorMessage = typeof err.detail === "string" ? err.detail : err.message;
+            errorMessage = typeof err.detail === "string" && err.detail !== "" ? err.detail : err.message;
           }
           Alert.alert(errorMessage);
         } else {

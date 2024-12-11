@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { Button, Loader, MessForm } from "@/components";
 import { Theme } from "@/store";
-import { colorDark, globalStyles } from "@/styles";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { colorDark, fontsStyles, globalStyles } from "@/styles";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { t } from "i18next";
 
 import { CameraView } from "expo-camera";
@@ -27,13 +27,22 @@ export function TakePhoto({ userId, theme }: { userId: string | null | undefined
     return (
       <View style={[globalStyles.container, styles.defaultMarginTop]}>
         <Loader theme={theme} size={50} />
+        <View style={styles.mainContainer}>
+          <Text style={[fontsStyles.text, fontsStyles.defaultColor, { textAlign: "center" }]}>
+            {t("defaultMessage.longProcess")}
+          </Text>
+        </View>
       </View>
     );
   }
 
   return (
     <View style={[globalStyles.container, styles.mainContainer]}>
-      {error && <MessForm message={{ defaultAxios: error }} status={"error"} />}
+      {error && (
+        <View style={{ marginBottom: 10 }}>
+          <MessForm message={{ defaultAxios: error }} status={"error"} />
+        </View>
+      )}
       {capturedPhoto ? (
         <>
           <View style={[globalStyles.container, styles.buttonsContainer]}>
